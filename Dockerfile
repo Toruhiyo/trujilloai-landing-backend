@@ -27,15 +27,16 @@ RUN pip install "poetry==$POETRY_VERSION"
 # Copy only poetry.lock & pyproject.toml to cache them in docker layer
 COPY poetry.lock pyproject.toml ${WORKING_DIR}/
 
-# Setup SSH for private repos
-ARG SSH_PRIVATE_KEY
-RUN yum install -y openssh-clients
+# # Setup SSH for private repos
+# ARG SSH_PRIVATE_KEY
+# RUN yum install -y openssh-clients
 
-RUN mkdir -p /root/.ssh/ \
-    && touch /root/.ssh/known_hosts \
-    && ssh-keyscan bitbucket.org >> /root/.ssh/known_hosts \
-    && echo "${SSH_PRIVATE_KEY}" > /root/.ssh/id_rsa \
-    && chmod 600 /root/.ssh/id_rsa 
+# RUN mkdir -p /root/.ssh/ \
+#     && touch /root/.ssh/known_hosts \
+#     && ssh-keyscan bitbucket.org >> /root/.ssh/known_hosts \
+#     && echo "${SSH_PRIVATE_KEY}" > /root/.ssh/id_rsa \
+#     && chmod 600 /root/.ssh/id_rsa 
+
 # Install dependencies
 RUN poetry config virtualenvs.create false \
     && poetry install --only main --no-interaction --no-ansi --no-root
