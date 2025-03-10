@@ -69,5 +69,5 @@ jobs:
         run: |
           aws lambda update-function-code \
             --function-name trujilloai-landing-${{ env.ENV }}-backend \
-            --image-uri ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY }}:${{ github.sha }} \
+            --image-uri ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY }}:latest-${{ env.ENV }} \
             --publish
