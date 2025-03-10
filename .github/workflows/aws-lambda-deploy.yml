@@ -32,10 +32,8 @@ jobs:
 
     # Environment-specific variables
     env:
-      AWS_REGION: eu-west-3
-      ECR_REPOSITORY: trujilloai-landing-backend
+      ECR_REPOSITORY: trujilloai-landing-global-backend
       ENV: ${{ github.ref == 'refs/heads/main' && 'prod' || (github.ref == 'refs/heads/development' && 'dev') || (inputs.environment == 'Production' && 'prod' || 'dev') }}
-      LAMBDA_FUNCTION: trujilloai-landing-backend-${{ github.ref == 'refs/heads/main' && 'prod' || (github.ref == 'refs/heads/development' && 'dev') || (inputs.environment == 'Production' && 'prod' || 'dev') }}
 
     steps:
       - name: Checkout code
@@ -65,13 +63,12 @@ jobs:
           build-args: |
             PROJECT_KEY=${{ vars.PROJECT_KEY }}
             ENV=${{ env.ENV }}
-            SSH_PRIVATE_KEY=${{ secrets.SSH_PRIVATE_KEY }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Update Lambda Function
         run: |
           aws lambda update-function-code \
-            --function-name ${{ env.LAMBDA_FUNCTION }} \
+            --function-name trujilloai-${{ env.ENV }}-landing-backend \
             --image-uri ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }} \
             --publish
