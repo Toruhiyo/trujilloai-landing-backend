@@ -1,0 +1,77 @@
+name: Deploy Lambda Function
+
+on:
+  push:
+    branches:
+      - main
+      - development
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment to deploy to"
+        required: true
+        default: "Development"
+        type: choice
+        options:
+          - Production
+          - Development
+
+jobs:
+  deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    # Only run when explicitly on main or development branches
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/development' || github.event_name == 'workflow_dispatch'
+
+    # Define environment based on exact branch match
+    environment: ${{ github.ref == 'refs/heads/main' && 'Production' || (github.ref == 'refs/heads/development' && 'Development') || inputs.environment }}
+
+    # Environment-specific variables
+    env:
+      AWS_REGION: eu-west-3
+      ECR_REPOSITORY: trujilloai-landing-backend
+      ENV: ${{ github.ref == 'refs/heads/main' && 'prod' || (github.ref == 'refs/heads/development' && 'dev') || (inputs.environment == 'Production' && 'prod' || 'dev') }}
+      LAMBDA_FUNCTION: trujilloai-landing-backend-${{ github.ref == 'refs/heads/main' && 'prod' || (github.ref == 'refs/heads/development' && 'dev') || (inputs.environment == 'Production' && 'prod' || 'dev') }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+            ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest-${{ env.ENV }}
+          build-args: |
+            PROJECT_KEY=${{ vars.PROJECT_KEY }}
+            ENV=${{ env.ENV }}
+            SSH_PRIVATE_KEY=${{ secrets.SSH_PRIVATE_KEY }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Update Lambda Function
+        run: |
+          aws lambda update-function-code \
+            --function-name ${{ env.LAMBDA_FUNCTION }} \
+            --image-uri ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }} \
+            --publish
