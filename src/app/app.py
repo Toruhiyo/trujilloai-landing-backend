@@ -32,7 +32,7 @@ app.add_middleware(
         "https://dev.trujillo.ai",
         "https://www.trujillo.ai",
         "https://trujillo.ai",
-        "https://trujilloai-landing.vercel.app",
+        "https://trujilloai-landing.vercel.app/*",
     ],
     allow_credentials=True,
     allow_methods=["*"],
