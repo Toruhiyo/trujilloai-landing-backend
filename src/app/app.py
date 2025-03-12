@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer
 
+from .chat import endpoints as chat
 from .entities.users import endpoints as users
 
 from .error_handling import set_app_exception_handlers
@@ -13,8 +14,8 @@ from src.utils.requests_toolbox import get_request_relevant_data
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
+router.include_router(chat.router, tags=["Chat"])
 router.include_router(users.router, tags=["Users"])
-
 
 app = FastAPI(
     openapi_url="/documentation/openapi.json",

@@ -1,6 +1,6 @@
 from mangum import Mangum
 
-from src.app.api import app
+from src.app.app import app
 
 # Lambda API runner
 handler = Mangum(app)
