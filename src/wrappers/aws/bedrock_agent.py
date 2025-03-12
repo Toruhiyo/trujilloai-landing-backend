@@ -84,16 +84,19 @@ class BedrockAgentWrapper(metaclass=DynamicSingleton):
         if isinstance(completion_event, EventStream):
             # Handle streaming response
             completion_text = ""
+            n_chunks = 0
             for event in completion_event:
                 chunk = event.get("chunk", {})
                 if chunk and "bytes" in chunk:
                     try:
                         chunk = chunk["bytes"].decode("utf-8")
                         completion_text += chunk
+                        n_chunks += 1
                     except json.JSONDecodeError:
                         raise ValueError("Failed to decode chunk data as JSON")
                     except Exception as e:
                         raise ValueError(f"Error processing chunk: {str(e)}")
+            logger.info(f"Completion text: {completion_text}. No. chunks: {n_chunks}")
             return completion_text
         else:
             # Handle non-streaming response (though this is less common)
