@@ -26,14 +26,13 @@ app = FastAPI(
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"
-                   
-        # "http://localhost:8080",
-        # "https://localhost:8080",
-        # "https://dev.trujillo.ai",
-        # "https://www.trujillo.ai",
-        # "https://trujillo.ai",
-        # "https://trujilloai-landing.vercel.app",
+    allow_origins=[
+        "http://localhost:8080",
+        "https://localhost:8080",
+        "https://dev.trujillo.ai",
+        "https://www.trujillo.ai",
+        "https://trujillo.ai",
+        "https://trujilloai-landing.vercel.app",
     ],
     allow_credentials=True,
     allow_methods=["*"],
