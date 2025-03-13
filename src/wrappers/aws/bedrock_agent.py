@@ -1,5 +1,6 @@
 import json
 import logging
+import time
 from typing import Optional, Any
 
 from botocore.exceptions import ClientError
@@ -35,6 +36,7 @@ class BedrockAgentWrapper(metaclass=DynamicSingleton):
         memory_attributes: Optional[dict[str, Any]] = None,
         end_session: bool = False,
         max_attempts: int = 3,
+        retry_delay: float = 2.0,
     ) -> str:
         self.__client.meta.config.retries = {"max_attempts": max_attempts}
 
@@ -52,20 +54,46 @@ class BedrockAgentWrapper(metaclass=DynamicSingleton):
         if end_session:
             request_body["endSession"] = end_session
 
-        try:
-            response = self.__client.invoke_agent(
-                agentId=agent_id, agentAliasId=agent_alias_id, **request_body
-            )
+        attempts = 0
+        last_exception = None
 
-            # Process the streaming response if needed
-            completion = self.__process_response(response)
-            return completion
+        while attempts < max_attempts:
+            try:
+                response = self.__client.invoke_agent(
+                    agentId=agent_id, agentAliasId=agent_alias_id, **request_body
+                )
 
-        except ClientError as e:
-            code = e.response["Error"]["Code"]
-            message = e.response["Error"]["Message"]
-            logger.error(f"Bedrock Agent invocation failed: {code} - {message}")
-            raise e
+                # Process the streaming response if needed
+                completion = self.__process_response(response)
+                return completion
+
+            except ClientError as e:
+                code = e.response["Error"]["Code"]
+                message = e.response["Error"]["Message"]
+
+                # Check if this is the "not in ready state" error
+                if code == "validationException" and "not in ready state" in message:
+                    attempts += 1
+                    last_exception = e
+
+                    if attempts < max_attempts:
+                        wait_time = retry_delay * (
+                            2 ** (attempts - 1)
+                        )  # Exponential backoff
+                        logger.info(
+                            f"Agent not ready, retrying in {wait_time:.2f} seconds (attempt {attempts}/{max_attempts})"
+                        )
+                        time.sleep(wait_time)
+                        continue
+
+                # For other errors or if we've exhausted retries
+                logger.error(f"Bedrock Agent invocation failed: {code} - {message}")
+                raise e
+
+        # If we've exhausted all retries
+        if last_exception:
+            logger.error(f"Bedrock Agent still not ready after {max_attempts} attempts")
+            raise last_exception
 
     @AWSException.error_handling
     def list_agents(self) -> list:
