@@ -60,6 +60,7 @@ class BedrockAgentWrapper(metaclass=DynamicSingleton):
 
         while attempts < max_attempts:
             try:
+                attempts += 1
                 response = self.__client.invoke_agent(
                     agentId=agent_id, agentAliasId=agent_alias_id, **request_body
                 )
@@ -69,6 +70,7 @@ class BedrockAgentWrapper(metaclass=DynamicSingleton):
                 return completion
 
             except ClientError as e:
+                last_exception = e
                 code = e.response["Error"]["Code"]
                 message = e.response["Error"]["Message"]
 
@@ -76,17 +78,23 @@ class BedrockAgentWrapper(metaclass=DynamicSingleton):
                     code == "throttlingException"
                     and "rate is too high" in message.lower()
                 ):
-                    raise RateLimitExceededError(message)
-
+                    last_exception = RateLimitExceededError(message)
+                    if attempts <= max_attempts:
+                        wait_time = retry_delay * (
+                            2 ** (attempts - 1)
+                        )  # Exponential backoff
+                        logger.info(
+                            f"Rate limit exceeded, retrying in {wait_time:.2f} seconds (attempt {attempts}/{max_attempts})"
+                        )
+                        time.sleep(wait_time)
+                        continue
                 # Check if this is the "not in ready state" error
                 if (
                     code == "validationException"
                     and "not in ready state" in message.lower()
                 ):
-                    attempts += 1
-                    last_exception = e
 
-                    if attempts < max_attempts:
+                    if attempts <= max_attempts:
                         wait_time = retry_delay * (
                             2 ** (attempts - 1)
                         )  # Exponential backoff
