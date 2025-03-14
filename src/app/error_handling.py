@@ -172,14 +172,24 @@ def set_app_exception_handlers(app):
 
     @app.exception_handler(Exception)
     async def handle_generic_exception(request: Request, exc: Exception):
+        """Catch-all exception handler to ensure all unhandled errors return 500"""
+        error_detail = str(exc)
+        # Log with full traceback for debugging
         logger.error(
-            f"Unexpected error in request {request.method} {request.url}: {exc}. "
+            f"Unexpected error in request {request.method} {request.url}: {error_detail}. "
             f"Traceback: {traceback.format_exc()}"
         )
+
+        # Return a consistent 500 error response
         return JSONResponse(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             content={
-                "message": "Unexpected error",
+                "message": "An unexpected error occurred",
+                "error": (
+                    error_detail
+                    if not isinstance(error_detail, Exception)
+                    else str(error_detail)
+                ),
                 "status_code": status.HTTP_500_INTERNAL_SERVER_ERROR,
             },
         )

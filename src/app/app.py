@@ -1,6 +1,7 @@
 import logging
+import traceback
 
-from fastapi import APIRouter, FastAPI, Request
+from fastapi import APIRouter, FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer
@@ -23,20 +24,47 @@ app = FastAPI(
     redoc_url="/documentation/redoc",
 )
 
-# Add CORS middleware
+
+# Add the catch-all exception middleware first
+@app.middleware("http")
+async def catch_exceptions_middleware(request: Request, call_next):
+    try:
+        return await call_next(request)
+    except Exception as e:
+        # Log the error with traceback
+        logger.error(
+            f"Unhandled exception in middleware: {str(e)}. "
+            f"Traceback: {traceback.format_exc()}"
+        )
+        # Return a 500 response
+        return JSONResponse(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            content={
+                "message": "An unexpected error occurred",
+                "status_code": status.HTTP_500_INTERNAL_SERVER_ERROR,
+            },
+        )
+
+
+# Then add CORS middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:8080",
         "https://localhost:8080",
+        "http://localhost:3000",  # Common React development port
+        "https://localhost:3000",
         "https://dev.trujillo.ai",
         "https://www.trujillo.ai",
         "https://trujillo.ai",
         "https://trujilloai-landing.vercel.app",
+        # Add any other frontend origins you need
     ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"],  # Expose headers to the frontend
+    max_age=600,  # Cache preflight requests for 10 minutes
 )
 
 app.include_router(router)
