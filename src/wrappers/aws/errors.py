@@ -16,3 +16,7 @@ class CognitoUserNotFoundError(Exception):
 
 class MaxRetriesExceededError(Exception):
     pass
+
+
+class RateLimitExceededError(Exception):
+    pass

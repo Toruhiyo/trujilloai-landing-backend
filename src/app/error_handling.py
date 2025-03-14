@@ -14,6 +14,7 @@ from .errors import (
     ItemAlreadyRestoredError,
     ItemNotFoundError,
     MissingAccessTokenException,
+    RateLimitExceededError,
     ThreadIsActiveError,
     UnauthorizedRequestError,
     UserNotFoundError,
@@ -93,6 +94,16 @@ def set_app_exception_handlers(app):
         return JSONResponse(
             status_code=status.HTTP_423_LOCKED,
             content={"message": str(exc), "status_code": status.HTTP_423_LOCKED},
+        )
+
+    @app.exception_handler(RateLimitExceededError)
+    async def handle_rate_limit_exceeded(request: Request, exc: RateLimitExceededError):
+        return JSONResponse(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            content={
+                "message": str(exc),
+                "status_code": status.HTTP_429_TOO_MANY_REQUESTS,
+            },
         )
 
     @app.exception_handler(ItemNotFoundError)
@@ -201,6 +212,7 @@ def set_app_exception_handlers(app):
     app.add_exception_handler(UnauthorizedRequestError, handle_unauthorized_request)
     app.add_exception_handler(ForbiddenRequestError, handle_forbidden_request)
     app.add_exception_handler(ThreadIsActiveError, handle_thread_is_active)
+    app.add_exception_handler(RateLimitExceededError, handle_rate_limit_exceeded)
     app.add_exception_handler(ItemNotFoundError, handle_item_not_found)
     app.add_exception_handler(ItemAlreadyExistsError, handle_item_already_exists)
     app.add_exception_handler(ItemAlreadyDeletedError, handle_item_already_deleted)

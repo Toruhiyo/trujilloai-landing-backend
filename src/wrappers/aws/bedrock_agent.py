@@ -7,6 +7,7 @@ from botocore.exceptions import ClientError
 from botocore.eventstream import EventStream
 from ...utils.metaclasses import DynamicSingleton
 from .exception import AWSException
+from .errors import RateLimitExceededError
 from .session import Boto3Session
 
 logger = logging.getLogger(__name__)
@@ -71,8 +72,17 @@ class BedrockAgentWrapper(metaclass=DynamicSingleton):
                 code = e.response["Error"]["Code"]
                 message = e.response["Error"]["Message"]
 
+                if (
+                    code == "throttlingException"
+                    and "rate is too high" in message.lower()
+                ):
+                    raise RateLimitExceededError(message)
+
                 # Check if this is the "not in ready state" error
-                if code == "validationException" and "not in ready state" in message:
+                if (
+                    code == "validationException"
+                    and "not in ready state" in message.lower()
+                ):
                     attempts += 1
                     last_exception = e
 

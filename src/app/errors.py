@@ -86,3 +86,9 @@ class ThreadIsActiveError(Exception):
     def __init__(self, msg: str = "Thread is active"):
         self.msg = msg
         super().__init__(msg)
+
+
+class RateLimitExceededError(Exception):
+    def __init__(self, msg: str = "Rate limit exceeded"):
+        self.msg = msg
+        super().__init__(msg)
