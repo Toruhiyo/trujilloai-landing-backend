@@ -17,6 +17,7 @@ pytz = "^2023.3"
 python-multipart = "^0.0.6"
 pyjwt = "^2.8.0"
 mangum = "^0.17.0"
+pyngrok = "^7.2.3"
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "^5.0.4"
