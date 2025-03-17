@@ -1,12 +1,10 @@
 import uuid
 from typing import Optional
-from src.app.entities.messages.dtos import MessageDTO
 from src.config.vars_grabber import VariablesGrabber
 from src.wrappers.aws.bedrock_agent import BedrockAgentWrapper
-from src.app.entities.messages.enums import RoleType
 from src.app.errors import RateLimitExceededError
 from src.wrappers.aws.errors import RateLimitExceededError as AWSRateLimitExceededError
-from datetime import datetime
+from .dtos import ChatbotBotMessageDTO
 
 AGENT_ID = VariablesGrabber().get("CHATBOT_BEDROCK_AGENT_ID")
 AGENT_ALIAS_ID = VariablesGrabber().get("CHATBOT_BEDROCK_AGENT_ALIAS_ID")
@@ -14,7 +12,8 @@ AGENT_ALIAS_ID = VariablesGrabber().get("CHATBOT_BEDROCK_AGENT_ALIAS_ID")
 
 def post_message_and_await_reply(
     content: str, conversation_id: Optional[str] = None
-) -> MessageDTO:
+) -> ChatbotBotMessageDTO:
+    conversation_id = conversation_id or generate_session_id()
     try:
         reply = BedrockAgentWrapper().invoke(
             agent_id=AGENT_ID,
@@ -24,16 +23,9 @@ def post_message_and_await_reply(
         )
     except AWSRateLimitExceededError:
         raise RateLimitExceededError()
-    return MessageDTO(
-        **{
-            "content": reply,
-            "conversation_id": conversation_id,
-            "role": RoleType.ASSISTANT,
-            "username": "chatbot",
-            "created_at": datetime.now(),
-            "updated_at": datetime.now(),
-            "deleted_at": None,
-        }
+    return ChatbotBotMessageDTO(
+        content=reply["text"],
+        conversation_id=conversation_id,
     )
 
 
