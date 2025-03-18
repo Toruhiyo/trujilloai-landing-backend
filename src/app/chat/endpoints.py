@@ -1,6 +1,6 @@
 import logging
 from fastapi import APIRouter, Cookie, Body, Path
-from .toolbox import post_message_and_await_reply, generate_session_id
+from .resources import post_message_and_await_reply, generate_session_id
 from src.app.chat.dtos import InputMessageDTO, HighlightRequestDTO
 from src.app.entities.messages.responses import SingleMessageResponse
 from src.app.chat.responses import HighlightTextResponseDTO
