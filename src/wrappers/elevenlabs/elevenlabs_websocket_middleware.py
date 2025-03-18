@@ -151,9 +151,13 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
             ):
                 # Receive message from client with a timeout to check connection status periodically
                 try:
-                    client_message = await asyncio.wait_for(
-                        self.client_connection.receive_json(), timeout=1.0
-                    )
+                    if self.client_connection:
+                        client_message = await asyncio.wait_for(
+                            self.client_connection.receive_json(), timeout=1.0
+                        )
+                    else:
+                        logger.warning("Cannot forward to client: connection is closed")
+                        break
                 except asyncio.TimeoutError:
                     # Just check if connections are still valid and continue
                     if not (self.is_client_connected and self.is_elevenlabs_connected):
@@ -170,7 +174,11 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
                     on_event("client_to_elevenlabs", client_message)
 
                 # Forward to ElevenLabs
-                await self.elevenlabs_connection.send(json.dumps(client_message))
+                if self.elevenlabs_connection:
+                    logger.info(f"Forwarding message to ElevenLabs: {client_message}")
+                    await self.elevenlabs_connection.send(json.dumps(client_message))
+                else:
+                    logger.warning("Cannot forward to ElevenLabs: connection is closed")
 
         except websockets.exceptions.ConnectionClosed as e:
             # Normal closure, don't treat as error
@@ -214,7 +222,10 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
                     on_event("elevenlabs_to_client", elevenlabs_message)
 
                 # Forward to client
-                await self.client_connection.send_json(elevenlabs_message)
+                if self.client_connection:
+                    await self.client_connection.send_json(elevenlabs_message)
+                else:
+                    logger.warning("Cannot forward to client: connection is closed")
 
         except ConnectionClosed as e:
             logger.info(

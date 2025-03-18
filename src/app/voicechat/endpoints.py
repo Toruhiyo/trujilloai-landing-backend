@@ -57,14 +57,12 @@ async def voicechat_websocket(
 
     try:
         # Setup connections (both client and ElevenLabs)
-        # This now also sends the connected event to the client
         client_id = await elevenlabs_middleware.setup_connections(
             websocket, debug=debug
         )
         active_middlewares[client_id] = elevenlabs_middleware
 
         # Start bidirectional message forwarding
-        # This will run until either connection closes
         await elevenlabs_middleware.start_forwarding()
 
     except Exception as e:
