@@ -1,11 +1,12 @@
 import json
 import logging
 import asyncio
-from typing import Dict, Any, Optional, Callable
+from typing import Any, Optional, Callable
 import websockets
 from fastapi import WebSocket
 from websockets.exceptions import ConnectionClosed
 from src.utils.metaclasses import DynamicSingleton
+from src.wrappers.elevenlabs.toolbox import get_signed_url
 
 logger = logging.getLogger(__name__)
 
@@ -15,8 +16,6 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
     Middleware for handling websocket connections with ElevenLabs Conversational AI API.
     Acts as a bidirectional proxy between front-end clients and ElevenLabs websocket service.
     """
-
-    ELEVENLABS_WS_URL = "wss://api.elevenlabs.io/v1/convai/conversation"
 
     def __init__(self, agent_id: str, api_key: str, voice_id: Optional[str] = None):
         self.agent_id = agent_id
@@ -79,13 +78,10 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
         if debug:
             query_params.append("debug=true")
 
-        connection_url = f"{self.ELEVENLABS_WS_URL}?{'&'.join(query_params)}"
-        headers = {"xi-api-key": self.api_key}
+        connection_url = f"{self.__get_signed_url()}?{'&'.join(query_params)}"
 
         try:
-            self.elevenlabs_connection = await websockets.connect(
-                connection_url, additional_headers=headers
-            )
+            self.elevenlabs_connection = await websockets.connect(connection_url)
             self.is_elevenlabs_connected = True
             logger.info("Connected to ElevenLabs websocket API")
         except Exception as e:
@@ -208,6 +204,10 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
                 and self.is_client_connected
             ):
                 # Receive message from ElevenLabs
+                if self.elevenlabs_connection is None:
+                    logger.warning("Cannot receive from ElevenLabs: connection is None")
+                    break
+
                 data = await self.elevenlabs_connection.recv()
                 elevenlabs_message = json.loads(data)
 
@@ -285,3 +285,7 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
         # Wait for forwarding tasks to complete
         if self._forward_tasks:
             await asyncio.wait(self._forward_tasks, timeout=2)
+
+    # Private methods:
+    def __get_signed_url(self):
+        return get_signed_url(self.api_key, self.agent_id)
