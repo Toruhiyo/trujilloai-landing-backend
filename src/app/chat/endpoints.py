@@ -7,10 +7,10 @@ from src.app.chat.responses import HighlightTextResponseDTO
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter()
+router = APIRouter(prefix="/chatbot/chat")
 
 
-@router.post("/chatbot/chat", response_model=SingleMessageResponse)
+@router.post("/", response_model=SingleMessageResponse)
 async def post_message_endpoint(
     message: InputMessageDTO, session_id: str = Cookie(None)
 ) -> SingleMessageResponse:
@@ -24,7 +24,7 @@ async def post_message_endpoint(
     )
 
 
-@router.post("/chatbot/chat/{session_id}/highlight")
+@router.post("/{session_id}/highlight")
 async def highlight_endpoint(
     session_id: str = Path(...), highlight_request: HighlightRequestDTO = Body(...)
 ) -> HighlightTextResponseDTO:
