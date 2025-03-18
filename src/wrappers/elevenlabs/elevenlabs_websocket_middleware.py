@@ -175,7 +175,6 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
 
                 # Forward to ElevenLabs
                 if self.elevenlabs_connection:
-                    logger.info(f"Forwarding message to ElevenLabs: {client_message}")
                     await self.elevenlabs_connection.send(json.dumps(client_message))
                 else:
                     logger.warning("Cannot forward to ElevenLabs: connection is closed")
