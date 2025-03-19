@@ -8,6 +8,13 @@ logger = logging.getLogger(__name__)
 # Configure log level to ensure INFO logs are displayed
 logger.setLevel(logging.INFO)
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(name)s %(levelname)s %(message)s",
+    handlers=[logging.StreamHandler()],
+)
+logging.getLogger("urllib3").setLevel(logging.WARNING)
+
 
 # Custom Lambda handler that logs event and context
 def lambda_handler(event, context):
