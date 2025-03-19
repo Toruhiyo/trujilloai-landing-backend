@@ -6,14 +6,11 @@ from fastapi import (
     Depends,
     HTTPException,
     Query,
-    Response,
 )
-from fastapi.responses import PlainTextResponse
 
 from src.wrappers.elevenlabs.elevenlabs_websocket_middleware import (
     ElevenLabsWebsocketMiddleware,
 )
-from src.app.common.response import SwitchingProtocolsResponse
 from .enums import WebSocketEventType
 
 router = APIRouter(prefix="/voicechat", tags=["voicechat"])
@@ -40,21 +37,6 @@ def get_elevenlabs_middleware(
     return ElevenLabsWebsocketMiddleware(
         agent_id=agent_id, api_key=api_key, voice_id=voice_id
     )
-
-
-@router.get("/ws")
-async def connect():
-    """
-    WebSocket upgrade endpoint that returns a proper 101 response
-    with the necessary headers for protocol switching
-    """
-    headers = {
-        "Connection": "Upgrade",
-        "Upgrade": "websocket",
-        "Sec-WebSocket-Accept": "s3pPLMBiTxaQ9kYGzzhZRbK+xOo=",  # This would normally be calculated
-    }
-
-    return Response(content="", status_code=101, headers=headers)
 
 
 @router.websocket("/ws")
