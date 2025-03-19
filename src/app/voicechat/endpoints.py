@@ -6,7 +6,9 @@ from fastapi import (
     Depends,
     HTTPException,
     Query,
+    Response,
 )
+from fastapi.responses import PlainTextResponse
 
 from src.wrappers.elevenlabs.elevenlabs_websocket_middleware import (
     ElevenLabsWebsocketMiddleware,
@@ -41,8 +43,18 @@ def get_elevenlabs_middleware(
 
 
 @router.get("/ws")
-async def connect() -> SwitchingProtocolsResponse:
-    return SwitchingProtocolsResponse()
+async def connect():
+    """
+    WebSocket upgrade endpoint that returns a proper 101 response
+    with the necessary headers for protocol switching
+    """
+    headers = {
+        "Connection": "Upgrade",
+        "Upgrade": "websocket",
+        "Sec-WebSocket-Accept": "s3pPLMBiTxaQ9kYGzzhZRbK+xOo=",  # This would normally be calculated
+    }
+
+    return Response(content="", status_code=101, headers=headers)
 
 
 @router.websocket("/ws")

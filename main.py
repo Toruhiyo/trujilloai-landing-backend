@@ -18,7 +18,6 @@ logging.getLogger("urllib3").setLevel(logging.WARNING)
 
 # Custom Lambda handler that logs event and context
 def lambda_handler(event, context):
-    # Log the Lambda event and context
     logger.info(f"Lambda event: {event}")
 
     # Log useful context attributes
@@ -37,9 +36,29 @@ def lambda_handler(event, context):
         }
         logger.info(f"Lambda context: {context_details}")
 
-    # Use Mangum to handle the request
+    # Check if this is a WebSocket event
+    if "requestContext" in event and event["requestContext"].get("connectionId"):
+        return handle_websocket_event(event, context)
+
+    # Regular HTTP event - use Mangum
     mangum_handler = Mangum(app)
     return mangum_handler(event, context)
+
+
+def handle_websocket_event(event, context):
+    connection_id = event["requestContext"]["connectionId"]
+    route_key = event["requestContext"]["routeKey"]
+
+    if route_key == "$connect":
+        # Handle connection establishment
+        return {"statusCode": 200}
+    elif route_key == "$disconnect":
+        # Handle disconnection
+        return {"statusCode": 200}
+    elif route_key == "$default":
+        # Handle messages - you'll need to adapt your existing WebSocket handler
+        # to work with the API Gateway WebSocket format
+        return {"statusCode": 200}
 
 
 # Local API runner
