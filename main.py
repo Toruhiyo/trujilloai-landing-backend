@@ -5,6 +5,8 @@ from src.app.app import app
 
 # Set up logging
 logger = logging.getLogger(__name__)
+# Configure log level to ensure INFO logs are displayed
+logger.setLevel(logging.INFO)
 
 
 # Custom Lambda handler that logs event and context
