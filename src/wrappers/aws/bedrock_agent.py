@@ -38,7 +38,7 @@ class BedrockAgentWrapper(metaclass=DynamicSingleton):
         end_session: bool = False,
         max_attempts: int = 3,
         retry_delay: float = 2.0,
-    ) -> str:
+    ) -> dict:
         self.__client.meta.config.retries = {"max_attempts": max_attempts}
 
         request_body = {
@@ -66,8 +66,8 @@ class BedrockAgentWrapper(metaclass=DynamicSingleton):
                 )
 
                 # Process the streaming response if needed
-                completion = self.__process_response(response)
-                return completion
+                reply = self.__process_response(response)
+                return reply
 
             except ClientError as e:
                 last_exception = e
@@ -112,6 +112,7 @@ class BedrockAgentWrapper(metaclass=DynamicSingleton):
         if last_exception:
             logger.error(f"Bedrock Agent still not ready after {max_attempts} attempts")
             raise last_exception
+        raise Exception("Unknown error")
 
     @AWSException.error_handling
     def list_agents(self) -> list:
@@ -124,26 +125,29 @@ class BedrockAgentWrapper(metaclass=DynamicSingleton):
         return response
 
     # Private:
-    def __process_response(self, response) -> str:
+    def __process_response(self, response) -> dict:
         """Process the EventStream response from Bedrock Agent and return just the completion text."""
         completion_event = response.get("completion", None)
         if isinstance(completion_event, EventStream):
             # Handle streaming response
-            completion_text = ""
-            n_chunks = 0
+            reply = {"text": "", "citations": []}
             for event in completion_event:
                 chunk = event.get("chunk", {})
+                attribution = chunk.get("attribution", {})
                 if chunk and "bytes" in chunk:
                     try:
-                        chunk = chunk["bytes"].decode("utf-8")
-                        completion_text += chunk
-                        n_chunks += 1
+                        chunk["text"] = chunk["bytes"].decode("utf-8")
+                        reply["text"] += chunk["text"]
+                        reply["citations"] += attribution.get("citations", [])
                     except json.JSONDecodeError:
                         raise ValueError("Failed to decode chunk data as JSON")
                     except Exception as e:
                         raise ValueError(f"Error processing chunk: {str(e)}")
-            logger.info(f"Completion text: {completion_text}. No. chunks: {n_chunks}")
-            return completion_text
+
+            logger.info(
+                f"Completion text: {reply['text']}. No. citations: {len(reply['citations'])}"
+            )
+            return reply
         else:
             # Handle non-streaming response (though this is less common)
             logger.warning("Received non-streaming response from Bedrock Agent")

@@ -5,6 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Run: Expose API",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceRoot}/scripts/expose_api.py",
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONPATH": "${workspaceRoot}",
+            },
+            "justMyCode": false,
+            "envFile": "${workspaceRoot}/.env"
+        },
+        {
             "name": "Pytest: All tests",
             "type": "debugpy",
             "request": "launch",
