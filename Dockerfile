@@ -48,4 +48,4 @@ RUN curl -O https://lambda-insights-extension.s3-ap-northeast-1.amazonaws.com/am
 # Copy the code to the function directory
 COPY . ./
 
-CMD ["main.handler"]
+CMD ["main.lambda_handler"]
