@@ -7,3 +7,8 @@ class SingleBasicResponse(BaseDTO):
     message: str
     data: Optional[dict] = None
     status_code: int = status.HTTP_200_OK
+
+
+class SwitchingProtocolsResponse(BaseDTO):
+    message: str = "Switching protocols"
+    status_code: int = status.HTTP_101_SWITCHING_PROTOCOLS
