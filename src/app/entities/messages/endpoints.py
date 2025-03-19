@@ -13,12 +13,10 @@ from .responses import (
     SingleMessageResponse,
 )
 
-router = APIRouter()
+router = APIRouter(prefix="/conversations")
 
 
-@router.get(
-    "/conversations/{conversation_id}/messages", response_model=MultipleMessagesResponse
-)
+@router.get("/{conversation_id}/messages", response_model=MultipleMessagesResponse)
 def get_messages_endpoint(conversation_id: str):
     messages = list_messages(conversation_id)
     return MultipleMessagesResponse(
@@ -28,7 +26,7 @@ def get_messages_endpoint(conversation_id: str):
 
 
 @router.get(
-    "/conversations/{conversation_id}/messages/{message_id}",
+    "/{conversation_id}/messages/{message_id}",
     response_model=SingleMessageResponse,
 )
 def get_message_endpoint(conversation_id: str, message_id: str):
@@ -40,7 +38,7 @@ def get_message_endpoint(conversation_id: str, message_id: str):
 
 
 # @router.post(
-#     "/conversations/{conversation_id}/messages", response_model=SingleMessageResponse
+#     "/{conversation_id}/messages", response_model=SingleMessageResponse
 # )
 # def create_message_endpoint(conversation_id: str):
 #     username = get_username_from_id_token()
@@ -52,7 +50,7 @@ def get_message_endpoint(conversation_id: str, message_id: str):
 
 
 @router.delete(
-    "/conversations/{conversation_id}/messages/{message_id}",
+    "/{conversation_id}/messages/{message_id}",
     response_model=DeleteResponse,
 )
 def delete_message_endpoint(conversation_id: str, message_id: str):

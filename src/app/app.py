@@ -8,6 +8,7 @@ from fastapi.security import OAuth2PasswordBearer
 
 from .chat import endpoints as chat
 from .entities.users import endpoints as users
+from .voicechat import endpoints as voicechat
 
 from .error_handling import set_app_exception_handlers
 from src.utils.requests_toolbox import get_request_relevant_data
@@ -17,7 +18,7 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 router.include_router(chat.router, tags=["Chat"])
 router.include_router(users.router, tags=["Users"])
-
+router.include_router(voicechat.router, tags=["VoiceChat"])
 app = FastAPI(
     openapi_url="/documentation/openapi.json",
     docs_url="/documentation/swagger",

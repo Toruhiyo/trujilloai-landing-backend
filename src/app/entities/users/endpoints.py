@@ -15,11 +15,11 @@ from .resources import (
     update_user,
 )
 
-router = APIRouter()
+router = APIRouter(prefix="/users")
 
 
 @router.get(
-    "/users",
+    "/",
     response_model=MultipleUserResponse | api_responses.BadRequestError,
 )
 def list_users_endpoint(
@@ -32,7 +32,7 @@ def list_users_endpoint(
 
 
 @router.post(
-    "/users",
+    "/",
     response_model=SingleUserResponse
     | MultipleUserResponse
     | api_responses.BadRequestError,
