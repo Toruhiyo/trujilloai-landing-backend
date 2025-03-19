@@ -11,6 +11,7 @@ from fastapi import (
 from src.wrappers.elevenlabs.elevenlabs_websocket_middleware import (
     ElevenLabsWebsocketMiddleware,
 )
+from src.app.common.response import SingleBasicResponse
 from .enums import WebSocketEventType
 
 router = APIRouter(prefix="/voicechat", tags=["voicechat"])
@@ -37,6 +38,11 @@ def get_elevenlabs_middleware(
     return ElevenLabsWebsocketMiddleware(
         agent_id=agent_id, api_key=api_key, voice_id=voice_id
     )
+
+
+@router.get("/ws")
+async def connect() -> SingleBasicResponse:
+    return SingleBasicResponse(message="Connection successful")
 
 
 @router.websocket("/ws")
