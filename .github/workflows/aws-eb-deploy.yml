@@ -71,6 +71,7 @@ jobs:
           build-args: |
             PROJECT_KEY=${{ vars.PROJECT_KEY }}
             ENV=${{ vars.ENV }}
+            AWS_REGION=${{ vars.AWS_REGION }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           provenance: false

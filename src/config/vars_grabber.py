@@ -13,12 +13,15 @@ logger = logging.getLogger(__name__)
 DEFAULT_ENV_PATH = Path(".env")
 BASE_MANDATORY_VARS = ["ENV", "PROJECT_KEY"]
 
+DEFAULT_AWS_REGION = "us-east-1"
+
 
 class VariablesGrabber(metaclass=DynamicSingleton):
     def __init__(
         self,
         env_path: Path = DEFAULT_ENV_PATH,
         extra_mandatory_vars: Optional[list[str]] = None,
+        aws_region: Optional[str] = None,
     ):
         extra_mandatory_vars = extra_mandatory_vars or []
         self.__env_path = env_path
@@ -30,7 +33,8 @@ class VariablesGrabber(metaclass=DynamicSingleton):
         ):
             self.__load_dot_env()
         self.__validate_mandatory_vars()
-        self.__ssm = SSMWrapper()
+        aws_region = aws_region or os.environ.get("AWS_REGION") or DEFAULT_AWS_REGION
+        self.__ssm = SSMWrapper(region=aws_region)
 
     def get(
         self,

@@ -7,9 +7,8 @@ ENV PROJECT_KEY=${PROJECT_KEY}
 ARG ENV
 ENV ENV=${ENV}
 
-# Create .env file with environment variables
-RUN echo "PROJECT_KEY=${PROJECT_KEY}" > .env && \
-    echo "ENV=${ENV}" >> .env
+ARG AWS_REGION
+ENV AWS_REGION=${AWS_REGION}
 
 # Set non-interactive and disable pip cache for smaller images
 ENV PIP_NO_CACHE_DIR=off \
@@ -19,6 +18,12 @@ ENV PIP_NO_CACHE_DIR=off \
 
 # Set the working directory
 WORKDIR /app
+
+# Create .env file with environment variables
+RUN echo "PROJECT_KEY=${PROJECT_KEY}" > .env && \
+    echo "ENV=${ENV}" >> .env && \
+    echo "AWS_REGION=${AWS_REGION}" >> .env && \
+    chmod 644 .env
 
 # Update pip and install Poetry
 RUN pip install --upgrade pip \

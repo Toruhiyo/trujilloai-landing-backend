@@ -10,14 +10,16 @@ from .exception import AWSException
 
 logger = logging.getLogger(__name__)
 
+DEFAULT_REGION = "us-east-1"
+
 
 class SSMWrapper(metaclass=DynamicSingleton):
     @AWSException.error_handling
-    def __init__(self, credentials: dict | None = None):
+    def __init__(self, credentials: dict | None = None, region: str | None = None):
         self.__client = (
             boto3.Session(**credentials).client("ssm")
             if credentials
-            else boto3.client("ssm")
+            else boto3.client("ssm", region_name=region or DEFAULT_REGION)
         )
 
     # @AWSException.error_handling
