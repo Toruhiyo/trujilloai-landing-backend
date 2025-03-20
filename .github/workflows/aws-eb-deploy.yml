@@ -33,7 +33,7 @@ jobs:
     # Environment-specific variables
     env:
       EB_APP_NAME: "${{ vars.PROJECT_KEY }}-${{ vars.ENV }}-backend"
-      EB_ENV_NAME: ${{ vars.ENV }}
+      EB_ENV_NAME: "${{ vars.PROJECT_KEY }}-${{ vars.ENV }}-backend"
       S3_KEY: Dockerrun.aws.json
 
     steps:
