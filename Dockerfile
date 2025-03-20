@@ -1,7 +1,4 @@
-FROM public.ecr.aws/lambda/python:3.13
-
-# Define working directory
-ARG WORKING_DIR=${LAMBDA_TASK_ROOT}
+FROM python:3.13-slim
 
 # Set environment variables
 ARG PROJECT_KEY
@@ -10,42 +7,31 @@ ENV PROJECT_KEY=${PROJECT_KEY}
 ARG ENV
 ENV ENV=${ENV}
 
-
+# Set non-interactive and disable pip cache for smaller images
 ENV PIP_NO_CACHE_DIR=off \
     PIP_DISABLE_PIP_VERSION_CHECK=on \
-    POETRY_VERSION=2.1.1
+    POETRY_VERSION=2.1.1 \
+    PYTHONUNBUFFERED=1
 
-# Update pip
-RUN python3 -m pip install --upgrade pip
+# Set the working directory
+WORKDIR /app
 
-# Set the working directory to the root of the project.
-WORKDIR ${WORKING_DIR}
-
-# Install poetry
-RUN pip install "poetry==$POETRY_VERSION"
+# Update pip and install Poetry
+RUN pip install --upgrade pip \
+    && pip install "poetry==$POETRY_VERSION"
 
 # Copy only poetry.lock & pyproject.toml to cache them in docker layer
-COPY poetry.lock pyproject.toml ${WORKING_DIR}/
-
-# # Setup SSH for private repos
-# ARG SSH_PRIVATE_KEY
-# RUN yum install -y openssh-clients
-
-# RUN mkdir -p /root/.ssh/ \
-#     && touch /root/.ssh/known_hosts \
-#     && ssh-keyscan bitbucket.org >> /root/.ssh/known_hosts \
-#     && echo "${SSH_PRIVATE_KEY}" > /root/.ssh/id_rsa \
-#     && chmod 600 /root/.ssh/id_rsa 
+COPY poetry.lock pyproject.toml ./
 
 # Install dependencies
 RUN poetry config virtualenvs.create false \
     && poetry install --only main --no-interaction --no-ansi --no-root
 
-RUN curl -O https://lambda-insights-extension.s3-ap-northeast-1.amazonaws.com/amazon_linux/lambda-insights-extension.rpm && \
-    rpm -U lambda-insights-extension.rpm && \
-    rm -f lambda-insights-extension.rpm
+# Copy the rest of the application code
+COPY . .
 
-# Copy the code to the function directory
-COPY . ./
+# Expose the port the app runs on
+EXPOSE 8000
 
-CMD ["main.lambda_handler"]
+# Start the web server
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

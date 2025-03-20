@@ -1,0 +1,95 @@
+name: Deploy to Elastic Beanstalk
+
+on:
+  push:
+    branches:
+      - main
+      - development
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment to deploy to"
+        required: true
+        default: "Development"
+        type: choice
+        options:
+          - Production
+          - Development
+
+jobs:
+  deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    # Only run when explicitly on main or development branches
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/development' || github.event_name == 'workflow_dispatch'
+
+    # Define environment based on exact branch match
+    environment: ${{ github.ref == 'refs/heads/main' && 'Production' || (github.ref == 'refs/heads/development' && 'Development') || inputs.environment }}
+
+    # Environment-specific variables
+    env:
+      ENV: ${{ github.ref == 'refs/heads/main' && 'prod' || (github.ref == 'refs/heads/development' && 'dev') || (inputs.environment == 'Production' && 'prod' || 'dev') }}
+      EB_APP_NAME: trujilloai-landing
+      EB_ENV_NAME: trujilloai-landing-${{ github.ref == 'refs/heads/main' && 'prod' || (github.ref == 'refs/heads/development' && 'dev') || (inputs.environment == 'Production' && 'prod' || 'dev') }}-backend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          driver-opts: |
+            image=moby/buildkit:v0.11.0
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          platforms: linux/amd64
+          tags: |
+            ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY }}:${{ github.sha }}
+            ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY }}:latest-${{ env.ENV }}
+          build-args: |
+            PROJECT_KEY=${{ vars.PROJECT_KEY }}
+            ENV=${{ env.ENV }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: false
+          sbom: false
+
+      - name: Create application version
+        run: |
+          # Create a new application version in Elastic Beanstalk
+          aws elasticbeanstalk create-application-version \
+            --application-name ${{ env.EB_APP_NAME }} \
+            --version-label ${{ github.sha }} \
+            --description "Deployment from GitHub Actions workflow" \
+            --source-bundle "{\"S3Bucket\":\"elasticbeanstalk-${{ vars.AWS_REGION }}-${{ github.repository_owner }}\",\"S3Key\":\"dummy-key\"}" \
+            --process
+
+      - name: Deploy to Elastic Beanstalk
+        run: |
+          # Update the Elastic Beanstalk environment with the new version
+          aws elasticbeanstalk update-environment \
+            --application-name ${{ env.EB_APP_NAME }} \
+            --environment-name ${{ env.EB_ENV_NAME }} \
+            --version-label ${{ github.sha }}
