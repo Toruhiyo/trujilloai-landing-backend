@@ -32,8 +32,9 @@ jobs:
 
     # Environment-specific variables
     env:
-      EB_APP_NAME: "${{ vars.PROJECT_KEY }}-${{ vars.ENV }}"
+      EB_APP_NAME: "${{ vars.PROJECT_KEY }}-${{ vars.ENV }}-backend"
       EB_ENV_NAME: ${{ vars.ENV }}
+      S3_KEY: Dockerrun.aws.json
 
     steps:
       - name: Checkout code
@@ -82,7 +83,7 @@ jobs:
             --application-name ${{ env.EB_APP_NAME }} \
             --version-label ${{ github.sha }} \
             --description "Deployment from GitHub Actions workflow" \
-            --source-bundle "{\"S3Bucket\":\"elasticbeanstalk-${{ env.EB_APP_NAME }}\",\"S3Key\":\"SOURCES/${{ env.S3_KEY }}\"}" \
+            --source-bundle "{\"S3Bucket\":\"${{ env.EB_APP_NAME }}-elasticbeanstalk\",\"S3Key\":\"${{ env.S3_KEY }}\"}" \
             --process
 
       - name: Deploy to Elastic Beanstalk
