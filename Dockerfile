@@ -25,7 +25,8 @@ COPY poetry.lock pyproject.toml ./
 
 # Install dependencies
 RUN poetry config virtualenvs.create false \
-    && poetry install --only main --no-interaction --no-ansi --no-root
+    && poetry install --only main --no-interaction --no-ansi --no-root \
+    && poetry run pip install uvicorn
 
 # Copy the rest of the application code
 COPY . .
