@@ -32,9 +32,8 @@ jobs:
 
     # Environment-specific variables
     env:
-      ENV: ${{ github.ref == 'refs/heads/main' && 'prod' || (github.ref == 'refs/heads/development' && 'dev') || (inputs.environment == 'Production' && 'prod' || 'dev') }}
-      EB_APP_NAME: trujilloai-landing
-      EB_ENV_NAME: trujilloai-landing-${{ github.ref == 'refs/heads/main' && 'prod' || (github.ref == 'refs/heads/development' && 'dev') || (inputs.environment == 'Production' && 'prod' || 'dev') }}-backend
+      EB_APP_NAME: "${{ vars.PROJECT_KEY }}-${{ vars.ENV }}"
+      EB_ENV_NAME: ${{ vars.ENV }}
 
     steps:
       - name: Checkout code
@@ -67,10 +66,10 @@ jobs:
           platforms: linux/amd64
           tags: |
             ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY }}:${{ github.sha }}
-            ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY }}:latest-${{ env.ENV }}
+            ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY }}:latest-${{ vars.ENV }}
           build-args: |
             PROJECT_KEY=${{ vars.PROJECT_KEY }}
-            ENV=${{ env.ENV }}
+            ENV=${{ vars.ENV }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           provenance: false
@@ -83,7 +82,7 @@ jobs:
             --application-name ${{ env.EB_APP_NAME }} \
             --version-label ${{ github.sha }} \
             --description "Deployment from GitHub Actions workflow" \
-            --source-bundle "{\"S3Bucket\":\"elasticbeanstalk-${{ vars.AWS_REGION }}-${{ github.repository_owner }}\",\"S3Key\":\"dummy-key\"}" \
+            --source-bundle "{\"S3Bucket\":\"elasticbeanstalk-${{ env.EB_APP_NAME }}\",\"S3Key\":\"SOURCES/${{ env.S3_KEY }}\"}" \
             --process
 
       - name: Deploy to Elastic Beanstalk
