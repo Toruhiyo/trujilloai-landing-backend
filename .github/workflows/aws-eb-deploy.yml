@@ -77,6 +77,33 @@ jobs:
           provenance: false
           sbom: false
 
+      - name: Generate Dockerrun.aws.json
+        run: |
+          cat > Dockerrun.aws.json << EOF
+          {
+            "AWSEBDockerrunVersion": "1",
+            "Image": {
+              "Name": "${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY }}:${{ github.sha }}",
+              "Update": "true"
+            },
+            "Ports": [
+              {
+                "ContainerPort": 3000,
+                "HostPort": 80
+              }
+            ]
+          }
+          EOF
+          cat Dockerrun.aws.json
+
+      - name: Upload Dockerrun.aws.json to S3
+        run: |
+          # Create the bucket if it doesn't exist
+          aws s3api head-bucket --bucket "${{ env.EB_APP_NAME }}-elasticbeanstalk" || aws s3 mb s3://${{ env.EB_APP_NAME }}-elasticbeanstalk
+
+          # Upload the file
+          aws s3 cp Dockerrun.aws.json s3://${{ env.EB_APP_NAME }}-elasticbeanstalk/${{ env.S3_KEY }}
+
       - name: Create application version
         run: |
           # Check if application version already exists
