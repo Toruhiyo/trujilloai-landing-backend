@@ -7,6 +7,10 @@ ENV PROJECT_KEY=${PROJECT_KEY}
 ARG ENV
 ENV ENV=${ENV}
 
+# Create .env file with environment variables
+RUN echo "PROJECT_KEY=${PROJECT_KEY}" > .env && \
+    echo "ENV=${ENV}" >> .env
+
 # Set non-interactive and disable pip cache for smaller images
 ENV PIP_NO_CACHE_DIR=off \
     PIP_DISABLE_PIP_VERSION_CHECK=on \
