@@ -1,5 +1,6 @@
 from botocore.exceptions import ClientError
 import logging
+import os
 from typing import Generator, Any
 
 import boto3
@@ -16,10 +17,24 @@ DEFAULT_REGION = "us-east-1"
 class SSMWrapper(metaclass=DynamicSingleton):
     @AWSException.error_handling
     def __init__(self, credentials: dict | None = None, region: str | None = None):
+        # Try to get the region in this order:
+        # 1. Directly passed region parameter
+        # 2. AWS_REGION environment variable
+        # 3. AWS_DEFAULT_REGION environment variable
+        # 4. DEFAULT_REGION constant
+        region_name = (
+            region
+            or os.environ.get("AWS_REGION")
+            or os.environ.get("AWS_DEFAULT_REGION")
+            or DEFAULT_REGION
+        )
+
+        logger.info(f"Initializing SSM client with region: {region_name}")
+
         self.__client = (
-            boto3.Session(**credentials).client("ssm")
+            boto3.Session(**credentials).client("ssm", region_name=region_name)
             if credentials
-            else boto3.client("ssm", region_name=region or DEFAULT_REGION)
+            else boto3.client("ssm", region_name=region_name)
         )
 
     # @AWSException.error_handling

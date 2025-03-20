@@ -1,4 +1,5 @@
 import logging
+import os
 
 from boto3.session import Session
 
@@ -8,6 +9,9 @@ from ...utils.metaclasses import DynamicSingleton
 from .exception import AWSException
 
 logger = logging.getLogger(__name__)
+
+# Default region to use if none is specified
+DEFAULT_REGION = "us-east-1"
 
 
 class Boto3Session(Session, metaclass=DynamicSingleton):
@@ -21,9 +25,9 @@ class Boto3Session(Session, metaclass=DynamicSingleton):
         """
         if isinstance(credentials, dict):
             params = credentials
-            params["region_name"] = VariablesGrabber().get(
-                "AWS_DEFAULT_REGION", scopes=ScopeType.LOCAL
-            )
+            # Ensure region is set in credentials dict
+            if "region_name" not in params:
+                params["region_name"] = self.__get_region()
         else:
             params = {}
             if (
@@ -55,15 +59,10 @@ class Boto3Session(Session, metaclass=DynamicSingleton):
                 params["aws_session_token"] = VariablesGrabber().get(
                     "AWS_SESSION_TOKEN"
                 )
-            if (
-                VariablesGrabber().get(
-                    "AWS_DEFAULT_REGION",
-                    scopes=ScopeType.LOCAL,
-                    ignore_missing_keys=True,
-                )
-                is not None
-            ):
-                params["region_name"] = VariablesGrabber().get("AWS_DEFAULT_REGION")
+
+            # Always ensure region is set
+            params["region_name"] = self.__get_region()
+
             if (
                 VariablesGrabber().get(
                     "AWS_PROFILE", scopes=ScopeType.LOCAL, ignore_missing_keys=True
@@ -72,4 +71,36 @@ class Boto3Session(Session, metaclass=DynamicSingleton):
             ):
                 params["profile_name"] = VariablesGrabber().get("AWS_PROFILE")
 
+        logger.info(
+            f"Initializing AWS Session with region: {params.get('region_name', 'UNKNOWN')}"
+        )
         super().__init__(**params)
+
+    def __get_region(self) -> str:
+        """
+        Get the AWS region from environment variables in the following order:
+        1. AWS_REGION (direct env var)
+        2. AWS_DEFAULT_REGION (direct env var)
+        3. From VariablesGrabber (which may read from .env file)
+        4. Default to DEFAULT_REGION constant
+        """
+        # Direct environment variable access first (highest priority)
+        if region := os.environ.get("AWS_REGION"):
+            return region
+
+        if region := os.environ.get("AWS_DEFAULT_REGION"):
+            return region
+
+        # Then try through VariablesGrabber
+        if region := VariablesGrabber().get(
+            "AWS_DEFAULT_REGION",
+            scopes=ScopeType.LOCAL,
+            ignore_missing_keys=True,
+        ):
+            return region
+
+        # Fall back to default
+        logger.warning(
+            f"No AWS region found in environment variables, using default: {DEFAULT_REGION}"
+        )
+        return DEFAULT_REGION
