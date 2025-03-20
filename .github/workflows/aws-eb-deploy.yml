@@ -78,13 +78,24 @@ jobs:
 
       - name: Create application version
         run: |
-          # Create a new application version in Elastic Beanstalk
-          aws elasticbeanstalk create-application-version \
+          # Check if application version already exists
+          VERSION_EXISTS=$(aws elasticbeanstalk describe-application-versions \
             --application-name ${{ env.EB_APP_NAME }} \
-            --version-label ${{ github.sha }} \
-            --description "Deployment from GitHub Actions workflow" \
-            --source-bundle "{\"S3Bucket\":\"${{ env.EB_APP_NAME }}-elasticbeanstalk\",\"S3Key\":\"${{ env.S3_KEY }}\"}" \
-            --process
+            --version-labels ${{ github.sha }} \
+            --query "ApplicationVersions[0].VersionLabel" \
+            --output text || echo "")
+
+          if [ "$VERSION_EXISTS" = "${{ github.sha }}" ]; then
+            echo "Application Version ${{ github.sha }} already exists. Skipping creation."
+          else
+            # Create a new application version in Elastic Beanstalk
+            aws elasticbeanstalk create-application-version \
+              --application-name ${{ env.EB_APP_NAME }} \
+              --version-label ${{ github.sha }} \
+              --description "Deployment from GitHub Actions workflow" \
+              --source-bundle "{\"S3Bucket\":\"${{ env.EB_APP_NAME }}-elasticbeanstalk\",\"S3Key\":\"${{ env.S3_KEY }}\"}" \
+              --process
+          fi
 
       - name: Deploy to Elastic Beanstalk
         run: |
