@@ -3,7 +3,6 @@ from fastapi import (
     APIRouter,
     WebSocket,
     Depends,
-    HTTPException,
     Query,
 )
 
@@ -12,6 +11,8 @@ from src.wrappers.elevenlabs.elevenlabs_websocket_middleware import (
 )
 from src.config.vars_grabber import VariablesGrabber
 from .enums import WebSocketEventType
+from src.wrappers.elevenlabs.toolbox import get_signed_url
+from src.app.errors import EnvironmentVariablesValueError
 
 router = APIRouter(prefix="/voicechat", tags=["voicechat"])
 logger = logging.getLogger(__name__)
@@ -27,11 +28,11 @@ def get_elevenlabs_middleware(
     voice_id: str = Query(None, description="ElevenLabs voice ID")
 ) -> ElevenLabsWebsocketMiddleware:
     if not ELEVENLABS_API_KEY:
-        raise HTTPException(status_code=500, detail="ELEVENLABS_API_KEY not configured")
+        logger.error("ELEVENLABS_API_KEY not configured")
+        raise EnvironmentVariablesValueError("ELEVENLABS_API_KEY not configured")
     if not ELEVENLABS_AGENT_ID:
-        raise HTTPException(
-            status_code=500, detail="ELEVENLABS_AGENT_ID not configured"
-        )
+        logger.error("ELEVENLABS_AGENT_ID not configured")
+        raise EnvironmentVariablesValueError("ELEVENLABS_AGENT_ID not configured")
 
     return ElevenLabsWebsocketMiddleware(
         agent_id=ELEVENLABS_AGENT_ID, api_key=ELEVENLABS_API_KEY, voice_id=voice_id
