@@ -12,7 +12,7 @@ from src.utils.metaclasses import DynamicSingleton
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_REGION = "eu-west-3"
+DEFAULT_REGION = "us-east-1"
 
 
 class CognitoWrapper(metaclass=DynamicSingleton):
