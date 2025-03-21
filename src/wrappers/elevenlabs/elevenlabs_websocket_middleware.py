@@ -1,7 +1,6 @@
 import json
 import logging
 import asyncio
-import traceback
 from typing import Any, Optional, Callable
 import websockets
 from fastapi import WebSocket
@@ -43,18 +42,8 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
         Returns:
             client_id: The ID assigned to the client
         """
-        # Accept the client connection if not already accepted
-        # Check if the connection is already accepted to avoid errors
-        if not getattr(client_websocket, "_accepted", False):
-            try:
-                await client_websocket.accept()
-                logger.info("Accepted WebSocket connection in middleware")
-            except RuntimeError as e:
-                if "already accepted" not in str(e).lower():
-                    # If the error is not about already being accepted, re-raise
-                    raise
-                logger.info("WebSocket connection was already accepted")
-
+        # Accept the client connection
+        await client_websocket.accept()
         self.client_connection = client_websocket
         self.is_client_connected = True
         self.client_id = f"{id(client_websocket)}"
@@ -89,36 +78,14 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
         if debug:
             query_params.append("debug=true")
 
+        connection_url = f"{self.__get_signed_url()}?{'&'.join(query_params)}"
+
         try:
-            # Get the signed URL and log it (partially redacted for security)
-            signed_url = self.__get_signed_url()
-            if signed_url:
-                # Redact most of the URL for security but show part of it for debugging
-                redacted_url = (
-                    f"{signed_url[:20]}...{signed_url[-20:]}"
-                    if len(signed_url) > 40
-                    else "URL too short to redact safely"
-                )
-                logger.info(f"Got signed URL from ElevenLabs: {redacted_url}")
-            else:
-                logger.error("Failed to get signed URL from ElevenLabs: URL is None")
-                raise Exception("Failed to get signed URL from ElevenLabs")
-
-            connection_url = f"{signed_url}?{'&'.join(query_params)}"
-            logger.info(
-                f"Attempting to connect to ElevenLabs with params: {query_params}"
-            )
-
-            # Add a timeout to the websocket connection to avoid hanging
-            self.elevenlabs_connection = await asyncio.wait_for(
-                websockets.connect(connection_url), timeout=10.0  # 10 second timeout
-            )
+            self.elevenlabs_connection = await websockets.connect(connection_url)
             self.is_elevenlabs_connected = True
             logger.info("Connected to ElevenLabs websocket API")
         except Exception as e:
-            stack_trace = traceback.format_exc()
-            error_msg = f"Failed to connect to ElevenLabs: {str(e)}\n{stack_trace}"
-            logger.error(error_msg)
+            logger.error(f"Failed to connect to ElevenLabs: {str(e)}")
             # Close client connection if ElevenLabs connection fails
             await self._close_client_connection("Failed to connect to ElevenLabs")
             raise
@@ -321,10 +288,4 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
 
     # Private methods:
     def __get_signed_url(self):
-        try:
-            url = get_signed_url(self.api_key, self.agent_id)
-            return url
-        except Exception as e:
-            stack_trace = traceback.format_exc()
-            logger.error(f"Error getting signed URL: {str(e)}\n{stack_trace}")
-            return None
+        return get_signed_url(self.api_key, self.agent_id)
