@@ -1,5 +1,4 @@
 import logging
-import os
 from fastapi import (
     APIRouter,
     WebSocket,
@@ -11,6 +10,7 @@ from fastapi import (
 from src.wrappers.elevenlabs.elevenlabs_websocket_middleware import (
     ElevenLabsWebsocketMiddleware,
 )
+from src.config.vars_grabber import VariablesGrabber
 from .enums import WebSocketEventType
 
 router = APIRouter(prefix="/voicechat", tags=["voicechat"])
@@ -19,23 +19,22 @@ logger = logging.getLogger(__name__)
 # Cache for active connections
 active_middlewares: dict[str, ElevenLabsWebsocketMiddleware] = {}
 
+ELEVENLABS_API_KEY = VariablesGrabber().get("ELEVENLABS_API_KEY")
+ELEVENLABS_AGENT_ID = VariablesGrabber().get("ELEVENLABS_AGENT_ID")
+
 
 def get_elevenlabs_middleware(
     voice_id: str = Query(None, description="ElevenLabs voice ID")
 ) -> ElevenLabsWebsocketMiddleware:
-    """Dependency to get ElevenLabs middleware with API key from environment"""
-    api_key = os.getenv("ELEVENLABS_API_KEY")
-    agent_id = os.getenv("ELEVENLABS_AGENT_ID")
-
-    if not api_key:
+    if not ELEVENLABS_API_KEY:
         raise HTTPException(status_code=500, detail="ELEVENLABS_API_KEY not configured")
-    if not agent_id:
+    if not ELEVENLABS_AGENT_ID:
         raise HTTPException(
             status_code=500, detail="ELEVENLABS_AGENT_ID not configured"
         )
 
     return ElevenLabsWebsocketMiddleware(
-        agent_id=agent_id, api_key=api_key, voice_id=voice_id
+        agent_id=ELEVENLABS_AGENT_ID, api_key=ELEVENLABS_API_KEY, voice_id=voice_id
     )
 
 
