@@ -35,6 +35,8 @@ jobs:
       EB_APP_NAME: "${{ vars.PROJECT_KEY }}-${{ vars.ENV }}-backend"
       EB_ENV_NAME: "${{ vars.PROJECT_KEY }}-${{ vars.ENV }}-backend"
       S3_KEY: Dockerrun.aws.json
+      CONTAINER_PORT: 8000
+      HOST_PORT: 80
 
     steps:
       - name: Checkout code
@@ -88,8 +90,8 @@ jobs:
             },
             "Ports": [
               {
-                "ContainerPort": 3000,
-                "HostPort": 80
+                "ContainerPort": ${{ env.CONTAINER_PORT }},
+                "HostPort": ${{ env.HOST_PORT }}
               }
             ]
           }
