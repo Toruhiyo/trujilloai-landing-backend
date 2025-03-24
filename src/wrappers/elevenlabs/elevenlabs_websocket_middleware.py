@@ -12,11 +12,8 @@ logger = logging.getLogger(__name__)
 
 
 class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
-    """
-    Middleware for handling websocket connections with ElevenLabs Conversational AI API.
-    Acts as a bidirectional proxy between front-end clients and ElevenLabs websocket service.
-    """
 
+    # Public:
     def __init__(self, agent_id: str, api_key: str, voice_id: Optional[str] = None):
         self.agent_id = agent_id
         self.api_key = api_key
@@ -32,16 +29,6 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
     async def setup_connections(
         self, client_websocket: WebSocket, debug: bool = False
     ) -> str:
-        """
-        Setup connections for both client and ElevenLabs
-
-        Args:
-            client_websocket: The client's WebSocket connection
-            debug: Enable debug mode for ElevenLabs
-
-        Returns:
-            client_id: The ID assigned to the client
-        """
         # Accept the client connection
         await client_websocket.accept()
         self.client_connection = client_websocket
@@ -49,49 +36,15 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
         self.client_id = f"{id(client_websocket)}"
 
         # Connect to ElevenLabs
-        await self._connect_to_elevenlabs(debug)
+        await self.__connect_to_elevenlabs(debug)
 
         # Send connected event to client
-        await self._send_connected_event()
+        await self.__send_connected_event()
 
         # Return the client ID for reference
         return self.client_id
 
-    async def _send_connected_event(self):
-        """Send a connected event to the client"""
-        if self.is_client_connected and self.client_connection:
-            from src.app.voicechat.enums import WebSocketEventType
-
-            await self.client_connection.send_json(
-                {
-                    "type": WebSocketEventType.CONNECTED,
-                    "data": {"status": "connected", "client_id": self.client_id},
-                }
-            )
-            logger.info(f"Sent connected event to client: {self.client_id}")
-
-    async def _connect_to_elevenlabs(self, debug: bool = False) -> None:
-        """Establish connection to ElevenLabs websocket"""
-        query_params = [f"agent_id={self.agent_id}"]
-        if self.voice_id:
-            query_params.append(f"voice_id={self.voice_id}")
-        if debug:
-            query_params.append("debug=true")
-
-        connection_url = f"{self.__get_signed_url()}?{'&'.join(query_params)}"
-
-        try:
-            self.elevenlabs_connection = await websockets.connect(connection_url)
-            self.is_elevenlabs_connected = True
-            logger.info("Connected to ElevenLabs websocket API")
-        except Exception as e:
-            logger.error(f"Failed to connect to ElevenLabs: {str(e)}")
-            # Close client connection if ElevenLabs connection fails
-            await self._close_client_connection("Failed to connect to ElevenLabs")
-            raise
-
     async def start_forwarding(self):
-        """Start forwarding messages between client and ElevenLabs"""
         if not (self.is_client_connected and self.is_elevenlabs_connected):
             raise ConnectionError(
                 "Both client and ElevenLabs connections must be established"
@@ -102,8 +55,12 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
         self._shutdown_event.clear()
 
         # Create tasks for forwarding in both directions
-        client_to_elevenlabs = asyncio.create_task(self._forward_client_to_elevenlabs())
-        elevenlabs_to_client = asyncio.create_task(self._forward_elevenlabs_to_client())
+        client_to_elevenlabs = asyncio.create_task(
+            self.__forward_client_to_elevenlabs()
+        )
+        elevenlabs_to_client = asyncio.create_task(
+            self.__forward_elevenlabs_to_client()
+        )
 
         # Store tasks
         self._forward_tasks = [client_to_elevenlabs, elevenlabs_to_client]
@@ -135,10 +92,55 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
             # Ensure connections are closed
             await self.close_all_connections()
 
-    async def _forward_client_to_elevenlabs(
+    async def close_all_connections(self):
+        # Trigger shutdown event
+        self._shutdown_event.set()
+
+        # Close ElevenLabs connection
+        await self.__close_elevenlabs_connection()
+
+        # Close client connection
+        await self.__close_client_connection("Service shutting down")
+
+        # Wait for forwarding tasks to complete
+        if self._forward_tasks:
+            await asyncio.wait(self._forward_tasks, timeout=2)
+
+    # Private:
+    async def __send_connected_event(self):
+        if self.is_client_connected and self.client_connection:
+            from src.app.voicechat.enums import WebSocketEventType
+
+            await self.client_connection.send_json(
+                {
+                    "type": WebSocketEventType.CONNECTED,
+                    "data": {"status": "connected", "client_id": self.client_id},
+                }
+            )
+            logger.info(f"Sent connected event to client: {self.client_id}")
+
+    async def __connect_to_elevenlabs(self, debug: bool = False) -> None:
+        query_params = [f"agent_id={self.agent_id}"]
+        if self.voice_id:
+            query_params.append(f"voice_id={self.voice_id}")
+        if debug:
+            query_params.append("debug=true")
+
+        connection_url = f"{self.__get_signed_url()}?{'&'.join(query_params)}"
+
+        try:
+            self.elevenlabs_connection = await websockets.connect(connection_url)
+            self.is_elevenlabs_connected = True
+            logger.info("Connected to ElevenLabs websocket API")
+        except Exception as e:
+            logger.error(f"Failed to connect to ElevenLabs: {str(e)}")
+            # Close client connection if ElevenLabs connection fails
+            await self.__close_client_connection("Failed to connect to ElevenLabs")
+            raise
+
+    async def __forward_client_to_elevenlabs(
         self, on_event: Optional[Callable[[str, Any], None]] = None
     ):
-        """Forward messages from client to ElevenLabs"""
         try:
             while (
                 not self._shutdown_event.is_set()
@@ -182,21 +184,20 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
 
             # Don't try to close ElevenLabs if it's already closed
             if self.is_elevenlabs_connected:
-                await self._close_elevenlabs_connection()
+                await self.__close_elevenlabs_connection()
         except Exception as e:
             logger.error(f"Error forwarding client to ElevenLabs: {str(e)}")
 
             # Don't try to close ElevenLabs if it's already closed
             if self.is_elevenlabs_connected:
-                await self._close_elevenlabs_connection()
+                await self.__close_elevenlabs_connection()
         finally:
             # Make sure client is marked as disconnected
             self.is_client_connected = False
 
-    async def _forward_elevenlabs_to_client(
+    async def __forward_elevenlabs_to_client(
         self, on_event: Optional[Callable[[str, Any], None]] = None
     ):
-        """Forward messages from ElevenLabs to client"""
         try:
             while (
                 not self._shutdown_event.is_set()
@@ -232,16 +233,15 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
             )
             self.is_elevenlabs_connected = False
             # Close client connection if ElevenLabs connection closes
-            await self._close_client_connection("ElevenLabs connection closed")
+            await self.__close_client_connection("ElevenLabs connection closed")
         except Exception as e:
             logger.error(f"Error forwarding ElevenLabs to client: {str(e)}")
             # Close client connection on error
-            await self._close_client_connection(
+            await self.__close_client_connection(
                 f"Error in ElevenLabs communication: {str(e)}"
             )
 
-    async def _close_client_connection(self, reason: str):
-        """Close the client WebSocket connection with error message"""
+    async def __close_client_connection(self, reason: str):
         if self.is_client_connected and self.client_connection:
             try:
                 from src.app.voicechat.enums import WebSocketEventType
@@ -260,8 +260,7 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
             finally:
                 self.is_client_connected = False
 
-    async def _close_elevenlabs_connection(self):
-        """Close the ElevenLabs WebSocket connection"""
+    async def __close_elevenlabs_connection(self):
         if self.is_elevenlabs_connected and self.elevenlabs_connection:
             try:
                 await self.elevenlabs_connection.close()
@@ -271,21 +270,5 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
             finally:
                 self.is_elevenlabs_connected = False
 
-    async def close_all_connections(self):
-        """Close both client and ElevenLabs connections"""
-        # Trigger shutdown event
-        self._shutdown_event.set()
-
-        # Close ElevenLabs connection
-        await self._close_elevenlabs_connection()
-
-        # Close client connection
-        await self._close_client_connection("Service shutting down")
-
-        # Wait for forwarding tasks to complete
-        if self._forward_tasks:
-            await asyncio.wait(self._forward_tasks, timeout=2)
-
-    # Private methods:
     def __get_signed_url(self):
         return get_signed_url(self.api_key, self.agent_id)
