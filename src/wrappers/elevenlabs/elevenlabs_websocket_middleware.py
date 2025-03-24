@@ -43,8 +43,8 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
         self.__is_elevenlabs_connected = False
         self.__is_client_connected = False
         self.__client_id = None
-        self._forward_tasks = []
-        self._shutdown_event = asyncio.Event()
+        self.__forward_tasks = []
+        self.__shutdown_event = asyncio.Event()
 
     async def setup_connections(
         self, client_websocket: WebSocket, debug: bool = False
@@ -71,8 +71,8 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
             )
 
         # Clear any existing tasks
-        self._forward_tasks = []
-        self._shutdown_event.clear()
+        self.__forward_tasks = []
+        self.__shutdown_event.clear()
 
         # Create tasks for forwarding in both directions
         client_to_elevenlabs = asyncio.create_task(
@@ -83,12 +83,12 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
         )
 
         # Store tasks
-        self._forward_tasks = [client_to_elevenlabs, elevenlabs_to_client]
+        self.__forward_tasks = [client_to_elevenlabs, elevenlabs_to_client]
 
         # Wait for either task to complete - when one connection fails, we stop both
         try:
             done, pending = await asyncio.wait(
-                self._forward_tasks, return_when=asyncio.FIRST_COMPLETED
+                self.__forward_tasks, return_when=asyncio.FIRST_COMPLETED
             )
 
             # Check for exceptions in completed tasks
@@ -102,19 +102,19 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
             logger.info("Forwarding was cancelled")
         finally:
             # Ensure both tasks are properly cleaned up
-            for task in self._forward_tasks:
+            for task in self.__forward_tasks:
                 if not task.done():
                     task.cancel()
 
             # Wait briefly for tasks to complete
-            await asyncio.gather(*self._forward_tasks, return_exceptions=True)
+            await asyncio.gather(*self.__forward_tasks, return_exceptions=True)
 
             # Ensure connections are closed
             await self.close_all_connections()
 
     async def close_all_connections(self):
         # Trigger shutdown event
-        self._shutdown_event.set()
+        self.__shutdown_event.set()
 
         # Close ElevenLabs connection
         await self.__close_elevenlabs_connection()
@@ -123,8 +123,8 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
         await self.__close_client_connection("Service shutting down")
 
         # Wait for forwarding tasks to complete
-        if self._forward_tasks:
-            await asyncio.wait(self._forward_tasks, timeout=2)
+        if self.__forward_tasks:
+            await asyncio.wait(self.__forward_tasks, timeout=2)
 
     # Private:
     async def __send_connected_event(self):
@@ -163,7 +163,7 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
     ):
         try:
             while (
-                not self._shutdown_event.is_set()
+                not self.__shutdown_event.is_set()
                 and self.__is_client_connected
                 and self.__is_elevenlabs_connected
             ):
@@ -222,7 +222,7 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
     ):
         try:
             while (
-                not self._shutdown_event.is_set()
+                not self.__shutdown_event.is_set()
                 and self.__is_elevenlabs_connected
                 and self.__is_client_connected
             ):
