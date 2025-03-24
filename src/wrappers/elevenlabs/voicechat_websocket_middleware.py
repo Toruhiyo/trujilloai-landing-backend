@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Dict
+from typing import Any
 
 from src.wrappers.elevenlabs.elevenlabs_websocket_middleware import (
     ElevenLabsWebsocketMiddleware,
@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 class VoicechatWebsocketMiddleware(ElevenLabsWebsocketMiddleware):
 
     @client_tool_call(tool_name="highlight_text")
-    async def handle_search_tool(self, message: Dict[str, Any]):
+    async def handle_search_tool(self, message: dict[str, Any]):
         try:
             tool_call = message.get("client_tool_call", {})
             parameters = tool_call.get("parameters", {})
