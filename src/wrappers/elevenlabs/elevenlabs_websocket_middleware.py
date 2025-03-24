@@ -1,7 +1,7 @@
 import json
 import logging
 import asyncio
-from typing import Any, Optional, Callable
+from typing import Any, Optional, Callable, Dict, TypeVar, List
 import websockets
 from fastapi import WebSocket
 from websockets.exceptions import ConnectionClosed
@@ -9,6 +9,47 @@ from src.utils.metaclasses import DynamicSingleton
 from src.wrappers.elevenlabs.toolbox import get_signed_url
 
 logger = logging.getLogger(__name__)
+
+# Type for the event matcher function
+T = TypeVar("T")
+EventMatcherType = Callable[[Dict[str, Any]], bool]
+
+
+# Decorator factories
+def client_event(event_match: EventMatcherType) -> Callable[[Callable], Callable]:
+
+    def decorator(func):
+        # Mark this function for later registration
+        func.is_client_handler = True
+        func.event_matcher = event_match
+        return func
+
+    return decorator
+
+
+def server_event(event_match: EventMatcherType) -> Callable[[Callable], Callable]:
+
+    def decorator(func):
+        # Mark this function for later registration
+        func.is_server_handler = True
+        func.event_matcher = event_match
+        return func
+
+    return decorator
+
+
+def client_tool_call(tool_name: str):
+
+    def event_matcher(message: Dict[str, Any]) -> bool:
+        # First check if it's a client_tool_call message
+        if message.get("type") != "client_tool_call":
+            return False
+
+        # Then check if the tool_name matches
+        tool_call_data = message.get("client_tool_call", {})
+        return tool_call_data.get("tool_name") == tool_name
+
+    return server_event(event_matcher)
 
 
 class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
@@ -46,6 +87,35 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
         self.__forward_tasks = []
         self.__shutdown_event = asyncio.Event()
 
+        # Event handling attributes
+        self.__client_event_handlers: List[Callable] = []
+        self.__server_event_handlers: List[Callable] = []
+        self.__register_event_handlers()
+
+    def __register_event_handlers(self):
+        """
+        Automatically registers all methods decorated with @client_event or @server_event.
+        """
+        for attr_name in dir(self):
+            if attr_name.startswith("__"):
+                continue
+
+            attr = getattr(self, attr_name)
+            if callable(attr):
+                # Register client event handlers
+                if hasattr(attr, "is_client_handler") and getattr(
+                    attr, "is_client_handler"
+                ):
+                    self.__client_event_handlers.append(attr)
+                    logger.info(f"Registered client event handler: {attr_name}")
+
+                # Register server event handlers
+                if hasattr(attr, "is_server_handler") and getattr(
+                    attr, "is_server_handler"
+                ):
+                    self.__server_event_handlers.append(attr)
+                    logger.info(f"Registered server event handler: {attr_name}")
+
     async def setup_connections(
         self, client_websocket: WebSocket, debug: bool = False
     ) -> str:
@@ -74,12 +144,12 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
         self.__forward_tasks = []
         self.__shutdown_event.clear()
 
-        # Create tasks for forwarding in both directions
+        # Create tasks for forwarding in both directions with event handling
         client_to_elevenlabs = asyncio.create_task(
-            self.__forward_client_to_elevenlabs()
+            self.__forward_client_to_elevenlabs_with_handlers()
         )
         elevenlabs_to_client = asyncio.create_task(
-            self.__forward_elevenlabs_to_client()
+            self.__forward_elevenlabs_to_client_with_handlers()
         )
 
         # Store tasks
@@ -170,24 +240,24 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
             await self.__close_client_connection("Failed to connect to ElevenLabs")
             raise
 
-    async def __forward_client_to_elevenlabs(
+    async def __forward_client_to_elevenlabs_with_handlers(
         self, on_event: Optional[Callable[[str, Any], None]] = None
     ):
+        """
+        Forward messages from client to ElevenLabs with event handling.
+        """
         try:
             while (
                 not self.__shutdown_event.is_set()
                 and self.__is_client_connected
                 and self.__is_elevenlabs_connected
+                and self.__client_connection is not None
             ):
-                # Receive message from client with a timeout to check connection status periodically
+                # Receive message from client with a timeout
                 try:
-                    if self.__client_connection:
-                        client_message = await asyncio.wait_for(
-                            self.__client_connection.receive_json(), timeout=1.0
-                        )
-                    else:
-                        logger.warning("Cannot forward to client: connection is closed")
-                        break
+                    client_message = await asyncio.wait_for(
+                        self.__client_connection.receive_json(), timeout=1.0
+                    )
                 except asyncio.TimeoutError:
                     # Just check if connections are still valid and continue
                     if not (
@@ -196,14 +266,17 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
                         break
                     continue
 
-                # Skip forwarding if ElevenLabs connection is closed
-                if not self.__is_elevenlabs_connected:
-                    logger.warning("Cannot forward to ElevenLabs: connection is closed")
-                    break
+                # Process the message with client event handlers
+                await self.__process_client_message(client_message)
 
                 # Call the event handler if provided
                 if on_event:
                     on_event("client_to_elevenlabs", client_message)
+
+                # Skip forwarding if ElevenLabs connection is closed
+                if not self.__is_elevenlabs_connected:
+                    logger.warning("Cannot forward to ElevenLabs: connection is closed")
+                    break
 
                 # Forward to ElevenLabs
                 await self.send_message_to_elevenlabs(client_message)
@@ -226,31 +299,34 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
             # Make sure client is marked as disconnected
             self.__is_client_connected = False
 
-    async def __forward_elevenlabs_to_client(
+    async def __forward_elevenlabs_to_client_with_handlers(
         self, on_event: Optional[Callable[[str, Any], None]] = None
     ):
+        """
+        Forward messages from ElevenLabs to client with event handling.
+        """
         try:
             while (
                 not self.__shutdown_event.is_set()
                 and self.__is_elevenlabs_connected
                 and self.__is_client_connected
+                and self.__elevenlabs_connection is not None
             ):
                 # Receive message from ElevenLabs
-                if self.__elevenlabs_connection is None:
-                    logger.warning("Cannot receive from ElevenLabs: connection is None")
-                    break
-
                 data = await self.__elevenlabs_connection.recv()
                 elevenlabs_message = json.loads(data)
+
+                # Process the message with server event handlers
+                await self.__process_server_message(elevenlabs_message)
+
+                # Call the event handler if provided
+                if on_event:
+                    on_event("elevenlabs_to_client", elevenlabs_message)
 
                 # Skip forwarding if client connection is closed
                 if not self.__is_client_connected:
                     logger.warning("Cannot forward to client: connection is closed")
                     break
-
-                # Call the event handler if provided
-                if on_event:
-                    on_event("elevenlabs_to_client", elevenlabs_message)
 
                 # Forward to client
                 await self.send_message_to_client(elevenlabs_message)
@@ -268,6 +344,58 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
             await self.__close_client_connection(
                 f"Error in ElevenLabs communication: {str(e)}"
             )
+
+    async def __process_client_message(self, message: Dict[str, Any]):
+        """
+        Process a client message with registered handlers.
+
+        Args:
+            message: The client message to process
+        """
+        try:
+            # Go through all registered client event handlers
+            for handler in self.__client_event_handlers:
+                # Check if this handler should process this message
+                event_matcher = getattr(handler, "event_matcher", None)
+                if event_matcher is None:
+                    continue
+
+                try:
+                    if event_matcher(message):
+                        # Run the handler
+                        handler(message)
+                except Exception as matcher_error:
+                    # If the matcher fails (e.g., due to missing keys), just skip this handler
+                    logger.debug(f"Event matcher failed: {matcher_error}")
+                    continue
+        except Exception as e:
+            logger.error(f"Error processing client message: {e}")
+
+    async def __process_server_message(self, message: Dict[str, Any]):
+        """
+        Process a server message with registered handlers.
+
+        Args:
+            message: The server message to process
+        """
+        try:
+            # Go through all registered server event handlers
+            for handler in self.__server_event_handlers:
+                # Check if this handler should process this message
+                event_matcher = getattr(handler, "event_matcher", None)
+                if event_matcher is None:
+                    continue
+
+                try:
+                    if event_matcher(message):
+                        # Run the handler
+                        handler(message)
+                except Exception as matcher_error:
+                    # If the matcher fails (e.g., due to missing keys), just skip this handler
+                    logger.debug(f"Event matcher failed: {matcher_error}")
+                    continue
+        except Exception as e:
+            logger.error(f"Error processing server message: {e}")
 
     async def __close_client_connection(self, reason: str):
         if self.__is_client_connected and self.__client_connection:
