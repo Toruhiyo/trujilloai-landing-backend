@@ -196,13 +196,13 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
         if self.__forward_tasks:
             await asyncio.wait(self.__forward_tasks, timeout=2)
 
-    async def send_message_to_client(self, message: str):
+    async def send_message_to_client(self, message: dict):
         if self.__client_connection:
             await self.__client_connection.send_json(message)
         else:
             logger.warning("Cannot forward to client: connection is closed")
 
-    async def send_message_to_elevenlabs(self, message: str):
+    async def send_message_to_elevenlabs(self, message: dict):
         if self.__elevenlabs_connection:
             await self.__elevenlabs_connection.send(json.dumps(message))
         else:
@@ -389,7 +389,7 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
                 try:
                     if event_matcher(message):
                         # Run the handler
-                        handler(message)
+                        await handler(message)
                 except Exception as matcher_error:
                     # If the matcher fails (e.g., due to missing keys), just skip this handler
                     logger.debug(f"Event matcher failed: {matcher_error}")
