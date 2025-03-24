@@ -6,7 +6,7 @@ import websockets
 from fastapi import WebSocket
 from websockets.exceptions import ConnectionClosed
 from src.utils.metaclasses import DynamicSingleton
-from src.wrappers.elevenlabs.toolbox import get_signed_url
+from src.wrappers.elevenlabs.toolbox import format_message_for_logging, get_signed_url
 
 logger = logging.getLogger(__name__)
 
@@ -204,6 +204,9 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
 
     async def send_message_to_elevenlabs(self, message: dict):
         if self.__elevenlabs_connection:
+            logger.info(
+                f"Sending message to ElevenLabs: {format_message_for_logging(message)}"
+            )
             await self.__elevenlabs_connection.send(json.dumps(message))
         else:
             logger.warning("Cannot forward to ElevenLabs: connection is closed")

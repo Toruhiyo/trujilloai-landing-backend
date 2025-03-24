@@ -1,4 +1,5 @@
 from elevenlabs.client import ElevenLabs
+from copy import deepcopy
 
 
 def get_signed_url(api_key: str, agent_id: str):
@@ -9,3 +10,12 @@ def get_signed_url(api_key: str, agent_id: str):
     except Exception as error:
         print(f"Error getting signed URL: {error}")
         raise
+
+
+def format_message_for_logging(message: dict) -> dict:
+    message_copy = deepcopy(message)
+    if message_copy.get("audio_event"):
+        message_copy["audio_event"] = "..."
+    if message_copy.get("user_audio_chunk"):
+        message_copy["user_audio_chunk"] = "..."
+    return message_copy
