@@ -126,6 +126,18 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
         if self.__forward_tasks:
             await asyncio.wait(self.__forward_tasks, timeout=2)
 
+    async def send_message_to_client(self, message: str):
+        if self.__client_connection:
+            await self.__client_connection.send_json(message)
+        else:
+            logger.warning("Cannot forward to client: connection is closed")
+
+    async def send_message_to_elevenlabs(self, message: str):
+        if self.__elevenlabs_connection:
+            await self.__elevenlabs_connection.send(json.dumps(message))
+        else:
+            logger.warning("Cannot forward to ElevenLabs: connection is closed")
+
     # Private:
     async def __send_connected_event(self):
         if self.__is_client_connected and self.__client_connection:
@@ -194,10 +206,7 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
                     on_event("client_to_elevenlabs", client_message)
 
                 # Forward to ElevenLabs
-                if self.__elevenlabs_connection:
-                    await self.__elevenlabs_connection.send(json.dumps(client_message))
-                else:
-                    logger.warning("Cannot forward to ElevenLabs: connection is closed")
+                await self.send_message_to_elevenlabs(client_message)
 
         except websockets.exceptions.ConnectionClosed as e:
             # Normal closure, don't treat as error
@@ -244,10 +253,7 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
                     on_event("elevenlabs_to_client", elevenlabs_message)
 
                 # Forward to client
-                if self.__client_connection:
-                    await self.__client_connection.send_json(elevenlabs_message)
-                else:
-                    logger.warning("Cannot forward to client: connection is closed")
+                await self.send_message_to_client(elevenlabs_message)
 
         except ConnectionClosed as e:
             logger.info(
