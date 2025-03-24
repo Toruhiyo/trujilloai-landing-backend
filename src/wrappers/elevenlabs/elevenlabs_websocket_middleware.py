@@ -1,7 +1,7 @@
 import json
 import logging
 import asyncio
-from typing import Any, Optional, Callable, Dict, TypeVar, List
+from typing import Any, Optional, Callable, TypeVar
 import websockets
 from fastapi import WebSocket
 from websockets.exceptions import ConnectionClosed
@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 # Type for the event matcher function
 T = TypeVar("T")
-EventMatcherType = Callable[[Dict[str, Any]], bool]
+EventMatcherType = Callable[[dict[str, Any]], bool]
 
 
 # Decorator factories
@@ -40,7 +40,7 @@ def server_event(event_match: EventMatcherType) -> Callable[[Callable], Callable
 
 def client_tool_call(tool_name: str):
 
-    def event_matcher(message: Dict[str, Any]) -> bool:
+    def event_matcher(message: dict[str, Any]) -> bool:
         # First check if it's a client_tool_call message
         if message.get("type") != "client_tool_call":
             return False
@@ -88,33 +88,15 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
         self.__shutdown_event = asyncio.Event()
 
         # Event handling attributes
-        self.__client_event_handlers: List[Callable] = []
-        self.__server_event_handlers: List[Callable] = []
+        self.__client_event_handlers: list[Callable] = []
+        self.__server_event_handlers: list[Callable] = []
         self.__register_event_handlers()
 
-    def __register_event_handlers(self):
-        """
-        Automatically registers all methods decorated with @client_event or @server_event.
-        """
-        for attr_name in dir(self):
-            if attr_name.startswith("__"):
-                continue
+        # Message filtering attributes (true = forward message, false = don't forward)
+        self._client_to_elevenlabs_filters: list[Callable[[dict[str, Any]], bool]] = []
+        self._elevenlabs_to_client_filters: list[Callable[[dict[str, Any]], bool]] = []
 
-            attr = getattr(self, attr_name)
-            if callable(attr):
-                # Register client event handlers
-                if hasattr(attr, "is_client_handler") and getattr(
-                    attr, "is_client_handler"
-                ):
-                    self.__client_event_handlers.append(attr)
-                    logger.info(f"Registered client event handler: {attr_name}")
-
-                # Register server event handlers
-                if hasattr(attr, "is_server_handler") and getattr(
-                    attr, "is_server_handler"
-                ):
-                    self.__server_event_handlers.append(attr)
-                    logger.info(f"Registered server event handler: {attr_name}")
+        self._register_additional_filters()
 
     async def setup_connections(
         self, client_websocket: WebSocket, debug: bool = False
@@ -198,20 +180,110 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
 
     async def send_message_to_client(self, message: dict):
         if self.__client_connection:
+            logger.debug(
+                f"Sending message to client: {format_message_for_logging(message)}"
+            )
             await self.__client_connection.send_json(message)
         else:
             logger.warning("Cannot forward to client: connection is closed")
 
     async def send_message_to_elevenlabs(self, message: dict):
         if self.__elevenlabs_connection:
-            logger.info(
+            logger.debug(
                 f"Sending message to ElevenLabs: {format_message_for_logging(message)}"
             )
             await self.__elevenlabs_connection.send(json.dumps(message))
         else:
             logger.warning("Cannot forward to ElevenLabs: connection is closed")
 
-    # Private:
+    def add_client_to_elevenlabs_filter(
+        self, filter_func: Callable[[dict[str, Any]], bool]
+    ):
+        self._client_to_elevenlabs_filters.append(filter_func)
+
+    def add_elevenlabs_to_client_filter(
+        self, filter_func: Callable[[dict[str, Any]], bool]
+    ):
+        self._elevenlabs_to_client_filters.append(filter_func)
+
+    # Protected:
+    def _register_additional_filters(self):
+        # Check if child classes have defined additional filters
+        if hasattr(self, "_additional_client_to_elevenlabs_filters"):
+            additional_filters: list[Callable[[dict[str, Any]], bool]] = (
+                self._additional_client_to_elevenlabs_filters  # type: ignore
+            )
+            self._client_to_elevenlabs_filters.extend(additional_filters)
+
+        if hasattr(self, "_additional_elevenlabs_to_client_filters"):
+            additional_filters: list[Callable[[dict[str, Any]], bool]] = (
+                self._additional_elevenlabs_to_client_filters  # type: ignore
+            )
+            self._elevenlabs_to_client_filters.extend(additional_filters)
+
+    def __register_event_handlers(self):
+        for attr_name in dir(self):
+            if attr_name.startswith("__"):
+                continue
+
+            attr = getattr(self, attr_name)
+            if callable(attr):
+                # Register client event handlers
+                if hasattr(attr, "is_client_handler") and getattr(
+                    attr, "is_client_handler"
+                ):
+                    self.__client_event_handlers.append(attr)
+                    logger.info(f"Registered client event handler: {attr_name}")
+
+                # Register server event handlers
+                if hasattr(attr, "is_server_handler") and getattr(
+                    attr, "is_server_handler"
+                ):
+                    self.__server_event_handlers.append(attr)
+                    logger.info(f"Registered server event handler: {attr_name}")
+
+    def __should_forward_to_elevenlabs(self, message: dict[str, Any]) -> bool:
+        # If no filters, forward by default
+        if not self._client_to_elevenlabs_filters:
+            return True
+
+        # Check all filters - all must return True for the message to be forwarded
+        for filter_func in self._client_to_elevenlabs_filters:
+            try:
+                if filter_func(message):
+                    logger.debug(
+                        f"Message filtered, not forwarding to ElevenLabs: "
+                        f"{format_message_for_logging(message)}"
+                    )
+                    return False
+            except Exception as e:
+                logger.error(f"Error in filter function: {e}")
+                # In case of error, be conservative and forward the message
+                continue
+
+        return True
+
+    def __should_forward_to_client(self, message: dict[str, Any]) -> bool:
+        # If no filters, forward by default
+        if not self._elevenlabs_to_client_filters:
+            return True
+
+        # Check all filters - all must return True for the message to be forwarded
+        for filter_func in self._elevenlabs_to_client_filters:
+            try:
+                if filter_func(message):
+                    logger.debug(
+                        f"Message filtered, not forwarding to client: "
+                        f"{format_message_for_logging(message)}"
+                    )
+                    return False
+            except Exception as e:
+                logger.error(f"Error in filter function: {e}")
+                # In case of error, be conservative and forward the message
+                continue
+
+        return True
+
     async def __send_connected_event(self):
         if self.__is_client_connected and self.__client_connection:
             from src.app.voicechat.enums import WebSocketEventType
@@ -246,9 +318,6 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
     async def __forward_client_to_elevenlabs_with_handlers(
         self, on_event: Optional[Callable[[str, Any], None]] = None
     ):
-        """
-        Forward messages from client to ElevenLabs with event handling.
-        """
         try:
             while (
                 not self.__shutdown_event.is_set()
@@ -281,8 +350,15 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
                     logger.warning("Cannot forward to ElevenLabs: connection is closed")
                     break
 
-                # Forward to ElevenLabs
-                await self.send_message_to_elevenlabs(client_message)
+                # Check if message should be forwarded based on filters
+                if self.__should_forward_to_elevenlabs(client_message):
+                    # Forward to ElevenLabs
+                    await self.send_message_to_elevenlabs(client_message)
+                else:
+                    logger.info(
+                        f"Message filtered out from forwarding to ElevenLabs: "
+                        f"{format_message_for_logging(client_message)}"
+                    )
 
         except websockets.exceptions.ConnectionClosed as e:
             # Normal closure, don't treat as error
@@ -305,9 +381,6 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
     async def __forward_elevenlabs_to_client_with_handlers(
         self, on_event: Optional[Callable[[str, Any], None]] = None
     ):
-        """
-        Forward messages from ElevenLabs to client with event handling.
-        """
         try:
             while (
                 not self.__shutdown_event.is_set()
@@ -331,8 +404,15 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
                     logger.warning("Cannot forward to client: connection is closed")
                     break
 
-                # Forward to client
-                await self.send_message_to_client(elevenlabs_message)
+                # Check if message should be forwarded based on filters
+                if self.__should_forward_to_client(elevenlabs_message):
+                    # Forward to client
+                    await self.send_message_to_client(elevenlabs_message)
+                else:
+                    logger.info(
+                        f"Message filtered out from forwarding to client: "
+                        f"{format_message_for_logging(elevenlabs_message)}"
+                    )
 
         except ConnectionClosed as e:
             logger.info(
@@ -348,13 +428,7 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
                 f"Error in ElevenLabs communication: {str(e)}"
             )
 
-    async def __process_client_message(self, message: Dict[str, Any]):
-        """
-        Process a client message with registered handlers.
-
-        Args:
-            message: The client message to process
-        """
+    async def __process_client_message(self, message: dict[str, Any]):
         try:
             # Go through all registered client event handlers
             for handler in self.__client_event_handlers:
@@ -374,13 +448,7 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
         except Exception as e:
             logger.error(f"Error processing client message: {e}")
 
-    async def __process_server_message(self, message: Dict[str, Any]):
-        """
-        Process a server message with registered handlers.
-
-        Args:
-            message: The server message to process
-        """
+    async def __process_server_message(self, message: dict[str, Any]):
         try:
             # Go through all registered server event handlers
             for handler in self.__server_event_handlers:

@@ -11,6 +11,14 @@ logger = logging.getLogger(__name__)
 
 class VoicechatWebsocketMiddleware(ElevenLabsWebsocketMiddleware):
 
+    # Public:
+
+    # Protected:
+    _additional_client_to_elevenlabs_filters = [
+        lambda message: message.get("type") == "client_tool_result"
+    ]
+
+    # Private:
     @client_tool_call(tool_name="highlight_text")
     async def handle_search_tool(self, message: dict[str, Any]):
         try:
