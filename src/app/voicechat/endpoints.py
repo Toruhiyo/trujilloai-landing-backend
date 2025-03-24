@@ -11,7 +11,6 @@ from src.wrappers.elevenlabs.elevenlabs_websocket_middleware import (
 )
 from src.config.vars_grabber import VariablesGrabber
 from .enums import WebSocketEventType
-from src.wrappers.elevenlabs.toolbox import get_signed_url
 from src.app.errors import EnvironmentVariablesValueError
 
 router = APIRouter(prefix="/voicechat", tags=["voicechat"])
