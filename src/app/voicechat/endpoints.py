@@ -6,7 +6,7 @@ from fastapi import (
     Query,
 )
 
-from src.wrappers.elevenlabs.voicechat_websocket_middleware import (
+from src.app.voicechat.voicechat_websocket_middleware import (
     VoicechatWebsocketMiddleware,
 )
 from src.config.vars_grabber import VariablesGrabber
