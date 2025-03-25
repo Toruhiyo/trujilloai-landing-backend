@@ -6,6 +6,7 @@ import websockets
 from fastapi import WebSocket
 from websockets.exceptions import ConnectionClosed
 from src.utils.metaclasses import DynamicSingleton
+from src.wrappers.elevenlabs.errors import ToolCallMissingParametersError
 from src.wrappers.elevenlabs.toolbox import format_message_for_logging, get_signed_url
 
 logger = logging.getLogger(__name__)
@@ -38,7 +39,7 @@ def server_event(event_match: EventMatcherType) -> Callable[[Callable], Callable
     return decorator
 
 
-def client_tool_call(tool_name: str):
+def client_tool_call(tool_name: str, required_parameters: Optional[list[str]] = None):
 
     def event_matcher(message: dict[str, Any]) -> bool:
         # First check if it's a client_tool_call message
@@ -47,7 +48,19 @@ def client_tool_call(tool_name: str):
 
         # Then check if the tool_name matches
         tool_call_data = message.get("client_tool_call", {})
-        return tool_call_data.get("tool_name") == tool_name
+        if tool_call_data.get("tool_name") != tool_name:
+            return False
+
+        # Check for required parameters if specified
+        if required_parameters:
+            parameters = tool_call_data.get("parameters", {})
+            missing_parameters = [
+                param for param in required_parameters if param not in parameters
+            ]
+            if missing_parameters:
+                raise ToolCallMissingParametersError(tool_name, missing_parameters)
+
+        return True
 
     return server_event(event_matcher)
 
