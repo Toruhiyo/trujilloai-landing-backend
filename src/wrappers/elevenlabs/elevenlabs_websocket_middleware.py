@@ -474,6 +474,9 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
                     if event_matcher(message):
                         # Run the handler
                         await handler(message)
+                except ToolCallMissingParametersError as e:
+                    logger.error(f"Tool call missing parameters: {e}")
+                    continue
                 except Exception as matcher_error:
                     # If the matcher fails (e.g., due to missing keys), just skip this handler
                     logger.debug(f"Event matcher failed: {matcher_error}")
