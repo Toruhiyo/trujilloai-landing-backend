@@ -1,0 +1,15 @@
+{
+    "type": "object",
+    "properties": {
+        "texts": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "description": "The list of text fragments that are most relevant to the user's query and assistant's response."
+        }
+    },
+    "required": [
+        "texts"
+    ]
+}

@@ -1,0 +1,12 @@
+YOUR REAL TASK:
+
+QUESTION:
+{question}
+
+ANSWER:
+{answer}
+
+SECTION CONTENT:
+{section_content}
+
+RESULTS:

@@ -1,0 +1,92 @@
+import logging
+from math import ceil
+from time import perf_counter
+from typing import Any, Dict, Iterator, List, Mapping, Optional
+
+from langchain_core.callbacks.manager import CallbackManagerForLLMRun
+from langchain_core.language_models.llms import LLM
+from langchain_core.outputs import GenerationChunk
+
+from src.wrappers.azure.openai.session import AzureOpenAiSession
+
+logger = logging.getLogger(__name__)
+
+
+class AzureOpenAiLLM(LLM):
+    """A custom chat model that echoes the first `n` characters of the input.
+
+    When contributing an implementation to LangChain, carefully document
+    the model including the initialization parameters, include
+    an example of how to initialize the model and include any relevant
+    links to the underlying models documentation or API.
+
+    Example:
+
+        .. code-block:: python
+
+            model = CustomChatModel(n=2)
+            result = model.invoke([HumanMessage(content="hello")])
+            result = model.batch([[HumanMessage(content="hello")],
+                                 [HumanMessage(content="world")]])
+    """
+
+    # n: int
+    """The number of characters from the last message of the prompt to be echoed."""
+
+    class Config:
+        extra = "allow"
+
+    def __init__(
+        self,
+        deployment_name: str,
+        *args,
+        params: Optional[dict[str, Any]] = None,
+        read_timeout: Optional[int] = None,
+        **kwargs,
+    ):
+        super().__init__(*args, **kwargs)
+        self.__deployment_name = deployment_name
+        self.__params = params or {}
+        self.__read_timeout = read_timeout
+
+    def _call(
+        self,
+        prompt: str,
+        stop: Optional[List[str]] = None,
+        run_manager: Optional[CallbackManagerForLLMRun] = None,
+        **kwargs: Any,
+    ) -> str:
+        logger.info(
+            f"Calling Azure OpenAI model ({self.__deployment_name}) with a prompt of {len(prompt)} characters (~{ceil(len(prompt)/4)} tokens)."
+        )
+        t0 = perf_counter()
+        if stop is not None:
+            raise ValueError("stop kwargs are not permitted.")
+
+        response = AzureOpenAiSession().chat.completions.create(
+            model=self.__deployment_name,
+            messages=[{"role": "user", "content": prompt}],
+            **self.__params,
+        )
+
+        logger.info(
+            f"Azure OpenAI model ({self.__deployment_name}) call took {perf_counter() - t0:.2f} seconds."
+        )
+
+        return response.choices[0].message.content
+
+    @property
+    def deployment_name(self) -> str:
+        return self.__deployment_name
+
+    @property
+    def _identifying_params(self) -> Dict[str, Any]:
+        """Return a dictionary of identifying parameters."""
+        return {
+            "deployment_name": self.__deployment_name,
+            "model_parameters": self.__params,
+        }
+
+    @property
+    def _llm_type(self) -> str:
+        return "Azure OpenAI"

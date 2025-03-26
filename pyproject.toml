@@ -19,6 +19,7 @@ pyjwt = "^2.8.0"
 mangum = "^0.17.0"
 pyngrok = "^7.2.3"
 elevenlabs = "^1.54.0"
+langchain = "^0.3.21"
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "^5.0.4"

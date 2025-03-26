@@ -1,0 +1,15 @@
+Tecnología de vanguardia a tu servicio 
+
+- AWS
+- Microsoft Azure
+- Google Cloud
+- OpenAI
+- Anthropic
+- Gemini
+- Bedrock
+- ElevenLabs
+- Hugging Face models
+- DeepSeek
+- Qwen
+- Manus AI
+- Python

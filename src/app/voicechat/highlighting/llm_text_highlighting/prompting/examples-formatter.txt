@@ -1,0 +1,15 @@
+EXAMPLE {example_id}
+
+Type: {type}
+
+Question:
+{question}
+
+Answer:
+{answer}
+
+Section content:
+{section_content}
+
+Results:
+{results}

@@ -1,3 +1,4 @@
+from src.app.landing.enums import SectionName
 from src.utils.typification.base_dto import BaseDTO
 from typing import Literal
 from datetime import datetime
@@ -16,17 +17,3 @@ class ChatbotBotMessageDTO(BaseDTO):
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: datetime = Field(default_factory=datetime.now)
     deleted_at: datetime | None = None
-
-
-class HighlightRequestDTO(BaseDTO):
-    text: str
-    section: Literal[
-        "HERO",
-        "SERVICES",
-        "WHY_CHOOSE_ORIOL",
-        "HOW_SOLO_OR_SQUAD",
-        "HOW_METHODOLOGY",
-        "SELECTED_PROJECTS",
-        "BIO",
-        "CONTACT_FORM",
-    ]

@@ -1,0 +1,14 @@
+Selected Projects
+A glimpse of significant projects I've led. Due to confidentiality agreements, client names are withheld.
+
+Chatbot as AI Hub
+Leading Spanish Pharma
+Built an enterprise-grade conversational AI agent serving as central knowledge hub. Integrated with Azure, Microsoft Entra ID, and custom microservices architecture for secure, 24/7 information access.
+
+Real-time Transcription & Translation
+AI Consultancy Agency
+Developed a real-time cloud-native service handling transcription, translation, and automatic dubbing across multiple languages including Arabic dialects. Built on AWS with optimized response times.
+
+Automatic Clinical Documents Masking
+Leading Spanish Pharma
+Created an AI-powered platform for automated clinical document masking, reducing processing time from days to hours while ensuring EMA compliance through smart ML models and manual review integration.

@@ -2,7 +2,10 @@ import logging
 from typing import Any
 from uuid import uuid5, NAMESPACE_URL
 
-from src.app.voicechat.highlighting.text_highligther import TextHighlighter
+from src.app.landing.enums import LanguageCode, SectionName
+from src.app.landing.toolbox import typify_language, typify_section_name
+from src.app.voicechat.highlighting.dtos import HighlightedTextDTO
+from src.app.voicechat.highlighting.text_highlighter import TextHighlighter
 from src.wrappers.elevenlabs.elevenlabs_websocket_middleware import (
     ElevenLabsWebsocketMiddleware,
     client_tool_call,
@@ -29,11 +32,12 @@ class VoicechatWebsocketMiddleware(ElevenLabsWebsocketMiddleware):
             tool_call = message.get("client_tool_call", {})
             parameters = tool_call.get("parameters", {})
             logger.info(f"Go to section tool called with parameters: {parameters}")
-            section_name = parameters.get("section")
-            question = parameters.get("question")
-            response = parameters.get("response")
-            text_to_highlight = self.__compute_text_to_highlight(
-                section_name, question, response
+            section_name = typify_section_name(parameters["section"])
+            question = parameters["question"]
+            response = parameters["response"]
+            language = typify_language(parameters["language"])
+            highlighted_text_results = self.__compute_text_to_highlight(
+                section_name, question, response, language
             )
             tool_call_uuid = tool_call.get("client_tool_call", {}).get(
                 "tool_call_id", ""
@@ -45,8 +49,8 @@ class VoicechatWebsocketMiddleware(ElevenLabsWebsocketMiddleware):
                         "tool_name": "highlight_text",
                         "tool_call_id": f"highlight_text_{tool_call_uuid}",
                         "parameters": {
-                            "section": section_name,
-                            "text": text_to_highlight,
+                            "section": section_name.value,
+                            "text": "\n".join(highlighted_text_results.texts),
                         },
                     },
                 }
@@ -56,8 +60,10 @@ class VoicechatWebsocketMiddleware(ElevenLabsWebsocketMiddleware):
 
     # Private:
     def __compute_text_to_highlight(
-        self, section_name: str, question: str, response: str
-    ) -> str:
-        return TextHighlighter().compute_text_to_highlight(
-            section_name, question, response
-        )
+        self,
+        section_name: SectionName,
+        question: str,
+        response: str,
+        language: LanguageCode,
+    ) -> HighlightedTextDTO:
+        return TextHighlighter().compute(section_name, question, response, language)
