@@ -26,6 +26,7 @@ class VoicechatWebsocketMiddleware(ElevenLabsWebsocketMiddleware):
     @client_tool_call(
         tool_name="go_to_section",
         required_parameters=["section", "question", "response", "language"],
+        await_handler=False,
     )
     async def _handle_go_to_section_tool(self, message: dict[str, Any]):
         try:

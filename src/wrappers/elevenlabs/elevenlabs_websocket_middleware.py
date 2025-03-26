@@ -39,7 +39,11 @@ def server_event(event_match: EventMatcherType) -> Callable[[Callable], Callable
     return decorator
 
 
-def client_tool_call(tool_name: str, required_parameters: Optional[list[str]] = None):
+def client_tool_call(
+    tool_name: str,
+    required_parameters: Optional[list[str]] = None,
+    await_handler: bool = True,
+):
 
     def event_matcher(message: dict[str, Any]) -> bool:
         # First check if it's a client_tool_call message
@@ -62,6 +66,8 @@ def client_tool_call(tool_name: str, required_parameters: Optional[list[str]] = 
 
         return True
 
+    # Store the await_handler setting on the matcher function
+    event_matcher.await_handler = await_handler
     return server_event(event_matcher)
 
 
@@ -472,8 +478,14 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
 
                 try:
                     if event_matcher(message):
-                        # Run the handler
-                        await handler(message)
+                        # Check if the handler should be awaited
+                        await_handler = getattr(event_matcher, "await_handler", True)
+
+                        # Run the handler with or without awaiting
+                        if await_handler:
+                            await handler(message)
+                        else:
+                            asyncio.create_task(handler(message))
                 except ToolCallMissingParametersError as e:
                     logger.error(f"Tool call missing parameters: {e}")
                     continue
