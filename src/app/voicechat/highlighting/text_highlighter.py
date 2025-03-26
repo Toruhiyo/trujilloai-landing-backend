@@ -14,7 +14,7 @@ DEFAULT_BEDROCK_MODEL_ID = (
     or "us.meta.llama3-2-1b-instruct-v1:0"
 )
 
-DEFAULT_SECTIONS_CONTENT_DIRECTORY = Path("src/app/landing/content")
+DEFAULT_SECTIONS_CONTENT_DIRECTORY = Path("src/app/landing/highlightable-content")
 
 
 class TextHighlighter(metaclass=DynamicSingleton):

@@ -1,0 +1,29 @@
+Mi flujo de trabajo
+Metodología probada
+Este es el flujo de trabajo que me ha permitido entregar proyectos exitosos a clientes satisfechos durante años :)
+
+01
+Definición
+Exploración y toma de requisitos
+
+Analicemos juntos las necesidades y objetivos de tu negocio para diseñar la solución de IA óptima.
+
+Documento funcional y Definition of Done
+
+Elaboración de documentación clara para definir la solución, cronogramas basados en entregables y criterios de aceptación para asegurar un entendimiento mutuo.
+
+02
+Ejecución
+Implementación con checkpoints regulares
+
+Empieza la magia. Hacemos lo se nos da mejor: desarrollamos la solución de IA mientras os mantenemos involucrados con actualizaciones regulares e integración de feedback.
+
+Entrega final
+
+Retoques finales, pruebas exhaustivas y refinamiento, para asegurar una solución pulida y lista para producción.
+
+03
+Soporte
+Soporte continuo y Service Level Agreement (SLA)
+
+La entrega no es el final del viaje. Asegurémonos de que tu solución de IA continúe entregando valor con soporte y mantenimiento continuos.
