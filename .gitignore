@@ -58,3 +58,6 @@ tests/data/outputs/*
 */*/tests/data/outputs/*
 */*/*/tests/data/outputs/*
 */*/*/*/tests/data/outputs/*
+
+# Logs
+logs/*

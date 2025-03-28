@@ -69,8 +69,8 @@ def make_serializable(value: Any, date_format: str | None = None, **kwargs) -> A
         value = value.decode()
     elif isinstance(value, complex):
         value = str(value)
-    elif isinstance(value, DataFrame):
-        value = value.to_csv(index=False)
+    # elif isinstance(value, DataFrame):
+    #     value = value.to_csv(index=False)
     elif isinstance(value, object):
         if hasattr(value, "__dict__"):
             value = make_serializable(value.__dict__, date_format=date_format, **kwargs)

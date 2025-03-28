@@ -1,0 +1,14 @@
+{
+    "question": "¿Cómo trabaja?",
+    "answer": "Como puedes ver, Oriol ofrece sus servicios como freelance, trabajando **solo o formando un equipo a medida**, según las necesidades del proyecto. Su metodología se basa en la **transparencia, la comunicación constante y la adaptación a las necesidades específicas de cada cliente.**",
+    "section_content": "Cómo trabajo\nSolo o en equipo\nDependiendo de las necesidades de tu proyecto, trabajo como One-Man Army o ensamblo un equipo especializado formado por profesionales de confianza.\n\nProfesional independiente\nPara proyectos más pequeños o específicos, trabajo de forma independiente apoyándome en la IA, encargándome de todo, desde la arquitectura hasta la implementación y el despliegue.\n\nEquipo personalizado\nPara proyectos más grandes o complejos, suelo formar un equipo especializado de mi extensa red de profesionales probados, seleccionados específicamente para las necesidades del proyecto.",
+    "results": {
+        "texts": [
+            "Solo o en equipo",
+            "One-Man Army",
+            "Equipo personalizado",
+            "Para proyectos más pequeños o específicos, trabajo de forma independiente apoyándome en la IA, encargándome de todo, desde la arquitectura hasta la implementación y el despliegue.",
+            "Para proyectos más grandes o complejos, suelo formar un equipo especializado de mi extensa red de profesionales probados, seleccionados específicamente para las necesidades del proyecto."
+        ]
+    }
+}

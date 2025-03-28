@@ -1,0 +1,15 @@
+{
+    "question": "I would like to know more about Oriol.",
+    "answer": "Oriol is a comitted Tech Lead & AI Expert with 7+ years in the AI industry, specializing in NLP. Currently enjoying my freelance adventure by building end-to-end tailor-made software solutions powered by AI. He stand out by focusing on 3 fundamental pillars: high technical quality, business-oriented vision and personal communication with which I turn innovative ideas into reality.",
+    "section_content": "Who I Am\nOriol\nI'm a comitted Tech Lead & AI Expert with 7+ years in the AI industry, specializing in NLP.\n\nCurrently enjoying my freelance adventure by building end-to-end tailor-made software solutions powered by AI.\n\nI stand out by focusing on 3 fundamental pillars: high technical quality, business-oriented vision and personal communication with which I turn innovative ideas into reality.\n\nRAG Architecture Pioneer in 2022\nOne-Man Army\nLightning Fast\n7+ Years Building AI Solutions\nAI Expert\nEnd-to-End Project Delivery",
+    "results": {
+        "texts": [
+            "I'm a comitted Tech Lead & AI Expert",
+            "7+ years in the AI industry",
+            "building end-to-end tailor-made software solutions powered by AI",
+            "high technical quality",
+            "business-oriented vision",
+            "personal communication"
+        ]
+    }
+}

@@ -7,17 +7,18 @@ You will be provided with the whole text content of an already selected website 
 You will have to work with either English or Spanish.
 
 RULES:
-1. You must NEVER alter the text content. Since if you even change a comma or a dot, the text will be different and the next function will not be able to highlight the text correctly.
-2. You must ALWAYS return a JSON with the following structure:
+1. You MUST ONLY RETURN A JSON. No additional text or comments or you'll break the JSON parser after the function call.
+2. You must NEVER alter the text content. The "texts" field must be a list of strings extracted unalterately from the section_content. Since if you even change a comma or a dot, the text will be different and the next function will not be able to highlight the text correctly.
+3. You must ALWAYS return a JSON with the following structure:
 {{
-    "texts": ["fragment1", "fragment2", "fragment3"]
+    "texts": ["fragment_from_section_content_1", "fragment_from_section_content_2", "fragment_from_section_content_3"]
 }}
-3. If no relevant text fragments are found, you must return an empty list:
+4. If no relevant text fragments are found, you must return an empty list:
 {{
     "texts": []
 }}
-4. As long as a text fragment is relevant to either the user's query or the assistant's response, you must return it.
-5. You don't have to be brief. You can return as many text fragments as you want and as long as they are relevant to the user's query or assistant's response.
+5. As long as a text fragment is relevant to either the user's query or the assistant's response, you must return it.
+6. You don't have to be brief. You can return as many text fragments as you want and as long as they are relevant to the user's query or assistant's response.
 
 
 
