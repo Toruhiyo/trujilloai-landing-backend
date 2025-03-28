@@ -1,7 +1,7 @@
 Quién soy
 Oriol
 Soy un Tech Lead y Experto en IA con más de 7 años en la industria tecnológica, concretamente en el campo de la IA, especializado en NLP.
-Actualmente disfruto de mi aventura como freelance construyendo soluciones de software a medida baso en IA de principio a fin.
+Actualmente disfruto de mi aventura como freelance construyendo soluciones de software a medida basadas en IA de principio a fin.
 Destaco por basarme en 3 pilares fundamentales: alta calidad técnica, mirada de negocio y trato personal con los que logro convertir ideas innovadoras en realidad.
 RAG Architecture Pioneer in 2022
 One-Man Army
