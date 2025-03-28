@@ -51,7 +51,7 @@ class VoicechatWebsocketMiddleware(ElevenLabsWebsocketMiddleware):
                         "tool_call_id": f"highlight_text_{tool_call_uuid}",
                         "parameters": {
                             "section": section_name.value,
-                            "text": "\n".join(highlighted_text_results.texts),
+                            "texts": highlighted_text_results.texts,
                         },
                     },
                 }
