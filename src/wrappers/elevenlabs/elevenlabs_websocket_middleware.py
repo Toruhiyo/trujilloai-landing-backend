@@ -6,8 +6,9 @@ import websockets
 from fastapi import WebSocket
 from websockets.exceptions import ConnectionClosed
 from src.utils.metaclasses import DynamicSingleton
-from src.wrappers.elevenlabs.errors import ToolCallMissingParametersError
-from src.wrappers.elevenlabs.toolbox import format_message_for_logging, get_signed_url
+from .enums import WebSocketEventType
+from .errors import ToolCallMissingParametersError
+from .toolbox import format_message_for_logging, get_signed_url
 
 logger = logging.getLogger(__name__)
 
@@ -305,7 +306,6 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
 
     async def __send_connected_event(self):
         if self.__is_client_connected and self.__client_connection:
-            from src.app.voicechat.enums import WebSocketEventType
 
             await self.__client_connection.send_json(
                 {
@@ -499,8 +499,6 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
     async def __close_client_connection(self, reason: str):
         if self.__is_client_connected and self.__client_connection:
             try:
-                from src.app.voicechat.enums import WebSocketEventType
-
                 # Send error message before closing
                 await self.__client_connection.send_json(
                     {
