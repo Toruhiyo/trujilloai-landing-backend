@@ -23,6 +23,16 @@ class VoicechatWebsocketMiddleware(ElevenLabsWebsocketMiddleware):
         lambda message: message.get("type") == "client_tool_result"
     ]
 
+    _highlightable_sections = [
+        SectionName.HERO,
+        SectionName.SERVICES,
+        SectionName.WHY_CHOOSE_ORIOL,
+        SectionName.HOW_SOLO_OR_SQUAD,
+        SectionName.HOW_METHODOLOGY,
+        SectionName.SELECTED_PROJECTS,
+        SectionName.BIO,
+    ]
+
     @client_tool_call(
         tool_name="go_to_section",
         required_parameters=["section", "question", "response", "language"],
@@ -37,6 +47,13 @@ class VoicechatWebsocketMiddleware(ElevenLabsWebsocketMiddleware):
             question = parameters["question"]
             response = parameters["response"]
             language = typify_language(parameters["language"])
+
+            if section_name not in self._highlightable_sections:
+                logger.info(
+                    f"Section {section_name} is not highlightable, skipping highlighting"
+                )
+                return
+
             highlighted_text_results = self.__compute_text_to_highlight(
                 section_name, question, response, language
             )
