@@ -23,7 +23,7 @@ ELEVENLABS_API_KEY = VariablesGrabber().get("ELEVENLABS_API_KEY")
 VOICECHAT_ELEVENLABS_AGENT_ID = VariablesGrabber().get("VOICECHAT_ELEVENLABS_AGENT_ID")
 
 
-def get_elevenlabs_middleware(
+def get_voicechat_elevenlabs_middleware(
     voice_id: str = Query(None, description="ElevenLabs voice ID")
 ) -> VoicechatWebsocketMiddleware:
     if not ELEVENLABS_API_KEY:
@@ -46,8 +46,8 @@ def get_elevenlabs_middleware(
 async def voicechat_websocket(
     websocket: WebSocket,
     debug: bool = Query(False, description="Enable debug mode"),
-    elevenlabs_middleware: VoicechatWebsocketMiddleware = Depends(
-        get_elevenlabs_middleware
+    voicechat_elevenlabs_middleware: VoicechatWebsocketMiddleware = Depends(
+        get_voicechat_elevenlabs_middleware
     ),
 ):
     """
@@ -60,13 +60,13 @@ async def voicechat_websocket(
 
     try:
         # Setup connections (both client and ElevenLabs)
-        client_id = await elevenlabs_middleware.setup_connections(
+        client_id = await voicechat_elevenlabs_middleware.setup_connections(
             websocket, debug=debug
         )
-        active_middlewares[client_id] = elevenlabs_middleware
+        active_middlewares[client_id] = voicechat_elevenlabs_middleware
 
         # Start bidirectional message forwarding
-        await elevenlabs_middleware.start_forwarding()
+        await voicechat_elevenlabs_middleware.start_forwarding()
 
     except Exception as e:
         error_message = f"Error in websocket connection: {str(e)}"
@@ -80,9 +80,9 @@ async def voicechat_websocket(
             pass
 
     finally:
+        # Close all connections if needed
+        await voicechat_elevenlabs_middleware.close_all_connections()
+
         # Clean up
         if client_id and client_id in active_middlewares:
             del active_middlewares[client_id]
-
-        # Close all connections if needed
-        await elevenlabs_middleware.close_all_connections()
