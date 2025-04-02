@@ -10,7 +10,7 @@ from src.app.voicechat.voicechat_websocket_middleware import (
     VoicechatWebsocketMiddleware,
 )
 from src.config.vars_grabber import VariablesGrabber
-from .enums import WebSocketEventType
+from src.wrappers.elevenlabs.enums import WebSocketEventType
 from src.app.errors import EnvironmentVariablesValueError
 
 router = APIRouter(prefix="/voicechat", tags=["voicechat"])
@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 active_middlewares: dict[str, VoicechatWebsocketMiddleware] = {}
 
 ELEVENLABS_API_KEY = VariablesGrabber().get("ELEVENLABS_API_KEY")
-ELEVENLABS_AGENT_ID = VariablesGrabber().get("ELEVENLABS_AGENT_ID")
+VOICECHAT_ELEVENLABS_AGENT_ID = VariablesGrabber().get("VOICECHAT_ELEVENLABS_AGENT_ID")
 
 
 def get_elevenlabs_middleware(
@@ -29,12 +29,16 @@ def get_elevenlabs_middleware(
     if not ELEVENLABS_API_KEY:
         logger.error("ELEVENLABS_API_KEY not configured")
         raise EnvironmentVariablesValueError("ELEVENLABS_API_KEY not configured")
-    if not ELEVENLABS_AGENT_ID:
-        logger.error("ELEVENLABS_AGENT_ID not configured")
-        raise EnvironmentVariablesValueError("ELEVENLABS_AGENT_ID not configured")
+    if not VOICECHAT_ELEVENLABS_AGENT_ID:
+        logger.error("VOICECHAT_ELEVENLABS_AGENT_ID not configured")
+        raise EnvironmentVariablesValueError(
+            "VOICECHAT_ELEVENLABS_AGENT_ID not configured"
+        )
 
     return VoicechatWebsocketMiddleware(
-        agent_id=ELEVENLABS_AGENT_ID, api_key=ELEVENLABS_API_KEY, voice_id=voice_id
+        agent_id=VOICECHAT_ELEVENLABS_AGENT_ID,
+        api_key=ELEVENLABS_API_KEY,
+        voice_id=voice_id,
     )
 
 
