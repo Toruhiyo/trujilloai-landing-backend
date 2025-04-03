@@ -4,16 +4,19 @@ from fastapi import (
     WebSocket,
     Depends,
     Query,
+    Body,
 )
 
 from src.app.demos.ai_bi.aibi_websocket_middleware import (
     AibiWebsocketMiddleware,
 )
+from src.app.demos.ai_bi.nlq.nlq_agent import AibiNlqAgent
 from src.config.vars_grabber import VariablesGrabber
 from src.wrappers.elevenlabs.enums import WebSocketEventType
 from src.app.errors import EnvironmentVariablesValueError
 
-router = APIRouter(prefix="/demos/aibi", tags=["AI BI"])
+# Define router with the aibi prefix and appropriate tags
+router = APIRouter(prefix="/aibi", tags=["AI BI"])
 logger = logging.getLogger(__name__)
 
 # Cache for active connections
@@ -86,3 +89,37 @@ async def aibi_websocket(
         # Clean up
         if client_id and client_id in active_middlewares:
             del active_middlewares[client_id]
+
+
+@router.post("/nlq")
+async def natural_language_query(
+    query: str = Body(
+        ..., embed=True, description="Natural language query to convert to SQL"
+    )
+):
+    """
+    Convert a natural language query to SQL, execute it and return the results
+    """
+    try:
+        nlq_agent = AibiNlqAgent()
+        result = nlq_agent.compute(query)
+
+        return {
+            "success": True,
+            "data": result.dict(),
+        }
+    except Exception as e:
+        error_message = f"Error processing natural language query: {str(e)}"
+        logger.error(error_message)
+        return {
+            "success": False,
+            "error": error_message,
+        }
+
+
+@router.get("/test")
+async def test_endpoint():
+    """
+    Simple test endpoint to verify routing is working correctly
+    """
+    return {"success": True, "message": "AI BI test endpoint is working!"}

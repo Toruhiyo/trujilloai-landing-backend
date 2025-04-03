@@ -1,0 +1,6 @@
+{
+    "example_id": 2,
+    "type": "Aggregation",
+    "natural_language_query": "What's the total sales by month in 2023?",
+    "sql_query": "SELECT TO_CHAR(sale_date, 'YYYY-MM') AS month, SUM(total_amount) AS monthly_total FROM sales WHERE EXTRACT(YEAR FROM sale_date) = 2023 GROUP BY month ORDER BY month;"
+}

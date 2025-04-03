@@ -1,0 +1,6 @@
+{
+    "example_id": 1,
+    "type": "Basic Query",
+    "natural_language_query": "Show me all products in the Office Supplies category",
+    "sql_query": "SELECT p.product_id, p.name, p.description, p.price FROM products p JOIN categories c ON p.category_id = c.category_id WHERE c.name = 'Office Supplies' ORDER BY p.name;"
+}

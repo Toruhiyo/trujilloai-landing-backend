@@ -4,9 +4,9 @@ import traceback
 from fastapi import APIRouter, FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from fastapi.security import OAuth2PasswordBearer
 
 from .chat import endpoints as chat
+from .demos import endpoints as demos
 from .entities.users import endpoints as users
 from .voicechat import endpoints as voicechat
 
@@ -19,6 +19,9 @@ router = APIRouter()
 router.include_router(chat.router, tags=["Chat"])
 router.include_router(users.router, tags=["Users"])
 router.include_router(voicechat.router, tags=["VoiceChat"])
+
+# Include the demos router directly in the app, not in the main router
+# This way the prefix can be properly handled
 app = FastAPI(
     openapi_url="/documentation/openapi.json",
     docs_url="/documentation/swagger",
@@ -69,6 +72,8 @@ app.add_middleware(
 )
 
 app.include_router(router)
+# Include the demos router directly in the app since it already has its own prefix
+app.include_router(demos.router)
 
 set_app_exception_handlers(app)
 
