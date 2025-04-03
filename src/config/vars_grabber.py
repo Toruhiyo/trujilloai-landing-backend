@@ -44,10 +44,14 @@ class VariablesGrabber(metaclass=DynamicSingleton):
         type: Any = str,
         default: Optional[Any] = None,
         can_be_none: bool = True,
+        skip_full_path: Optional[bool] = False,
     ) -> Any:
         try:
             value = self.__retrieve_variable(
-                name, ignore_missing_keys=ignore_missing_keys, scopes=scopes
+                name,
+                ignore_missing_keys=ignore_missing_keys,
+                scopes=scopes,
+                skip_full_path=skip_full_path,
             )
         except Exception as e:
             if default is not None or can_be_none:
@@ -77,6 +81,7 @@ class VariablesGrabber(metaclass=DynamicSingleton):
         name: str,
         ignore_missing_keys: Optional[bool] = False,
         scopes: Optional[list[ScopeType] | ScopeType] = None,
+        skip_full_path: Optional[bool] = False,
     ) -> Any:
 
         scopes = (
@@ -87,7 +92,11 @@ class VariablesGrabber(metaclass=DynamicSingleton):
 
         if ScopeType.AWS in scopes:
             # Construct the full path for the SSM parameter or secret
-            full_path = f"/{self.__project_key}/{self.__environment}/{name}"
+            full_path = (
+                f"/{self.__project_key}/{self.__environment}/{name}"
+                if not skip_full_path
+                else name
+            )
 
             # Try to get it from SSM (assuming it could be either a parameter or a secret)
             try:

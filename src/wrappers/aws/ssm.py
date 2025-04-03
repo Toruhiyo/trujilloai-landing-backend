@@ -48,7 +48,10 @@ class SSMWrapper(metaclass=DynamicSingleton):
                 "Parameter"
             ]
         except ClientError as e:
-            if e.response["Error"]["Code"] == "ParameterNotFound":
+            if (
+                e.response["Error"]["Code"] == "ParameterNotFound"
+                or e.response["Error"]["Code"] == "ValidationException"
+            ):
                 return SecretsManagerWrapper().get_secret(name)
             raise e
 
