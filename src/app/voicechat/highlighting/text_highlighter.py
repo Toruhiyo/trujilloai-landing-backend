@@ -10,7 +10,7 @@ from src.utils.metaclasses import DynamicSingleton
 from src.utils.string_toolbox import convert_snake_to_kebab_case
 
 DEFAULT_BEDROCK_MODEL_ID = (
-    VariablesGrabber().get("AWS_BEDROCK_MODEL_ID")
+    VariablesGrabber().get("HIGHLIGHTING_BEDROCK_INFERENCE_PROFILE_ID")
     or "us.meta.llama3-2-1b-instruct-v1:0"
 )
 

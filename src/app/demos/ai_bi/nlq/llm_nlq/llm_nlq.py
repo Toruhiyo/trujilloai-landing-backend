@@ -32,7 +32,7 @@ DEFAULT_JSON_SCHEMA = json.loads(
 )
 
 DEFAULT_MODEL_ID = (
-    VariablesGrabber().get("AWS_BEDROCK_DEMO_AIBI_NLQ_MODEL_ID")
+    VariablesGrabber().get("DEMO_AIBI_NLQ_BEDROCK_INFERENCE_PROFILE_ID")
     or "us.meta.llama3-3-70b-instruct-v1:0"
 )
 DEFAULT_REGION = VariablesGrabber().get("AWS_REGION") or "us-east-1"
