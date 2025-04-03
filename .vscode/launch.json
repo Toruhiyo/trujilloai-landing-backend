@@ -66,6 +66,18 @@
             "env": {
                 "PYTHONPATH": "${workspaceRoot}"
             }
+        },
+        {
+            "name": "Script: Demo AI BI - Setup Database",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceRoot}/scripts/demo_aibi_database/setup_database.py",
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONPATH": "${workspaceRoot}"
+            },
+            "justMyCode": false,
+            "envFile": "${workspaceRoot}/.env"
         }
     ]
 }
