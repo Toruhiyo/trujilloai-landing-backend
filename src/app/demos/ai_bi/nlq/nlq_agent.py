@@ -1,7 +1,8 @@
 import logging
+from time import perf_counter
 from typing import Optional
 
-from src.app.demos.ai_bi.nlq.dtos import SqlResultDTO
+from src.app.demos.ai_bi.nlq.dtos import NlqResultDTO, SqlResultDTO
 from src.app.demos.ai_bi.nlq.llm_nlq.dtos import NlqRequestDTO
 from src.app.demos.ai_bi.nlq.llm_nlq.llm_nlq import AibiLlmTextToSQL
 from src.app.demos.ai_bi.nlq.query_executor import AibiQueryExecutor
@@ -20,15 +21,23 @@ class AibiNlqAgent(metaclass=DynamicSingleton):
         self.__llm_text_to_sql = llm_text_to_sql or AibiLlmTextToSQL()
         self.__query_executor = query_executor or AibiQueryExecutor()
 
-    def compute(self, natural_language_query: str) -> SqlResultDTO:
-        sql_query = self.__compute_sql_query(natural_language_query)
+    def compute(self, natural_language_query: str) -> NlqResultDTO:
+        sql_query, generation_time_ms = self.__compute_sql_query(natural_language_query)
         sql_result = self.__execute_sql_query(sql_query)
-        return sql_result
+        return NlqResultDTO(
+            natural_language_query=natural_language_query,
+            sql_query=sql_query,
+            result=sql_result,
+            execution_time_ms=generation_time_ms + sql_result.execution_time_ms,
+        )
 
     # Private:
-    def __compute_sql_query(self, natural_language_query: str) -> str:
+    def __compute_sql_query(self, natural_language_query: str) -> tuple[str, float]:
+        t0 = perf_counter()
         nlq_request = NlqRequestDTO(natural_language_query=natural_language_query)
-        return self.__llm_text_to_sql.compute(nlq_request)
+        sql_result = self.__llm_text_to_sql.compute(nlq_request)
+        dt = perf_counter() - t0
+        return sql_result, dt
 
     def __execute_sql_query(self, query: str) -> SqlResultDTO:
         return self.__query_executor.execute(query)

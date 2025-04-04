@@ -11,6 +11,7 @@ from src.app.demos.ai_bi.aibi_websocket_middleware import (
     AibiWebsocketMiddleware,
 )
 from src.app.demos.ai_bi.nlq.nlq_agent import AibiNlqAgent
+from src.app.demos.ai_bi.responses import NlqResponse
 from src.config.vars_grabber import VariablesGrabber
 from src.wrappers.elevenlabs.enums import WebSocketEventType
 from src.app.errors import EnvironmentVariablesValueError
@@ -91,7 +92,7 @@ async def aibi_websocket(
             del active_middlewares[client_id]
 
 
-@router.post("/nlq")
+@router.post("/nlq", response_model=NlqResponse)
 async def natural_language_query(
     query: str = Body(
         ..., embed=True, description="Natural language query to convert to SQL"
@@ -104,10 +105,10 @@ async def natural_language_query(
         nlq_agent = AibiNlqAgent()
         result = nlq_agent.compute(query)
 
-        return {
-            "success": True,
-            "data": result.dict(),
-        }
+        return NlqResponse(
+            message="Successfully generated and executed SQL query",
+            data=result,
+        )
     except Exception as e:
         error_message = f"Error processing natural language query: {str(e)}"
         logger.error(error_message)
