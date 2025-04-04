@@ -5,6 +5,7 @@ from typing import Any, Optional, Callable, TypeVar
 import websockets
 from fastapi import WebSocket
 from websockets.exceptions import ConnectionClosed
+from src.utils.json_toolbox import make_serializable
 from src.utils.metaclasses import DynamicSingleton
 from .enums import WebSocketEventType
 from .errors import ToolCallMissingParametersError
@@ -207,7 +208,7 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
             logger.debug(
                 f"Sending message to client: {format_message_for_logging(message)}"
             )
-            await self.__client_connection.send_json(message)
+            await self.__client_connection.send_json(make_serializable(message))
         else:
             logger.warning("Cannot forward to client: connection is closed")
 
@@ -216,7 +217,9 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
             logger.debug(
                 f"Sending message to ElevenLabs: {format_message_for_logging(message)}"
             )
-            await self.__elevenlabs_connection.send(json.dumps(message))
+            await self.__elevenlabs_connection.send(
+                json.dumps(make_serializable(message))
+            )
         else:
             logger.warning("Cannot forward to ElevenLabs: connection is closed")
 
