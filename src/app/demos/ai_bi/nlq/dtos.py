@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Optional
 from src.utils.typification.base_dto import BaseDTO
 
 
@@ -14,3 +14,4 @@ class NlqResultDTO(BaseDTO):
     sql_query: str
     result: SqlResultDTO
     execution_time_ms: float
+    title: Optional[str] = None

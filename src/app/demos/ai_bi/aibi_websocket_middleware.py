@@ -35,10 +35,12 @@ class AibiWebsocketMiddleware(ElevenLabsWebsocketMiddleware):
         logger.info(f"Database query tool called with parameters: {parameters}")
 
         user_query = parameters.get("user_query", "")
+        title = parameters.get("title", "")
         if not user_query:
             raise ValueError("user_query parameter is required")
 
         nlq_result = self.__compute_nlq_result(user_query)
+        nlq_result.title = title
 
         return nlq_result.model_dump()
 
