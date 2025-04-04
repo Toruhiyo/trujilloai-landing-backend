@@ -56,7 +56,7 @@ def make_serializable(value: Any, date_format: str | None = None, **kwargs) -> A
     elif isinstance(value, set):
         value = make_serializable(list(value), date_format=date_format, **kwargs)
     elif isinstance(value, BaseModel):
-        value = make_serializable(value.dict(), date_format=date_format, **kwargs)
+        value = make_serializable(value.model_dump(), date_format=date_format, **kwargs)
     elif isinstance(value, Enum):
         value = make_serializable(value.value, date_format=date_format, **kwargs)
     elif isinstance(value, Path):

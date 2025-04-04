@@ -53,7 +53,7 @@ def create_user(
 
 def validate_input_user_data(user_data: UserInputDTO):
     try:
-        UserInputDTO(**user_data.dict())
+        UserInputDTO(**user_data.model_dump())
     except Exception as e:
         raise BadRequestError(f"Invalid user data: {e}")
 

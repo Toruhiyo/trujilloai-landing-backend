@@ -94,7 +94,7 @@ async def aibi_websocket(
 
 @router.post("/nlq", response_model=NlqResponse)
 async def natural_language_query(
-    query: str = Body(
+    user_query: str = Body(
         ..., embed=True, description="Natural language query to convert to SQL"
     )
 ):
@@ -103,7 +103,7 @@ async def natural_language_query(
     """
     try:
         nlq_agent = AibiNlqAgent()
-        result = nlq_agent.compute(query)
+        result = nlq_agent.compute(user_query)
 
         return NlqResponse(
             message="Successfully generated and executed SQL query",
