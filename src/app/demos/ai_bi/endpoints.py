@@ -115,11 +115,3 @@ async def natural_language_query(
             "success": False,
             "error": error_message,
         }
-
-
-@router.get("/test")
-async def test_endpoint():
-    """
-    Simple test endpoint to verify routing is working correctly
-    """
-    return {"success": True, "message": "AI BI test endpoint is working!"}
