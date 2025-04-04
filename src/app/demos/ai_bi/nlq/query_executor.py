@@ -13,6 +13,10 @@ from src.utils.metaclasses import DynamicSingleton
 
 logger = logging.getLogger(__name__)
 
+DEMO_AIBI_CREDENTIALS_SECRET_ARN = VariablesGrabber().get(
+    "DEMO_AIBI_CREDENTIALS_SECRET_ARN"
+)
+
 UNSAFE_OPERATIONS = [
     r"\bDROP\b",
     r"\bDELETE\b",
@@ -141,7 +145,7 @@ class AibiQueryExecutor(metaclass=DynamicSingleton):
         try:
             vars_grabber = VariablesGrabber()
             credentials = vars_grabber.get(
-                "rds!cluster-73c07d41-5cd2-481e-801c-5eeae82c6066", skip_full_path=True
+                DEMO_AIBI_CREDENTIALS_SECRET_ARN, skip_full_path=True
             )
             return json.loads(credentials)
         except Exception as e:

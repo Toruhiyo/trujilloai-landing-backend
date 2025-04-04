@@ -246,7 +246,7 @@ def main():
         logger.info(f"Database setup completed in {end_time - start_time:.2f} seconds")
     except Exception as e:
         logger.error(f"Error in main process: {e}")
-        sys.exit(1)
+        raise e
 
 
 if __name__ == "__main__":

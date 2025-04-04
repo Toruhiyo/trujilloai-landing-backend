@@ -24,13 +24,15 @@ sys.path.append(root_dir)
 # Import after adjusting sys.path
 from src.config.vars_grabber import VariablesGrabber
 
+DEMO_AIBI_CREDENTIALS_SECRET_ARN = VariablesGrabber().get("DEMO_AIBI_DB_SECRET_ARN")
+
 
 def get_db_credentials():
     """Get database credentials from VariablesGrabber"""
     try:
         vars_grabber = VariablesGrabber()
         credentials = vars_grabber.get(
-            "rds!cluster-73c07d41-5cd2-481e-801c-5eeae82c6066", skip_full_path=True
+            DEMO_AIBI_CREDENTIALS_SECRET_ARN, skip_full_path=True
         )
         creds_dict = json.loads(credentials)
 
