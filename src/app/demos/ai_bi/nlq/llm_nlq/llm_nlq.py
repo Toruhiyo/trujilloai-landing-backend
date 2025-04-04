@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 import re
 from pathlib import Path
 from typing import Any, Optional
@@ -15,7 +16,7 @@ from src.app.demos.ai_bi.nlq.llm_nlq.errors import (
     UnsafeQueryError,
 )
 from src.config.vars_grabber import VariablesGrabber
-from src.utils.json_toolbox import load_jsons_in_directory
+from src.utils.json_toolbox import load_jsons_in_directory, make_serializable
 from src.utils.metaclasses import DynamicSingleton
 from src.wrappers.langchain.llms.bedrock import BedrockLLM
 
@@ -36,6 +37,9 @@ DEFAULT_MODEL_ID = (
     or "us.meta.llama3-3-70b-instruct-v1:0"
 )
 DEFAULT_REGION = VariablesGrabber().get("AWS_REGION") or "us-east-1"
+
+SHALL_EXPORT_LOGS = os.environ.get("IS_LOCAL", "False").lower() == "true"
+LOGS_DIRECTORY = Path("logs")
 
 UNSAFE_OPERATIONS = [
     r"\bDROP\b",
@@ -109,6 +113,12 @@ class AibiLlmTextToSQL(metaclass=DynamicSingleton):
             # | self.__parser
         )
 
+        if SHALL_EXPORT_LOGS:
+            try:
+                self.__export_prompt_log(natural_language_query)
+            except Exception as e:
+                logger.warning(f"Failed to export prompt log: {type(e)}-{e}.")
+
         try:
             response = chain.invoke(
                 {
@@ -118,6 +128,12 @@ class AibiLlmTextToSQL(metaclass=DynamicSingleton):
         except OutputParserException as e:
             logger.error(f"Failed to parse output: {type(e)}-{e}.")
             raise e
+
+        if SHALL_EXPORT_LOGS:
+            try:
+                self.__export_reply_log(response, natural_language_query)
+            except Exception as e:
+                logger.warning(f"Failed to export reply log: {type(e)}-{e}.")
 
         return response
 
@@ -217,3 +233,42 @@ class AibiLlmTextToSQL(metaclass=DynamicSingleton):
                 logger.error(f"Failed to load prompt examples: {type(e)}-{e}")
                 return []
         return prompt_examples
+
+    def __export_prompt_log(
+        self,
+        natural_language_query: str,
+    ):
+        prompt = self.__prompt_template.format(
+            natural_language_query=natural_language_query,
+        )
+        if not LOGS_DIRECTORY.exists():
+            LOGS_DIRECTORY.mkdir()
+        last_prompt_filepath = LOGS_DIRECTORY / f"{type(self).__name__}-last-prompt.txt"
+        last_prompt_filepath.write_text(prompt, encoding="utf-8")
+
+    def __export_reply_log(
+        self,
+        response: Any,
+        natural_language_query: str,
+    ):
+        if not LOGS_DIRECTORY.exists():
+            LOGS_DIRECTORY.mkdir()
+        last_reply_filepath = LOGS_DIRECTORY / f"{type(self).__name__}-last-reply.json"
+        try:
+            last_reply_filepath.write_text(
+                json.dumps(
+                    make_serializable(
+                        {
+                            "INPUT": {
+                                "natural_language_query": natural_language_query,
+                            },
+                            "OUTPUT": response,
+                        }
+                    ),
+                    indent=4,
+                    ensure_ascii=False,
+                ),
+                encoding="utf-8",
+            )
+        except Exception:
+            last_reply_filepath.write_text(str(response))
