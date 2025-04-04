@@ -13,9 +13,7 @@ from src.utils.metaclasses import DynamicSingleton
 
 logger = logging.getLogger(__name__)
 
-DEMO_AIBI_CREDENTIALS_SECRET_ARN = VariablesGrabber().get(
-    "DEMO_AIBI_CREDENTIALS_SECRET_ARN"
-)
+DEMO_AIBI_CREDENTIALS_SECRET_ARN = VariablesGrabber().get("DEMO_AIBI_DB_SECRET_ARN")
 
 UNSAFE_OPERATIONS = [
     r"\bDROP\b",
