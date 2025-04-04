@@ -44,6 +44,8 @@ def client_tool_call(
     tool_name: str,
     required_parameters: Optional[list[str]] = None,
     await_handler: bool = True,
+    send_results_to_elevenlabs: bool = False,
+    send_results_to_client: bool = False,
 ):
 
     def event_matcher(message: dict[str, Any]) -> bool:
@@ -69,6 +71,8 @@ def client_tool_call(
 
     # Store the await_handler setting on the matcher function
     event_matcher.await_handler = await_handler
+    event_matcher.send_results_to_elevenlabs = send_results_to_elevenlabs
+    event_matcher.send_results_to_client = send_results_to_client
     return server_event(event_matcher)
 
 
@@ -469,6 +473,14 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
 
     async def __process_server_message(self, message: dict[str, Any]):
         try:
+            # Store the result to potentially send to ElevenLabs or client
+            tool_result = None
+            tool_call_id = None
+            tool_call_data = None
+            is_error = False
+            send_to_elevenlabs = False
+            send_to_client = False
+
             # Go through all registered server event handlers
             for handler in self.__server_event_handlers:
                 # Check if this handler should process this message
@@ -480,19 +492,99 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
                     if event_matcher(message):
                         # Check if the handler should be awaited
                         await_handler = getattr(event_matcher, "await_handler", True)
+                        send_results_to_elevenlabs = getattr(
+                            event_matcher, "send_results_to_elevenlabs", False
+                        )
+                        send_results_to_client = getattr(
+                            event_matcher, "send_results_to_client", False
+                        )
+
+                        # Store flags
+                        send_to_elevenlabs = send_results_to_elevenlabs
+                        send_to_client = send_results_to_client
+
+                        # Store the tool info for possible result routing
+                        if send_to_elevenlabs or send_to_client:
+                            tool_call_data = message.get("client_tool_call", {})
+                            tool_call_id = tool_call_data.get("tool_call_id", None)
+                            tool_name = tool_call_data.get("tool_name", "")
 
                         # Run the handler with or without awaiting
                         if await_handler:
-                            await handler(message)
+                            result = await handler(message)
+                            if (send_to_elevenlabs or send_to_client) and tool_call_id:
+                                tool_result = result
                         else:
-                            asyncio.create_task(handler(message))
+                            # Create a task and get a future reference to it
+                            task = asyncio.create_task(handler(message))
+
+                            # If we need to send results, we should actually await
+                            # even if await_handler is False
+                            if (send_to_elevenlabs or send_to_client) and tool_call_id:
+                                try:
+                                    result = await task
+                                    tool_result = result
+                                except Exception as e:
+                                    logger.error(f"Error getting tool result: {e}")
+                                    tool_result = str(e)
+                                    is_error = True
+
                 except ToolCallMissingParametersError as e:
                     logger.error(f"Tool call missing parameters: {e}")
+                    if tool_call_id:
+                        tool_result = str(e)
+                        is_error = True
                     continue
                 except Exception as matcher_error:
                     # If the matcher fails (e.g., due to missing keys), just skip this handler
                     logger.debug(f"Event matcher failed: {matcher_error}")
+                    if tool_call_id:
+                        tool_result = str(matcher_error)
+                        is_error = True
                     continue
+
+            # Send the result to ElevenLabs if needed
+            if send_to_elevenlabs and tool_call_id and tool_result is not None:
+                result_message = (
+                    str(tool_result.get("message", str(tool_result)))
+                    if isinstance(tool_result, dict)
+                    else str(tool_result)
+                )
+
+                await self.send_message_to_elevenlabs(
+                    {
+                        "type": "client_tool_result",
+                        "tool_call_id": tool_call_id,
+                        "result": result_message,
+                        "is_error": is_error,
+                    }
+                )
+
+            # Send the result to client if needed
+            if (
+                send_to_client
+                and tool_call_id
+                and tool_result is not None
+                and tool_call_data is not None
+            ):
+                tool_name = tool_call_data.get("tool_name", "")
+                result_tool_name = f"{tool_name}_result"
+
+                await self.send_message_to_client(
+                    {
+                        "type": "client_tool_call",
+                        "client_tool_call": {
+                            "tool_name": result_tool_name,
+                            "tool_call_id": f"{result_tool_name}_{tool_call_id.split('_')[-1] if tool_call_id else ''}",
+                            "parameters": (
+                                tool_result
+                                if isinstance(tool_result, dict)
+                                else {"result": str(tool_result), "is_error": is_error}
+                            ),
+                        },
+                    }
+                )
+
         except Exception as e:
             logger.error(f"Error processing server message: {e}")
 
