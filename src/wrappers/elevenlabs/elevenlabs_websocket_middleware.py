@@ -507,7 +507,6 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
                         if send_to_elevenlabs or send_to_client:
                             tool_call_data = message.get("client_tool_call", {})
                             tool_call_id = tool_call_data.get("tool_call_id", None)
-                            tool_name = tool_call_data.get("tool_name", "")
 
                         # Run the handler with or without awaiting
                         if await_handler:
@@ -567,21 +566,18 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
                 and tool_result is not None
                 and tool_call_data is not None
             ):
-                tool_name = tool_call_data.get("tool_name", "")
-                result_tool_name = f"{tool_name}_result"
+                # For the client, use either the explicit 'result' field or the whole dictionary
+                if isinstance(tool_result, dict):
+                    result_content = tool_result.get("result", tool_result)
+                else:
+                    result_content = tool_result
 
                 await self.send_message_to_client(
                     {
-                        "type": "client_tool_call",
-                        "client_tool_call": {
-                            "tool_name": result_tool_name,
-                            "tool_call_id": f"{result_tool_name}_{tool_call_id.split('_')[-1] if tool_call_id else ''}",
-                            "parameters": (
-                                tool_result
-                                if isinstance(tool_result, dict)
-                                else {"result": str(tool_result), "is_error": is_error}
-                            ),
-                        },
+                        "type": "client_tool_result",
+                        "tool_call_id": tool_call_id,
+                        "result": result_content,
+                        "is_error": is_error,
                     }
                 )
 
