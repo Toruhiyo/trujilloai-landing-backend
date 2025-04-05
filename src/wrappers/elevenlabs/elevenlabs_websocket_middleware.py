@@ -543,11 +543,53 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
                                     tool_result = str(e)
                                     is_error = True
 
+                                    # Send error to ElevenLabs and client immediately
+                                    if send_to_elevenlabs:
+                                        await self.send_message_to_elevenlabs(
+                                            {
+                                                "type": "client_tool_result",
+                                                "tool_call_id": tool_call_id,
+                                                "result": str(e),
+                                                "is_error": True,
+                                            }
+                                        )
+
+                                    if send_to_client:
+                                        await self.send_message_to_client(
+                                            {
+                                                "type": "client_tool_result",
+                                                "tool_call_id": tool_call_id,
+                                                "result": str(e),
+                                                "is_error": True,
+                                            }
+                                        )
+
                 except ToolCallMissingParametersError as e:
                     logger.error(f"Tool call missing parameters: {e}")
                     if tool_call_id:
                         tool_result = str(e)
                         is_error = True
+
+                        # Send parameter error to ElevenLabs and client
+                        if send_to_elevenlabs:
+                            await self.send_message_to_elevenlabs(
+                                {
+                                    "type": "client_tool_result",
+                                    "tool_call_id": tool_call_id,
+                                    "result": str(e),
+                                    "is_error": True,
+                                }
+                            )
+
+                        if send_to_client:
+                            await self.send_message_to_client(
+                                {
+                                    "type": "client_tool_result",
+                                    "tool_call_id": tool_call_id,
+                                    "result": str(e),
+                                    "is_error": True,
+                                }
+                            )
                     continue
                 except Exception as matcher_error:
                     # If the matcher fails (e.g., due to missing keys), just skip this handler
@@ -555,10 +597,36 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
                     if tool_call_id:
                         tool_result = str(matcher_error)
                         is_error = True
+
+                        # Send matcher error to ElevenLabs and client
+                        if send_to_elevenlabs:
+                            await self.send_message_to_elevenlabs(
+                                {
+                                    "type": "client_tool_result",
+                                    "tool_call_id": tool_call_id,
+                                    "result": str(matcher_error),
+                                    "is_error": True,
+                                }
+                            )
+
+                        if send_to_client:
+                            await self.send_message_to_client(
+                                {
+                                    "type": "client_tool_result",
+                                    "tool_call_id": tool_call_id,
+                                    "result": str(matcher_error),
+                                    "is_error": True,
+                                }
+                            )
                     continue
 
-            # Send the result to ElevenLabs if needed
-            if send_to_elevenlabs and tool_call_id and tool_result is not None:
+            # Send the result to ElevenLabs if needed (for successful cases)
+            if (
+                send_to_elevenlabs
+                and tool_call_id
+                and tool_result is not None
+                and not is_error
+            ):
                 result_message = (
                     str(tool_result.get("message", str(tool_result)))
                     if isinstance(tool_result, dict)
@@ -574,12 +642,13 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
                     }
                 )
 
-            # Send the result to client if needed
+            # Send the result to client if needed (for successful cases)
             if (
                 send_to_client
                 and tool_call_id
                 and tool_result is not None
                 and tool_call_data is not None
+                and not is_error
             ):
                 await self.send_message_to_client(
                     {
