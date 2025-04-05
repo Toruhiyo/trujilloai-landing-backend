@@ -569,17 +569,11 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
                 and tool_result is not None
                 and tool_call_data is not None
             ):
-                # For the client, use either the explicit 'result' field or the whole dictionary
-                if isinstance(tool_result, dict):
-                    result_content = tool_result.get("result", tool_result)
-                else:
-                    result_content = tool_result
-
                 await self.send_message_to_client(
                     {
                         "type": "client_tool_result",
                         "tool_call_id": tool_call_id,
-                        "result": result_content,
+                        "result": tool_result,
                         "is_error": is_error,
                     }
                 )
