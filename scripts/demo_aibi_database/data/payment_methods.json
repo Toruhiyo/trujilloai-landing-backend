@@ -1,0 +1,26 @@
+[
+    {
+        "name": "Credit Card"
+    },
+    {
+        "name": "Bank Transfer"
+    },
+    {
+        "name": "PayPal"
+    },
+    {
+        "name": "Check"
+    },
+    {
+        "name": "Cash"
+    },
+    {
+        "name": "Digital Wallet"
+    },
+    {
+        "name": "Cryptocurrency"
+    },
+    {
+        "name": "Invoice/Net 30"
+    }
+]

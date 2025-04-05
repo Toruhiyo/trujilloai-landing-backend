@@ -12,18 +12,22 @@ Tables and structure:
 - sector_id: Unique identifier of the industry sector (INT, PRIMARY KEY)
 - name: Name of the industry sector (e.g., Design & Marketing, Legal Services, Technology) (VARCHAR)
 
-3. customers
+3. payment_methods
+- payment_method_id: Unique identifier of the payment method (INT, PRIMARY KEY)
+- name: Name of the payment method (e.g., Credit Card, Bank Transfer, PayPal) (VARCHAR)
+
+4. customers
 - customer_id: Unique identifier of the customer (INT, PRIMARY KEY)
 - name: Company name of the customer (VARCHAR)
 - sector_id: Reference to the customer's industry sector (INT, FOREIGN KEY → sectors.sector_id)
 - region_id: Reference to the customer's geographical region (INT, FOREIGN KEY → regions.region_id)
 - signup_date: Date when the customer registered (DATE)
 
-4. categories
+5. categories
 - category_id: Unique identifier of the product category (INT, PRIMARY KEY)
 - name: Name of the category (e.g., Stationery, Writing, Organization) (VARCHAR)
 
-5. products
+6. products
 - product_id: Unique identifier of the product (INT, PRIMARY KEY)
 - name: Full product name, with detailed attributes (e.g., Blue Fine Tip Pen) (VARCHAR)
 - description: Optional detailed description (TEXT)
@@ -35,13 +39,14 @@ Tables and structure:
 - material: Main material (e.g., Plastic, Cardboard, Metal) (VARCHAR)
 - price: Unit price of the product (DECIMAL)
 
-6. sales
+7. sales
 - sale_id: Unique identifier of the sale (INT, PRIMARY KEY)
 - customer_id: Customer who made the purchase (INT, FOREIGN KEY → customers.customer_id)
 - sale_date: Date of the sale (DATE)
 - total_amount: Total amount of the sale (DECIMAL)
+- payment_method_id: Reference to the payment method used (INT, FOREIGN KEY → payment_methods.payment_method_id)
 
-7. sale_items
+8. sale_items
 - sale_item_id: Unique identifier for the sale line item (INT, PRIMARY KEY)
 - sale_id: Sale to which this item belongs (INT, FOREIGN KEY → sales.sale_id)
 - product_id: Product sold (INT, FOREIGN KEY → products.product_id)
@@ -50,6 +55,7 @@ Tables and structure:
 
 Key relationships:
 - Each customer belongs to one region and one sector.
+- Each sale is associated with one payment method.
 - A customer can have multiple sales.
 - Each sale can have multiple sale items.
 - Each sale item is linked to one product.
@@ -64,6 +70,8 @@ This schema supports answering complex business questions via natural language, 
 - "What are the most purchased blue pens in the legal sector?"
 - "Which regions have the highest sales in the Technology sector?"
 - "What is the most popular product category for customers in the East Coast region?"
+- "Which payment method is most commonly used for high-value purchases?"
+- "Compare the average sale amount between different payment methods"
 
 It is designed to support rich and flexible queries in natural language, ideal for NLQ demos with voice input or text.
 

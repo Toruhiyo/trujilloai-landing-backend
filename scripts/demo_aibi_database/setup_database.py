@@ -8,6 +8,7 @@ import time
 import glob
 import logging
 from pathlib import Path
+import random
 
 
 # Configure logging
@@ -44,6 +45,7 @@ def drop_tables(conn):
         "DROP TABLE IF EXISTS customers CASCADE;",
         "DROP TABLE IF EXISTS regions CASCADE;",
         "DROP TABLE IF EXISTS sectors CASCADE;",
+        "DROP TABLE IF EXISTS payment_methods CASCADE;",
     ]
 
     # Also explicitly drop sequences
@@ -55,6 +57,7 @@ def drop_tables(conn):
         "DROP SEQUENCE IF EXISTS sale_items_sale_item_id_seq CASCADE;",
         "DROP SEQUENCE IF EXISTS regions_region_id_seq CASCADE;",
         "DROP SEQUENCE IF EXISTS sectors_sector_id_seq CASCADE;",
+        "DROP SEQUENCE IF EXISTS payment_methods_payment_method_id_seq CASCADE;",
     ]
 
     try:
@@ -95,6 +98,12 @@ def create_tables(conn):
         )
         """,
         """
+        CREATE TABLE payment_methods (
+            payment_method_id SERIAL PRIMARY KEY,
+            name VARCHAR(100) NOT NULL
+        )
+        """,
+        """
         CREATE TABLE customers (
             customer_id SERIAL PRIMARY KEY,
             name VARCHAR(100) NOT NULL,
@@ -128,7 +137,8 @@ def create_tables(conn):
             sale_id SERIAL PRIMARY KEY,
             customer_id INTEGER REFERENCES customers(customer_id),
             sale_date DATE NOT NULL,
-            total_amount DECIMAL(10, 2) NOT NULL
+            total_amount DECIMAL(10, 2) NOT NULL,
+            payment_method_id INTEGER REFERENCES payment_methods(payment_method_id)
         )
         """,
         """
@@ -155,6 +165,7 @@ def create_tables(conn):
             "SELECT setval('sale_items_sale_item_id_seq', 1, false);",
             "SELECT setval('regions_region_id_seq', 1, false);",
             "SELECT setval('sectors_sector_id_seq', 1, false);",
+            "SELECT setval('payment_methods_payment_method_id_seq', 1, false);",
         ]
 
         for sql in reset_sequences_sql:
@@ -228,48 +239,61 @@ def populate_tables(conn):
         current_dir = Path(__file__).parent
         data_dir = current_dir / "data"
 
-        # Load and insert regions (before customers)
+        # Load data
         regions = load_all_data_by_type(data_dir, "regions*.json")
+        sectors = load_all_data_by_type(data_dir, "sectors*.json")
+        payment_methods = load_all_data_by_type(data_dir, "payment_methods*.json")
+        categories = load_all_data_by_type(data_dir, "categories*.json")
+        customers = load_all_data_by_type(data_dir, "customers*.json")
+        products = load_all_data_by_type(data_dir, "products*.json")
+        sales = load_all_data_by_type(data_dir, "sales*.json")
+        sale_items = load_all_data_by_type(data_dir, "sale_items*.json")
+
+        # Ensure all sales have a payment_method_id
+        payment_method_count = len(payment_methods)
+        for sale in sales:
+            if "payment_method_id" not in sale:
+                sale["payment_method_id"] = random.randint(1, payment_method_count)
+
+        # Insert data
+        # Insert regions
         region_columns = ["name"]
         insert_data(conn, "regions", regions, region_columns)
 
-        # Load and insert sectors (before customers)
-        sectors = load_all_data_by_type(data_dir, "sectors*.json")
+        # Insert sectors
         sector_columns = ["name"]
         insert_data(conn, "sectors", sectors, sector_columns)
 
-        # Load and insert categories
-        categories = load_all_data_by_type(data_dir, "categories*.json")
+        # Insert payment methods
+        payment_method_columns = ["name"]
+        insert_data(conn, "payment_methods", payment_methods, payment_method_columns)
+
+        # Insert categories
         category_columns = ["name"]
         insert_data(conn, "categories", categories, category_columns)
 
-        # Load and insert customers (now with foreign keys)
-        customers = load_all_data_by_type(data_dir, "customers*.json")
+        # Insert customers
         customer_columns = ["name", "sector_id", "region_id", "signup_date"]
         insert_data(conn, "customers", customers, customer_columns)
 
-        # Load and insert products
-        products = load_all_data_by_type(data_dir, "products*.json")
+        # Insert products
         product_columns = [
             "name",
-            "description",
             "category_id",
-            "brand",
-            "color",
-            "format",
-            "size",
-            "material",
             "price",
         ]
         insert_data(conn, "products", products, product_columns)
 
-        # Load and insert sales (no need to filter now that we have all customer IDs)
-        sales = load_all_data_by_type(data_dir, "sales*.json")
-        sale_columns = ["customer_id", "sale_date", "total_amount"]
+        # Insert sales
+        sale_columns = [
+            "customer_id",
+            "sale_date",
+            "total_amount",
+            "payment_method_id",
+        ]
         insert_data(conn, "sales", sales, sale_columns)
 
-        # Load and insert sale_items
-        sale_items = load_all_data_by_type(data_dir, "sale_items*.json")
+        # Insert sale items
         sale_item_columns = ["sale_id", "product_id", "quantity", "unit_price"]
         insert_data(conn, "sale_items", sale_items, sale_item_columns)
 
