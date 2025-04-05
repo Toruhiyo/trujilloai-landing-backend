@@ -466,7 +466,11 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
                 try:
                     if event_matcher(message):
                         # Run the handler
-                        handler(message)
+                        (
+                            await handler(message)
+                            if asyncio.iscoroutinefunction(handler)
+                            else handler(message)
+                        )
                 except Exception as matcher_error:
                     # If the matcher fails (e.g., due to missing keys), just skip this handler
                     logger.debug(f"Event matcher failed: {matcher_error}")
@@ -510,6 +514,14 @@ class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
                         if send_to_elevenlabs or send_to_client:
                             tool_call_data = message.get("client_tool_call", {})
                             tool_call_id = tool_call_data.get("tool_call_id", None)
+
+                        # For client_tool_call with await_handler=False, immediately forward to client
+                        if (
+                            not await_handler
+                            and message.get("type") == "client_tool_call"
+                        ):
+                            # Forward the original message directly to the client
+                            await self.send_message_to_client(message)
 
                         # Run the handler with or without awaiting
                         if await_handler:
