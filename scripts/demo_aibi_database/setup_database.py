@@ -42,6 +42,8 @@ def drop_tables(conn):
         "DROP TABLE IF EXISTS products CASCADE;",
         "DROP TABLE IF EXISTS categories CASCADE;",
         "DROP TABLE IF EXISTS customers CASCADE;",
+        "DROP TABLE IF EXISTS regions CASCADE;",
+        "DROP TABLE IF EXISTS sectors CASCADE;",
     ]
 
     # Also explicitly drop sequences
@@ -51,6 +53,8 @@ def drop_tables(conn):
         "DROP SEQUENCE IF EXISTS products_product_id_seq CASCADE;",
         "DROP SEQUENCE IF EXISTS sales_sale_id_seq CASCADE;",
         "DROP SEQUENCE IF EXISTS sale_items_sale_item_id_seq CASCADE;",
+        "DROP SEQUENCE IF EXISTS regions_region_id_seq CASCADE;",
+        "DROP SEQUENCE IF EXISTS sectors_sector_id_seq CASCADE;",
     ]
 
     try:
@@ -79,11 +83,23 @@ def create_tables(conn):
     # SQL for creating tables
     create_tables_sql = [
         """
+        CREATE TABLE regions (
+            region_id SERIAL PRIMARY KEY,
+            name VARCHAR(100) NOT NULL
+        )
+        """,
+        """
+        CREATE TABLE sectors (
+            sector_id SERIAL PRIMARY KEY,
+            name VARCHAR(100) NOT NULL
+        )
+        """,
+        """
         CREATE TABLE customers (
             customer_id SERIAL PRIMARY KEY,
             name VARCHAR(100) NOT NULL,
-            sector VARCHAR(100),
-            region VARCHAR(100),
+            sector_id INTEGER REFERENCES sectors(sector_id),
+            region_id INTEGER REFERENCES regions(region_id),
             signup_date DATE
         )
         """,
@@ -137,6 +153,8 @@ def create_tables(conn):
             "SELECT setval('products_product_id_seq', 1, false);",
             "SELECT setval('sales_sale_id_seq', 1, false);",
             "SELECT setval('sale_items_sale_item_id_seq', 1, false);",
+            "SELECT setval('regions_region_id_seq', 1, false);",
+            "SELECT setval('sectors_sector_id_seq', 1, false);",
         ]
 
         for sql in reset_sequences_sql:
@@ -173,6 +191,36 @@ def load_all_data_by_type(data_dir, file_pattern):
     return all_data
 
 
+def get_valid_customer_ids(conn):
+    """Get a list of valid customer IDs from the database"""
+    cursor = conn.cursor()
+    try:
+        cursor.execute("SELECT customer_id FROM customers")
+        return [row[0] for row in cursor.fetchall()]
+    finally:
+        cursor.close()
+
+
+def filter_sales_by_valid_customers(sales, valid_customer_ids):
+    """Filter sales to only include those with valid customer IDs"""
+    valid_sales = []
+    invalid_sales = []
+
+    for sale in sales:
+        if sale["customer_id"] in valid_customer_ids:
+            valid_sales.append(sale)
+        else:
+            invalid_sales.append(sale)
+
+    if invalid_sales:
+        logger.warning(
+            f"Filtered out {len(invalid_sales)} sales with invalid customer IDs: "
+            f"{sorted(set(sale['customer_id'] for sale in invalid_sales))}"
+        )
+
+    return valid_sales
+
+
 def populate_tables(conn):
     """Load data from files and insert into tables"""
     try:
@@ -180,14 +228,24 @@ def populate_tables(conn):
         current_dir = Path(__file__).parent
         data_dir = current_dir / "data"
 
+        # Load and insert regions (before customers)
+        regions = load_all_data_by_type(data_dir, "regions*.json")
+        region_columns = ["name"]
+        insert_data(conn, "regions", regions, region_columns)
+
+        # Load and insert sectors (before customers)
+        sectors = load_all_data_by_type(data_dir, "sectors*.json")
+        sector_columns = ["name"]
+        insert_data(conn, "sectors", sectors, sector_columns)
+
         # Load and insert categories
         categories = load_all_data_by_type(data_dir, "categories*.json")
         category_columns = ["name"]
         insert_data(conn, "categories", categories, category_columns)
 
-        # Load and insert customers
+        # Load and insert customers (now with foreign keys)
         customers = load_all_data_by_type(data_dir, "customers*.json")
-        customer_columns = ["name", "sector", "region", "signup_date"]
+        customer_columns = ["name", "sector_id", "region_id", "signup_date"]
         insert_data(conn, "customers", customers, customer_columns)
 
         # Load and insert products
@@ -205,7 +263,7 @@ def populate_tables(conn):
         ]
         insert_data(conn, "products", products, product_columns)
 
-        # Load and insert sales
+        # Load and insert sales (no need to filter now that we have all customer IDs)
         sales = load_all_data_by_type(data_dir, "sales*.json")
         sale_columns = ["customer_id", "sale_date", "total_amount"]
         insert_data(conn, "sales", sales, sale_columns)

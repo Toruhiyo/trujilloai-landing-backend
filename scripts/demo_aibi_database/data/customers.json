@@ -1,122 +1,212 @@
 [
     {
         "name": "Graphix Design Studio",
-        "sector": "Design Agency",
-        "region": "West Coast",
+        "sector_id": 1,
+        "region_id": 1,
         "signup_date": "2020-02-15"
     },
     {
         "name": "Anderson & Partners Law Firm",
-        "sector": "Legal Services",
-        "region": "East Coast",
+        "sector_id": 2,
+        "region_id": 2,
         "signup_date": "2019-08-22"
     },
     {
         "name": "Tech Innovate Solutions",
-        "sector": "Technology Startup",
-        "region": "West Coast",
+        "sector_id": 3,
+        "region_id": 1,
         "signup_date": "2021-03-10"
     },
     {
         "name": "City Public Schools District",
-        "sector": "Education",
-        "region": "Midwest",
+        "sector_id": 4,
+        "region_id": 3,
         "signup_date": "2018-07-30"
     },
     {
         "name": "Northern University",
-        "sector": "Higher Education",
-        "region": "North",
+        "sector_id": 4,
+        "region_id": 4,
         "signup_date": "2019-01-05"
     },
     {
         "name": "Municipal Government Office",
-        "sector": "Public Administration",
-        "region": "South",
+        "sector_id": 5,
+        "region_id": 5,
         "signup_date": "2017-11-12"
     },
     {
         "name": "Global Finance Consulting",
-        "sector": "Financial Services",
-        "region": "East Coast",
+        "sector_id": 6,
+        "region_id": 2,
         "signup_date": "2021-01-18"
     },
     {
         "name": "Creative Learning Academy",
-        "sector": "Education",
-        "region": "Southwest",
+        "sector_id": 4,
+        "region_id": 6,
         "signup_date": "2020-08-14"
     },
     {
         "name": "Swift Software Development",
-        "sector": "Technology Startup",
-        "region": "West Coast",
+        "sector_id": 3,
+        "region_id": 1,
         "signup_date": "2022-02-08"
     },
     {
         "name": "Healthcare Partners Medical",
-        "sector": "Healthcare",
-        "region": "Northeast",
+        "sector_id": 7,
+        "region_id": 7,
         "signup_date": "2019-04-22"
     },
     {
         "name": "Bright Future Elementary",
-        "sector": "Education",
-        "region": "Midwest",
+        "sector_id": 4,
+        "region_id": 3,
         "signup_date": "2020-06-15"
     },
     {
         "name": "Williams & Thompson Attorneys",
-        "sector": "Legal Services",
-        "region": "Southeast",
+        "sector_id": 2,
+        "region_id": 8,
         "signup_date": "2018-09-10"
     },
     {
         "name": "Central Accounting Services",
-        "sector": "Financial Services",
-        "region": "Central",
+        "sector_id": 6,
+        "region_id": 9,
         "signup_date": "2021-05-02"
     },
     {
         "name": "NextGen Web Solutions",
-        "sector": "Technology Startup",
-        "region": "Northwest",
+        "sector_id": 3,
+        "region_id": 10,
         "signup_date": "2022-01-15"
     },
     {
         "name": "Smithson Property Management",
-        "sector": "Real Estate",
-        "region": "Southwest",
+        "sector_id": 8,
+        "region_id": 6,
         "signup_date": "2019-11-08"
     },
     {
         "name": "Regional Medical Center",
-        "sector": "Healthcare",
-        "region": "South",
+        "sector_id": 7,
+        "region_id": 5,
         "signup_date": "2018-03-20"
     },
     {
         "name": "Johnson Manufacturing Co.",
-        "sector": "Manufacturing",
-        "region": "Midwest",
+        "sector_id": 9,
+        "region_id": 3,
         "signup_date": "2017-07-11"
     },
     {
         "name": "Metropolitan Library System",
-        "sector": "Public Services",
-        "region": "Northeast",
+        "sector_id": 5,
+        "region_id": 7,
         "signup_date": "2019-06-25"
     },
     {
         "name": "Evergreen Environmental Consulting",
-        "sector": "Environmental Services",
-        "region": "Northwest",
+        "sector_id": 10,
+        "region_id": 10,
         "signup_date": "2020-10-30"
     },
     {
         "name": "Digital Marketing Partners",
-        "sector": "Marketing Agency",
-        "region": "West Coast",
+        "sector_id": 1,
+        "region_id": 1,
         "signup_date": "2021-09-14"
+    },
+    {
+        "name": "Summit Education Group",
+        "sector_id": 4,
+        "region_id": 2,
+        "signup_date": "2022-03-15"
+    },
+    {
+        "name": "Coastal Technology Labs",
+        "sector_id": 3,
+        "region_id": 2,
+        "signup_date": "2022-04-10"
+    },
+    {
+        "name": "Riverdale Healthcare Center",
+        "sector_id": 7,
+        "region_id": 3,
+        "signup_date": "2021-11-22"
+    },
+    {
+        "name": "Prairie Financial Advisors",
+        "sector_id": 6,
+        "region_id": 3,
+        "signup_date": "2022-01-30"
+    },
+    {
+        "name": "Mountain View Law Group",
+        "sector_id": 2,
+        "region_id": 10,
+        "signup_date": "2021-08-12"
+    },
+    {
+        "name": "Horizon Design Collective",
+        "sector_id": 1,
+        "region_id": 7,
+        "signup_date": "2022-05-18"
+    },
+    {
+        "name": "Parkside Government Services",
+        "sector_id": 5,
+        "region_id": 5,
+        "signup_date": "2021-10-05"
+    },
+    {
+        "name": "Westfield Manufacturing Inc.",
+        "sector_id": 9,
+        "region_id": 1,
+        "signup_date": "2021-12-14"
+    },
+    {
+        "name": "Bayside Public Schools",
+        "sector_id": 4,
+        "region_id": 2,
+        "signup_date": "2022-02-28"
+    },
+    {
+        "name": "Pinewood Medical Group",
+        "sector_id": 7,
+        "region_id": 6,
+        "signup_date": "2021-07-22"
+    },
+    {
+        "name": "Urban Housing Authority",
+        "sector_id": 5,
+        "region_id": 7,
+        "signup_date": "2022-01-08"
+    },
+    {
+        "name": "Clearwater Software Solutions",
+        "sector_id": 3,
+        "region_id": 8,
+        "signup_date": "2021-09-30"
+    },
+    {
+        "name": "Golden State Real Estate",
+        "sector_id": 8,
+        "region_id": 1,
+        "signup_date": "2022-03-05"
+    },
+    {
+        "name": "Eastern Financial Group",
+        "sector_id": 6,
+        "region_id": 2,
+        "signup_date": "2021-11-15"
+    },
+    {
+        "name": "Green Valley Environmental Services",
+        "sector_id": 10,
+        "region_id": 3,
+        "signup_date": "2022-04-22"
     }
 ]
