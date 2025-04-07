@@ -75,6 +75,7 @@ This schema supports answering complex business questions via natural language, 
 
 It is designed to support rich and flexible queries in natural language, ideal for NLQ demos with voice input or text.
 
+NOTE: You will be provided with the present time timestamp but only in some time-related queries that will be needed. Most of the times you will ignore it.
 
 Your task is to translate a natural language query into a valid PostgreSQL 16.6 SQL query. Respond with ONLY a PostgreSQL query that correctly answers the user's question.
 

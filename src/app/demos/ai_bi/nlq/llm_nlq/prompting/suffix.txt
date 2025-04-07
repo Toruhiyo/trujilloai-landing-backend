@@ -2,5 +2,6 @@ Now, convert the following natural language query into a SQL query.
 Remember to follow all the rules I provided earlier. Return only the SQL query, no other text or explanations. 
 
 NATURAL LANGUAGE QUERY: {natural_language_query}
+CURRENT TIME TIMESTAMP: {timestamp}
 
 SQL QUERY: 

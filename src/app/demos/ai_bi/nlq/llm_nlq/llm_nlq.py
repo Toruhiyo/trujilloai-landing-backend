@@ -2,6 +2,7 @@ import json
 import logging
 import os
 import re
+from datetime import datetime
 from pathlib import Path
 from typing import Any, Optional
 
@@ -113,9 +114,10 @@ class AibiLlmTextToSQL(metaclass=DynamicSingleton):
             # | self.__parser
         )
 
+        current_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         if SHALL_EXPORT_LOGS:
             try:
-                self.__export_prompt_log(natural_language_query)
+                self.__export_prompt_log(natural_language_query, current_timestamp)
             except Exception as e:
                 logger.warning(f"Failed to export prompt log: {type(e)}-{e}.")
 
@@ -123,6 +125,7 @@ class AibiLlmTextToSQL(metaclass=DynamicSingleton):
             response = chain.invoke(
                 {
                     "natural_language_query": natural_language_query,
+                    "timestamp": current_timestamp,
                 }
             )
         except OutputParserException as e:
@@ -131,7 +134,9 @@ class AibiLlmTextToSQL(metaclass=DynamicSingleton):
 
         if SHALL_EXPORT_LOGS:
             try:
-                self.__export_reply_log(response, natural_language_query)
+                self.__export_reply_log(
+                    response, natural_language_query, current_timestamp
+                )
             except Exception as e:
                 logger.warning(f"Failed to export reply log: {type(e)}-{e}.")
 
@@ -220,7 +225,7 @@ class AibiLlmTextToSQL(metaclass=DynamicSingleton):
             prefix=prompt_prefix,
             examples=examples,
             example_prompt=example_prompt,
-            input_variables=["natural_language_query"],
+            input_variables=["natural_language_query", "timestamp"],
             suffix=prompt_suffix,
         )
 
@@ -237,9 +242,11 @@ class AibiLlmTextToSQL(metaclass=DynamicSingleton):
     def __export_prompt_log(
         self,
         natural_language_query: str,
+        current_timestamp: str,
     ):
         prompt = self.__prompt_template.format(
             natural_language_query=natural_language_query,
+            timestamp=current_timestamp,
         )
         if not LOGS_DIRECTORY.exists():
             LOGS_DIRECTORY.mkdir()
@@ -250,6 +257,7 @@ class AibiLlmTextToSQL(metaclass=DynamicSingleton):
         self,
         response: Any,
         natural_language_query: str,
+        current_timestamp: str,
     ):
         if not LOGS_DIRECTORY.exists():
             LOGS_DIRECTORY.mkdir()
@@ -261,6 +269,7 @@ class AibiLlmTextToSQL(metaclass=DynamicSingleton):
                         {
                             "INPUT": {
                                 "natural_language_query": natural_language_query,
+                                "timestamp": current_timestamp,
                             },
                             "OUTPUT": response,
                         }
