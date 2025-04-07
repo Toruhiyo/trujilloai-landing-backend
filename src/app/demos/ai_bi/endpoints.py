@@ -97,24 +97,13 @@ async def natural_language_query(
     user_query: str = Body(
         ..., embed=True, description="Natural language query to convert to SQL"
     ),
-    title: str = Body(..., embed=True, description="Title of the query"),
+    title: str = Body("Untitled", embed=True, description="Title of the query"),
 ):
-    """
-    Convert a natural language query to SQL, execute it and return the results
-    """
-    try:
-        nlq_agent = AibiNlqAgent()
-        result = nlq_agent.compute(user_query)
-        result.title = title
+    nlq_agent = AibiNlqAgent()
+    result = nlq_agent.compute(user_query)
+    result.title = title
 
-        return NlqResponse(
-            message="Successfully generated and executed SQL query",
-            data=result,
-        )
-    except Exception as e:
-        error_message = f"Error processing natural language query: {str(e)}"
-        logger.error(error_message)
-        return {
-            "success": False,
-            "error": error_message,
-        }
+    return NlqResponse(
+        message="Successfully generated and executed SQL query",
+        data=result,
+    )
