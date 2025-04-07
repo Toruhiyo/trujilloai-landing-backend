@@ -5,6 +5,7 @@ from time import perf_counter
 from typing import Dict, Optional
 
 import psycopg2
+from psycopg2 import pool
 
 from src.app.demos.ai_bi.nlq.dtos import SqlResultDTO
 from src.app.demos.ai_bi.nlq.llm_nlq.errors import SqlExecutionError, UnsafeQueryError
@@ -14,6 +15,11 @@ from src.utils.metaclasses import DynamicSingleton
 logger = logging.getLogger(__name__)
 
 DEMO_AIBI_CREDENTIALS_SECRET_ARN = VariablesGrabber().get("DEMO_AIBI_DB_SECRET_ARN")
+
+# Connection pool settings
+MIN_CONNECTIONS = 1
+MAX_CONNECTIONS = 10
+POOL_KEEPALIVE_SECONDS = 300  # 5 minutes
 
 UNSAFE_OPERATIONS = [
     r"\bDROP\b",
@@ -56,6 +62,9 @@ class AibiQueryExecutor(metaclass=DynamicSingleton):
         self.__connection_timeout = connection_timeout
         self.__validate_connection_params()
 
+        # Initialize connection pool
+        self.__connection_pool = self.__create_connection_pool()
+
     def execute(self, query: str) -> SqlResultDTO:
         self.__validate_query(query)
 
@@ -64,7 +73,7 @@ class AibiQueryExecutor(metaclass=DynamicSingleton):
         start_time = perf_counter()
 
         try:
-            connection = self.__get_connection()
+            connection = self.__get_pooled_connection()
             cursor = connection.cursor()
 
             cursor.execute(query)
@@ -97,11 +106,49 @@ class AibiQueryExecutor(metaclass=DynamicSingleton):
             if cursor:
                 cursor.close()
             if connection:
-                connection.close()
+                # Return connection to the pool instead of closing
+                connection.reset()
+                self.__connection_pool.putconn(connection)
 
     # Private:
+    def __create_connection_pool(self):
+        """Create a connection pool to the database"""
+        try:
+            connection_pool = pool.ThreadedConnectionPool(
+                minconn=MIN_CONNECTIONS,
+                maxconn=MAX_CONNECTIONS,
+                host=self.__host,
+                port=self.__port,
+                dbname=self.__dbname,
+                user=self.__username,
+                password=self.__password,
+                connect_timeout=self.__connection_timeout,
+                keepalives=1,
+                keepalives_idle=POOL_KEEPALIVE_SECONDS,
+                keepalives_interval=60,
+                keepalives_count=5,
+            )
+            logger.info(
+                f"Successfully created database connection pool with {MIN_CONNECTIONS}-{MAX_CONNECTIONS} connections"
+            )
+            return connection_pool
+        except Exception as e:
+            logger.error(f"Error creating connection pool: {str(e)}")
+            raise SqlExecutionError(f"Error creating connection pool: {str(e)}")
+
+    def __get_pooled_connection(self):
+        """Get a connection from the pool"""
+        try:
+            connection = self.__connection_pool.getconn()
+            return connection
+        except Exception as e:
+            logger.error(f"Error getting connection from pool: {str(e)}")
+            # Attempt to recreate the pool if it's unavailable
+            self.__connection_pool = self.__create_connection_pool()
+            raise SqlExecutionError(f"Error getting connection from pool: {str(e)}")
+
     def __get_connection(self):
-        """Get a connection to the database"""
+        """Get a direct connection to the database (fallback method)"""
         try:
             connection = psycopg2.connect(
                 host=self.__host,
@@ -110,6 +157,10 @@ class AibiQueryExecutor(metaclass=DynamicSingleton):
                 user=self.__username,
                 password=self.__password,
                 connect_timeout=self.__connection_timeout,
+                keepalives=1,
+                keepalives_idle=POOL_KEEPALIVE_SECONDS,
+                keepalives_interval=60,
+                keepalives_count=5,
             )
             return connection
         except Exception as e:
