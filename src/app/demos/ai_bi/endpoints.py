@@ -97,11 +97,12 @@ async def natural_language_query(
     user_query: str = Body(
         ..., embed=True, description="Natural language query to convert to SQL"
     ),
-    title: str = Body("Untitled", embed=True, description="Title of the query"),
+    title: str = Body(None, embed=True, description="Title of the query"),
 ):
     nlq_agent = AibiNlqAgent()
     result = nlq_agent.compute(user_query)
-    result.title = title
+    if title:
+        result.title = title
 
     return NlqResponse(
         message="Successfully generated and executed SQL query",

@@ -1,5 +1,5 @@
 Example {example_id}: {type}
 Natural Language: {natural_language_query}
 
-SQL Query:
-{sql_query} 
+RESULTS:
+{results}

@@ -10,8 +10,8 @@ from langchain_core.exceptions import OutputParserException
 from langchain_core.prompts.few_shot import FewShotPromptTemplate
 from langchain_core.prompts.prompt import PromptTemplate
 from langchain_core.runnables import chain
-
-from src.app.demos.ai_bi.nlq.llm_nlq.dtos import NlqRequestDTO
+from langchain_core.output_parsers import JsonOutputParser
+from src.app.demos.ai_bi.nlq.llm_nlq.dtos import NlqLlmResultsDTO, NlqRequestDTO
 from src.app.demos.ai_bi.nlq.llm_nlq.errors import (
     InvalidLLMResponseFormatError,
     UnsafeQueryError,
@@ -95,13 +95,15 @@ class AibiLlmTextToSQL(metaclass=DynamicSingleton):
             read_timeout=model_read_timeout,
         )
 
-    def compute(self, request: NlqRequestDTO) -> str:
+        self.__parser = JsonOutputParser()
+
+    def compute(self, request: NlqRequestDTO) -> NlqLlmResultsDTO:
         response = self.__compute_response(request)
         response = self.__validate_response(response)
         return response
 
     # Private:
-    def __compute_response(self, request: NlqRequestDTO) -> str:
+    def __compute_response(self, request: NlqRequestDTO) -> NlqLlmResultsDTO:
         llm_response = self.__execute_chain(request.natural_language_query)
         response = self.__extract_response(llm_response)
         return response
@@ -111,7 +113,7 @@ class AibiLlmTextToSQL(metaclass=DynamicSingleton):
             self.__prompt_template
             | self.__model
             | self.__answer_transform_step
-            # | self.__parser
+            | self.__parser
         )
 
         current_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -142,13 +144,20 @@ class AibiLlmTextToSQL(metaclass=DynamicSingleton):
 
         return response
 
-    def __extract_response(self, response: Any) -> str:
+    def __extract_response(self, response: Any) -> NlqLlmResultsDTO:
         try:
             if isinstance(response, list) and len(response) == 1:
                 response = response[0]
 
+            if isinstance(response, dict):
+                if "query" in response:
+                    response["sql_query"] = response["query"]
+                if "sql" in response:
+                    response["sql_query"] = response["sql"]
+                return NlqLlmResultsDTO(**response)
+
             if isinstance(response, str):
-                return response
+                return NlqLlmResultsDTO(sql_query=response, title=None)
         except Exception as e:
             raise InvalidLLMResponseFormatError(
                 f"Failed to typify LLM response into NLQ response format: {type(e)}-{e}. Response: {response}"
@@ -158,10 +167,10 @@ class AibiLlmTextToSQL(metaclass=DynamicSingleton):
             f"Failed to typify LLM response into NLQ response format: {type(response)}-{response}"
         )
 
-    def __validate_response(self, response: str) -> str:
+    def __validate_response(self, response: NlqLlmResultsDTO) -> NlqLlmResultsDTO:
         # Check for unsafe SQL operations
         for pattern in UNSAFE_OPERATIONS:
-            if re.search(pattern, response, re.IGNORECASE):
+            if re.search(pattern, response.sql_query, re.IGNORECASE):
                 raise UnsafeQueryError(
                     f"Query contains unsafe operation matching pattern: {pattern}"
                 )
@@ -172,15 +181,25 @@ class AibiLlmTextToSQL(metaclass=DynamicSingleton):
     @staticmethod
     def __answer_transform_step(answer: str) -> str:
         # Remove code blocks if present
-        if "```sql" in answer.lower():
-            pattern = r"```(?:sql)?(.*?)```"
+        if "```" in answer:
+            pattern = r"```(?:sql|json)?(.*?)```"
             matches = re.findall(pattern, answer, re.DOTALL)
             if matches:
-                return matches[0].strip()
+                answer = matches[0].strip()
+
+        # If answer is already JSON, return it
+        try:
+            json_data = json.loads(answer)
+            if isinstance(json_data, dict) and (
+                "sql_query" in json_data or "query" in json_data
+            ):
+                return answer
+        except json.JSONDecodeError:
+            pass
 
         # If the response directly starts with SELECT, assume it's a raw SQL query
         if answer.strip().upper().startswith("SELECT"):
-            return json.dumps({"query": answer.strip()})
+            return json.dumps({"sql_query": answer.strip(), "title": None})
 
         return answer
 
@@ -217,7 +236,7 @@ class AibiLlmTextToSQL(metaclass=DynamicSingleton):
                 "example_id",
                 "type",
                 "natural_language_query",
-                "sql_query",
+                "results",
             ],
         )
 
@@ -232,8 +251,28 @@ class AibiLlmTextToSQL(metaclass=DynamicSingleton):
     def __load_prompt_examples(self, prompt_examples: list[dict] | Path):
         if isinstance(prompt_examples, Path):
             try:
-                examples = load_jsons_in_directory(prompt_examples)
-                return examples
+                examples: list[dict] = load_jsons_in_directory(prompt_examples)
+                # Format the examples to ensure correct handling of nested dictionaries
+                for i, example in enumerate(examples):
+                    example["example_id"] = i + 1
+                    example["type"] = example.get("type", "Unknown")
+
+                # Convert nested dictionary results to string to prevent direct key access
+                # AND escape any curly braces to prevent string.format from treating them as placeholders
+                processed_examples = []
+                for example in examples:
+                    processed_example = {}
+                    for k, v in example.items():
+                        if k == "results":
+                            # Escape curly braces by doubling them to prevent format string interpretation
+                            json_str = json.dumps(v, ensure_ascii=False)
+                            json_str = json_str.replace("{", "{{").replace("}", "}}")
+                            processed_example[k] = json_str
+                        else:
+                            processed_example[k] = v
+                    processed_examples.append(processed_example)
+
+                return processed_examples
             except Exception as e:
                 logger.error(f"Failed to load prompt examples: {type(e)}-{e}")
                 return []
@@ -244,14 +283,19 @@ class AibiLlmTextToSQL(metaclass=DynamicSingleton):
         natural_language_query: str,
         current_timestamp: str,
     ):
-        prompt = self.__prompt_template.format(
-            natural_language_query=natural_language_query,
-            timestamp=current_timestamp,
-        )
-        if not LOGS_DIRECTORY.exists():
-            LOGS_DIRECTORY.mkdir()
-        last_prompt_filepath = LOGS_DIRECTORY / f"{type(self).__name__}-last-prompt.txt"
-        last_prompt_filepath.write_text(prompt, encoding="utf-8")
+        try:
+            prompt = self.__prompt_template.format(
+                natural_language_query=natural_language_query,
+                timestamp=current_timestamp,
+            )
+            if not LOGS_DIRECTORY.exists():
+                LOGS_DIRECTORY.mkdir()
+            last_prompt_filepath = (
+                LOGS_DIRECTORY / f"{type(self).__name__}-last-prompt.txt"
+            )
+            last_prompt_filepath.write_text(prompt, encoding="utf-8")
+        except Exception as e:
+            logger.error(f"Error exporting prompt log: {e}")
 
     def __export_reply_log(
         self,

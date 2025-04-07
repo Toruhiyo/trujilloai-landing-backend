@@ -1,7 +1,7 @@
 Now, convert the following natural language query into a SQL query.
-Remember to follow all the rules I provided earlier. Return only the SQL query, no other text or explanations. 
+Remember to follow all the rules I provided earlier and return the results in proper JSON format with "sql_query" and "title" fields.
 
 NATURAL LANGUAGE QUERY: {natural_language_query}
 CURRENT TIME TIMESTAMP: {timestamp}
 
-SQL QUERY: 
+YOUR JSON RESPONSE: 
