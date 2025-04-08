@@ -208,5 +208,197 @@
         "sector_id": 10,
         "region_id": 3,
         "signup_date": "2022-04-22"
+    },
+    {
+        "name": "Innovative Cloud Solutions",
+        "sector_id": 3,
+        "region_id": 1,
+        "signup_date": "2024-01-15"
+    },
+    {
+        "name": "Green Earth Construction",
+        "sector_id": 10,
+        "region_id": 2,
+        "signup_date": "2024-02-08"
+    },
+    {
+        "name": "Sunrise Medical Group",
+        "sector_id": 7,
+        "region_id": 3,
+        "signup_date": "2024-03-10"
+    },
+    {
+        "name": "Legal Excellence Partners",
+        "sector_id": 2,
+        "region_id": 4,
+        "signup_date": "2024-04-05"
+    },
+    {
+        "name": "Urban Investment Bank",
+        "sector_id": 6,
+        "region_id": 5,
+        "signup_date": "2024-05-12"
+    },
+    {
+        "name": "Modern Design Studio",
+        "sector_id": 1,
+        "region_id": 6,
+        "signup_date": "2024-06-20"
+    },
+    {
+        "name": "Highland Public Schools",
+        "sector_id": 4,
+        "region_id": 7,
+        "signup_date": "2024-07-15"
+    },
+    {
+        "name": "Smart Manufacturing Inc.",
+        "sector_id": 9,
+        "region_id": 8,
+        "signup_date": "2024-08-22"
+    },
+    {
+        "name": "Civic Administration Center",
+        "sector_id": 5,
+        "region_id": 9,
+        "signup_date": "2024-09-18"
+    },
+    {
+        "name": "Prestige Properties Group",
+        "sector_id": 8,
+        "region_id": 10,
+        "signup_date": "2024-10-30"
+    },
+    {
+        "name": "Forest Conservation Institute",
+        "sector_id": 10,
+        "region_id": 1,
+        "signup_date": "2024-11-15"
+    },
+    {
+        "name": "Future Academy",
+        "sector_id": 4,
+        "region_id": 2,
+        "signup_date": "2024-12-05"
+    },
+    {
+        "name": "Data Intelligence Systems",
+        "sector_id": 3,
+        "region_id": 3,
+        "signup_date": "2025-01-20"
+    },
+    {
+        "name": "Premier Healthcare Network",
+        "sector_id": 7,
+        "region_id": 4,
+        "signup_date": "2025-02-10"
+    },
+    {
+        "name": "Coastal Law Associates",
+        "sector_id": 2,
+        "region_id": 5,
+        "signup_date": "2025-03-05"
+    },
+    {
+        "name": "Strategic Financial Advisors",
+        "sector_id": 6,
+        "region_id": 6,
+        "signup_date": "2025-04-18"
+    },
+    {
+        "name": "Creative Content Agency",
+        "sector_id": 1,
+        "region_id": 7,
+        "signup_date": "2025-05-12"
+    },
+    {
+        "name": "Public Administration Office",
+        "sector_id": 5,
+        "region_id": 8,
+        "signup_date": "2025-06-08"
+    },
+    {
+        "name": "Quantum Computing Research",
+        "sector_id": 3,
+        "region_id": 1,
+        "signup_date": "2024-05-15"
+    },
+    {
+        "name": "Sustainable Architecture Firm",
+        "sector_id": 8,
+        "region_id": 2,
+        "signup_date": "2024-06-22"
+    },
+    {
+        "name": "Advanced Robotics Laboratory",
+        "sector_id": 3,
+        "region_id": 3,
+        "signup_date": "2024-07-10"
+    },
+    {
+        "name": "Global Education Initiatives",
+        "sector_id": 4,
+        "region_id": 4,
+        "signup_date": "2024-08-05"
+    },
+    {
+        "name": "Green Energy Solutions",
+        "sector_id": 10,
+        "region_id": 5,
+        "signup_date": "2024-09-18"
+    },
+    {
+        "name": "Digital Health Platform",
+        "sector_id": 7,
+        "region_id": 6,
+        "signup_date": "2024-10-25"
+    },
+    {
+        "name": "Urban Transportation Systems",
+        "sector_id": 9,
+        "region_id": 7,
+        "signup_date": "2024-11-12"
+    },
+    {
+        "name": "Professional Legal Network",
+        "sector_id": 2,
+        "region_id": 8,
+        "signup_date": "2024-12-08"
+    },
+    {
+        "name": "Financial Technology Startup",
+        "sector_id": 6,
+        "region_id": 9,
+        "signup_date": "2025-01-15"
+    },
+    {
+        "name": "Precision Manufacturing Group",
+        "sector_id": 9,
+        "region_id": 10,
+        "signup_date": "2025-02-20"
+    },
+    {
+        "name": "Cloud Security Services",
+        "sector_id": 3,
+        "region_id": 1,
+        "signup_date": "2025-03-14"
+    },
+    {
+        "name": "Retail Innovation Consortium",
+        "sector_id": 1,
+        "region_id": 2,
+        "signup_date": "2025-04-08"
+    },
+    {
+        "name": "Marine Conservation Institute",
+        "sector_id": 10,
+        "region_id": 3,
+        "signup_date": "2025-05-22"
+    },
+    {
+        "name": "Aerospace Engineering Solutions",
+        "sector_id": 9,
+        "region_id": 4,
+        "signup_date": "2025-06-17"
     }
 ]

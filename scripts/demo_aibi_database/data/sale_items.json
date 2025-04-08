@@ -658,5 +658,515 @@
         "product_id": 14,
         "quantity": 18,
         "unit_price": 4.29
+    },
+    {
+        "sale_id": 82,
+        "product_id": 5,
+        "quantity": 20,
+        "unit_price": 0.89
+    },
+    {
+        "sale_id": 82,
+        "product_id": 12,
+        "quantity": 10,
+        "unit_price": 7.49
+    },
+    {
+        "sale_id": 82,
+        "product_id": 24,
+        "quantity": 15,
+        "unit_price": 7.99
+    },
+    {
+        "sale_id": 83,
+        "product_id": 3,
+        "quantity": 25,
+        "unit_price": 3.29
+    },
+    {
+        "sale_id": 83,
+        "product_id": 15,
+        "quantity": 12,
+        "unit_price": 4.99
+    },
+    {
+        "sale_id": 83,
+        "product_id": 31,
+        "quantity": 5,
+        "unit_price": 29.99
+    },
+    {
+        "sale_id": 84,
+        "product_id": 7,
+        "quantity": 8,
+        "unit_price": 9.99
+    },
+    {
+        "sale_id": 84,
+        "product_id": 18,
+        "quantity": 6,
+        "unit_price": 14.99
+    },
+    {
+        "sale_id": 85,
+        "product_id": 2,
+        "quantity": 30,
+        "unit_price": 2.49
+    },
+    {
+        "sale_id": 85,
+        "product_id": 14,
+        "quantity": 15,
+        "unit_price": 4.29
+    },
+    {
+        "sale_id": 85,
+        "product_id": 28,
+        "quantity": 8,
+        "unit_price": 19.99
+    },
+    {
+        "sale_id": 86,
+        "product_id": 6,
+        "quantity": 12,
+        "unit_price": 5.99
+    },
+    {
+        "sale_id": 86,
+        "product_id": 21,
+        "quantity": 10,
+        "unit_price": 15.99
+    },
+    {
+        "sale_id": 87,
+        "product_id": 9,
+        "quantity": 20,
+        "unit_price": 3.29
+    },
+    {
+        "sale_id": 87,
+        "product_id": 17,
+        "quantity": 15,
+        "unit_price": 12.99
+    },
+    {
+        "sale_id": 87,
+        "product_id": 25,
+        "quantity": 5,
+        "unit_price": 24.99
+    },
+    {
+        "sale_id": 88,
+        "product_id": 4,
+        "quantity": 18,
+        "unit_price": 4.99
+    },
+    {
+        "sale_id": 88,
+        "product_id": 13,
+        "quantity": 25,
+        "unit_price": 2.99
+    },
+    {
+        "sale_id": 89,
+        "product_id": 1,
+        "quantity": 30,
+        "unit_price": 2.49
+    },
+    {
+        "sale_id": 89,
+        "product_id": 10,
+        "quantity": 25,
+        "unit_price": 5.99
+    },
+    {
+        "sale_id": 89,
+        "product_id": 32,
+        "quantity": 3,
+        "unit_price": 149.99
+    },
+    {
+        "sale_id": 90,
+        "product_id": 8,
+        "quantity": 22,
+        "unit_price": 4.49
+    },
+    {
+        "sale_id": 90,
+        "product_id": 19,
+        "quantity": 15,
+        "unit_price": 12.99
+    },
+    {
+        "sale_id": 91,
+        "product_id": 11,
+        "quantity": 28,
+        "unit_price": 6.99
+    },
+    {
+        "sale_id": 91,
+        "product_id": 23,
+        "quantity": 20,
+        "unit_price": 2.49
+    },
+    {
+        "sale_id": 92,
+        "product_id": 5,
+        "quantity": 35,
+        "unit_price": 0.89
+    },
+    {
+        "sale_id": 92,
+        "product_id": 22,
+        "quantity": 18,
+        "unit_price": 8.49
+    },
+    {
+        "sale_id": 93,
+        "product_id": 3,
+        "quantity": 40,
+        "unit_price": 3.29
+    },
+    {
+        "sale_id": 93,
+        "product_id": 20,
+        "quantity": 25,
+        "unit_price": 3.49
+    },
+    {
+        "sale_id": 93,
+        "product_id": 29,
+        "quantity": 10,
+        "unit_price": 8.99
+    },
+    {
+        "sale_id": 94,
+        "product_id": 6,
+        "quantity": 15,
+        "unit_price": 5.99
+    },
+    {
+        "sale_id": 94,
+        "product_id": 16,
+        "quantity": 22,
+        "unit_price": 2.29
+    },
+    {
+        "sale_id": 95,
+        "product_id": 2,
+        "quantity": 30,
+        "unit_price": 2.49
+    },
+    {
+        "sale_id": 95,
+        "product_id": 18,
+        "quantity": 12,
+        "unit_price": 14.99
+    },
+    {
+        "sale_id": 95,
+        "product_id": 27,
+        "quantity": 5,
+        "unit_price": 34.99
+    },
+    {
+        "sale_id": 96,
+        "product_id": 4,
+        "quantity": 25,
+        "unit_price": 4.99
+    },
+    {
+        "sale_id": 96,
+        "product_id": 14,
+        "quantity": 18,
+        "unit_price": 4.29
+    },
+    {
+        "sale_id": 97,
+        "product_id": 7,
+        "quantity": 10,
+        "unit_price": 9.99
+    },
+    {
+        "sale_id": 97,
+        "product_id": 15,
+        "quantity": 18,
+        "unit_price": 4.99
+    },
+    {
+        "sale_id": 97,
+        "product_id": 30,
+        "quantity": 8,
+        "unit_price": 29.99
+    },
+    {
+        "sale_id": 98,
+        "product_id": 1,
+        "quantity": 35,
+        "unit_price": 2.49
+    },
+    {
+        "sale_id": 98,
+        "product_id": 13,
+        "quantity": 30,
+        "unit_price": 2.99
+    },
+    {
+        "sale_id": 99,
+        "product_id": 9,
+        "quantity": 40,
+        "unit_price": 3.29
+    },
+    {
+        "sale_id": 99,
+        "product_id": 26,
+        "quantity": 15,
+        "unit_price": 19.99
+    },
+    {
+        "sale_id": 100,
+        "product_id": 8,
+        "quantity": 30,
+        "unit_price": 4.49
+    },
+    {
+        "sale_id": 100,
+        "product_id": 25,
+        "quantity": 10,
+        "unit_price": 24.99
+    },
+    {
+        "sale_id": 101,
+        "product_id": 3,
+        "quantity": 45,
+        "unit_price": 3.29
+    },
+    {
+        "sale_id": 101,
+        "product_id": 12,
+        "quantity": 20,
+        "unit_price": 7.49
+    },
+    {
+        "sale_id": 101,
+        "product_id": 24,
+        "quantity": 12,
+        "unit_price": 7.99
+    },
+    {
+        "sale_id": 102,
+        "product_id": 5,
+        "quantity": 50,
+        "unit_price": 0.89
+    },
+    {
+        "sale_id": 102,
+        "product_id": 17,
+        "quantity": 18,
+        "unit_price": 12.99
+    },
+    {
+        "sale_id": 103,
+        "product_id": 2,
+        "quantity": 35,
+        "unit_price": 2.49
+    },
+    {
+        "sale_id": 103,
+        "product_id": 19,
+        "quantity": 16,
+        "unit_price": 12.99
+    },
+    {
+        "sale_id": 103,
+        "product_id": 28,
+        "quantity": 7,
+        "unit_price": 19.99
+    },
+    {
+        "sale_id": 104,
+        "product_id": 6,
+        "quantity": 25,
+        "unit_price": 5.99
+    },
+    {
+        "sale_id": 104,
+        "product_id": 20,
+        "quantity": 30,
+        "unit_price": 3.49
+    },
+    {
+        "sale_id": 105,
+        "product_id": 4,
+        "quantity": 35,
+        "unit_price": 4.99
+    },
+    {
+        "sale_id": 105,
+        "product_id": 11,
+        "quantity": 22,
+        "unit_price": 6.99
+    },
+    {
+        "sale_id": 105,
+        "product_id": 32,
+        "quantity": 2,
+        "unit_price": 149.99
+    },
+    {
+        "sale_id": 106,
+        "product_id": 7,
+        "quantity": 15,
+        "unit_price": 9.99
+    },
+    {
+        "sale_id": 106,
+        "product_id": 16,
+        "quantity": 28,
+        "unit_price": 2.29
+    },
+    {
+        "sale_id": 107,
+        "product_id": 1,
+        "quantity": 45,
+        "unit_price": 2.49
+    },
+    {
+        "sale_id": 107,
+        "product_id": 22,
+        "quantity": 20,
+        "unit_price": 8.49
+    },
+    {
+        "sale_id": 108,
+        "product_id": 3,
+        "quantity": 50,
+        "unit_price": 3.29
+    },
+    {
+        "sale_id": 108,
+        "product_id": 15,
+        "quantity": 25,
+        "unit_price": 4.99
+    },
+    {
+        "sale_id": 109,
+        "product_id": 5,
+        "quantity": 60,
+        "unit_price": 0.89
+    },
+    {
+        "sale_id": 109,
+        "product_id": 18,
+        "quantity": 15,
+        "unit_price": 14.99
+    },
+    {
+        "sale_id": 109,
+        "product_id": 31,
+        "quantity": 6,
+        "unit_price": 29.99
+    },
+    {
+        "sale_id": 110,
+        "product_id": 2,
+        "quantity": 40,
+        "unit_price": 2.49
+    },
+    {
+        "sale_id": 110,
+        "product_id": 14,
+        "quantity": 23,
+        "unit_price": 4.29
+    },
+    {
+        "sale_id": 111,
+        "product_id": 8,
+        "quantity": 32,
+        "unit_price": 4.49
+    },
+    {
+        "sale_id": 111,
+        "product_id": 21,
+        "quantity": 13,
+        "unit_price": 15.99
+    },
+    {
+        "sale_id": 112,
+        "product_id": 4,
+        "quantity": 30,
+        "unit_price": 4.99
+    },
+    {
+        "sale_id": 112,
+        "product_id": 10,
+        "quantity": 25,
+        "unit_price": 5.99
+    },
+    {
+        "sale_id": 112,
+        "product_id": 29,
+        "quantity": 8,
+        "unit_price": 8.99
+    },
+    {
+        "sale_id": 113,
+        "product_id": 6,
+        "quantity": 28,
+        "unit_price": 5.99
+    },
+    {
+        "sale_id": 113,
+        "product_id": 23,
+        "quantity": 35,
+        "unit_price": 2.49
+    },
+    {
+        "sale_id": 114,
+        "product_id": 1,
+        "quantity": 55,
+        "unit_price": 2.49
+    },
+    {
+        "sale_id": 114,
+        "product_id": 13,
+        "quantity": 28,
+        "unit_price": 2.99
+    },
+    {
+        "sale_id": 115,
+        "product_id": 3,
+        "quantity": 40,
+        "unit_price": 3.29
+    },
+    {
+        "sale_id": 115,
+        "product_id": 27,
+        "quantity": 7,
+        "unit_price": 34.99
+    },
+    {
+        "sale_id": 116,
+        "product_id": 7,
+        "quantity": 18,
+        "unit_price": 9.99
+    },
+    {
+        "sale_id": 116,
+        "product_id": 19,
+        "quantity": 22,
+        "unit_price": 12.99
+    },
+    {
+        "sale_id": 117,
+        "product_id": 5,
+        "quantity": 45,
+        "unit_price": 0.89
+    },
+    {
+        "sale_id": 117,
+        "product_id": 24,
+        "quantity": 18,
+        "unit_price": 7.99
     }
 ]

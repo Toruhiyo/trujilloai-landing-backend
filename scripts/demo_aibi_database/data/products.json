@@ -581,5 +581,137 @@
         "size": "4 inch",
         "material": "Ceramic/Electronic",
         "price": 39.99
+    },
+    {
+        "name": "Eco-Friendly Recycled Paper Notepad A5",
+        "description": "Made from 100% recycled materials with 80 sheets of lined paper",
+        "category_id": 2,
+        "brand": "GreenWrite",
+        "color": "Natural",
+        "format": "A5",
+        "size": "80 sheets",
+        "material": "Recycled Paper",
+        "price": 6.99
+    },
+    {
+        "name": "Wireless Mouse with Ergonomic Design",
+        "description": "Comfortable ergonomic design with smooth optical tracking and low latency connection",
+        "category_id": 6,
+        "brand": "TechEase",
+        "color": "Black/Silver",
+        "format": "Wireless",
+        "size": "Standard",
+        "material": "Plastic/Rubber",
+        "price": 32.99
+    },
+    {
+        "name": "Premium Leather Desk Pad Protector",
+        "description": "Elegant full-grain leather desk pad that protects surfaces and enhances workspace aesthetics",
+        "category_id": 5,
+        "brand": "ExecuTrend",
+        "color": "Brown",
+        "format": "Rectangle",
+        "size": "60x40cm",
+        "material": "Leather",
+        "price": 49.99
+    },
+    {
+        "name": "Multifunction Document Scanner",
+        "description": "Compact document scanner with automatic feeder and WiFi connectivity",
+        "category_id": 6,
+        "brand": "DigiScan",
+        "color": "White",
+        "format": "Desktop",
+        "size": "Compact",
+        "material": "Plastic/Metal",
+        "price": 189.99
+    },
+    {
+        "name": "Ultra Fine Tip Gel Pen Set - Assorted Colors",
+        "description": "Set of 10 gel pens with 0.3mm tips for precise writing and drawing",
+        "category_id": 1,
+        "brand": "ArtWrite",
+        "color": "Assorted",
+        "format": "Gel",
+        "size": "0.3mm",
+        "material": "Plastic/Metal",
+        "price": 15.99
+    },
+    {
+        "name": "Bamboo Desktop Organizer",
+        "description": "Sustainable bamboo desktop organizer with multiple compartments",
+        "category_id": 3,
+        "brand": "EcoOrganize",
+        "color": "Natural",
+        "format": "Desktop",
+        "size": "30x20x15cm",
+        "material": "Bamboo",
+        "price": 28.99
+    },
+    {
+        "name": "Smart Digital Notebook - Reusable",
+        "description": "Digital notebook that can be erased and reused with companion app integration",
+        "category_id": 2,
+        "brand": "TechNote",
+        "color": "Gray",
+        "format": "A4",
+        "size": "40 pages",
+        "material": "Synthetic Paper/Plastic",
+        "price": 45.99
+    },
+    {
+        "name": "Anti-Fatigue Standing Desk Mat",
+        "description": "Ergonomic mat designed to reduce fatigue during prolonged standing at desk",
+        "category_id": 8,
+        "brand": "ComfortStand",
+        "color": "Black",
+        "format": "Rectangle",
+        "size": "90x50cm",
+        "material": "Foam/Rubber",
+        "price": 59.99
+    },
+    {
+        "name": "Wireless Charging Desk Lamp with USB Port",
+        "description": "LED desk lamp with adjustable brightness, wireless charging pad and USB port",
+        "category_id": 5,
+        "brand": "LumiCharge",
+        "color": "White",
+        "format": "LED",
+        "size": "40cm height",
+        "material": "Aluminum/Plastic",
+        "price": 69.99
+    },
+    {
+        "name": "Biodegradable Mechanical Pencil Set",
+        "description": "Set of 3 mechanical pencils made from biodegradable materials",
+        "category_id": 1,
+        "brand": "EcoDraft",
+        "color": "Earth tones",
+        "format": "Mechanical",
+        "size": "0.5mm",
+        "material": "Bioplastic",
+        "price": 12.99
+    },
+    {
+        "name": "Noise-Cancelling Wireless Headphones",
+        "description": "Over-ear headphones with active noise cancellation for office environments",
+        "category_id": 6,
+        "brand": "SoundPro",
+        "color": "Black",
+        "format": "Over-ear",
+        "size": "Standard",
+        "material": "Plastic/Metal/Fabric",
+        "price": 129.99
+    },
+    {
+        "name": "Adjustable Monitor Stand with Storage",
+        "description": "Height-adjustable monitor stand with integrated storage compartments",
+        "category_id": 6,
+        "brand": "ErgoPro",
+        "color": "Black",
+        "format": "Desktop",
+        "size": "Adjustable",
+        "material": "Aluminum/Plastic",
+        "price": 54.99
     }
 ]
