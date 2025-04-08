@@ -6,6 +6,7 @@ from src.app.demos.ai_bi.nlq.dtos import NlqResultDTO, SqlResultDTO
 from src.app.demos.ai_bi.nlq.llm_nlq.dtos import NlqLlmResultsDTO, NlqRequestDTO
 from src.app.demos.ai_bi.nlq.llm_nlq.llm_nlq import AibiLlmTextToSQL
 from src.app.demos.ai_bi.nlq.query_executor import AibiQueryExecutor
+from src.utils.decorators import retry
 from src.utils.metaclasses import DynamicSingleton
 
 logger = logging.getLogger(__name__)
@@ -21,6 +22,7 @@ class AibiNlqAgent(metaclass=DynamicSingleton):
         self.__llm_text_to_sql = llm_text_to_sql or AibiLlmTextToSQL()
         self.__query_executor = query_executor or AibiQueryExecutor()
 
+    @retry(max_retries=3, delay=0)
     def compute(self, natural_language_query: str) -> NlqResultDTO:
         t0 = perf_counter()
         llm_results, generation_time_ms = self.__compute_sql_query(
