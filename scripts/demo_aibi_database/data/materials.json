@@ -1,0 +1,258 @@
+[
+    {
+        "id": 1,
+        "name": "Plastic/Metal"
+    },
+    {
+        "id": 2,
+        "name": "Plastic"
+    },
+    {
+        "id": 3,
+        "name": "Metal/Plastic"
+    },
+    {
+        "id": 4,
+        "name": "Wood/Rubber"
+    },
+    {
+        "id": 5,
+        "name": "Paper/Cardboard"
+    },
+    {
+        "id": 6,
+        "name": "Premium Paper/Hardboard"
+    },
+    {
+        "id": 7,
+        "name": "Paper/Metal"
+    },
+    {
+        "id": 8,
+        "name": "Paper/Adhesive"
+    },
+    {
+        "id": 9,
+        "name": "Paper"
+    },
+    {
+        "id": 10,
+        "name": "Recycled Paper"
+    },
+    {
+        "id": 11,
+        "name": "Cardboard/Metal"
+    },
+    {
+        "id": 12,
+        "name": "Cardboard"
+    },
+    {
+        "id": 13,
+        "name": "Metal Mesh"
+    },
+    {
+        "id": 14,
+        "name": "Metal"
+    },
+    {
+        "id": 15,
+        "name": "Kraft Paper"
+    },
+    {
+        "id": 16,
+        "name": "Plastic/Solar"
+    },
+    {
+        "id": 17,
+        "name": "Stainless Steel/Plastic"
+    },
+    {
+        "id": 18,
+        "name": "Adhesive"
+    },
+    {
+        "id": 19,
+        "name": "Plastic/Electronic"
+    },
+    {
+        "id": 20,
+        "name": "Aluminum"
+    },
+    {
+        "id": 21,
+        "name": "Plastic/Ink"
+    },
+    {
+        "id": 22,
+        "name": "Cork/Aluminum"
+    },
+    {
+        "id": 23,
+        "name": "Steel/Aluminum"
+    },
+    {
+        "id": 24,
+        "name": "Mesh/Plastic/Metal"
+    },
+    {
+        "id": 25,
+        "name": "Wood/Metal"
+    },
+    {
+        "id": 26,
+        "name": "Steel Mesh"
+    },
+    {
+        "id": 27,
+        "name": "Paper/Bubble Wrap"
+    },
+    {
+        "id": 28,
+        "name": "Plastic/Tape"
+    },
+    {
+        "id": 29,
+        "name": "Coffee/Aluminum"
+    },
+    {
+        "id": 30,
+        "name": "Tea/Paper"
+    },
+    {
+        "id": 31,
+        "name": "Metal/Glass"
+    },
+    {
+        "id": 32,
+        "name": "Plastic/Metallic Ink"
+    },
+    {
+        "id": 33,
+        "name": "Premium Paper/Vegan Leather"
+    },
+    {
+        "id": 34,
+        "name": "Plastic Film"
+    },
+    {
+        "id": 35,
+        "name": "Composite/Electronic"
+    },
+    {
+        "id": 36,
+        "name": "Recycled Cardstock"
+    },
+    {
+        "id": 37,
+        "name": "Memory Foam/Mesh"
+    },
+    {
+        "id": 38,
+        "name": "Ceramic/Electronic"
+    },
+    {
+        "id": 39,
+        "name": "Plastic/Rubber"
+    },
+    {
+        "id": 40,
+        "name": "Leather"
+    },
+    {
+        "id": 41,
+        "name": "Bamboo"
+    },
+    {
+        "id": 42,
+        "name": "Synthetic Paper/Plastic"
+    },
+    {
+        "id": 43,
+        "name": "Foam/Rubber"
+    },
+    {
+        "id": 44,
+        "name": "Aluminum/Plastic"
+    },
+    {
+        "id": 45,
+        "name": "Bioplastic"
+    },
+    {
+        "id": 46,
+        "name": "Plastic/Metal/Fabric"
+    },
+    {
+        "id": 47,
+        "name": "Carbon Fiber/Polymer"
+    },
+    {
+        "id": 48,
+        "name": "Silicone/Electronic"
+    },
+    {
+        "id": 49,
+        "name": "Cotton/Synthetic Blend"
+    },
+    {
+        "id": 50,
+        "name": "Memory Foam/Fabric"
+    },
+    {
+        "id": 51,
+        "name": "ABS Plastic/Electronic"
+    },
+    {
+        "id": 52,
+        "name": "Ceramic/Glass"
+    },
+    {
+        "id": 53,
+        "name": "Hemp Paper"
+    },
+    {
+        "id": 54,
+        "name": "Silicone/Rubber"
+    },
+    {
+        "id": 55,
+        "name": "Full-Grain Leather"
+    },
+    {
+        "id": 56,
+        "name": "Composite/Metal"
+    },
+    {
+        "id": 57,
+        "name": "Metal/Electronic Components"
+    },
+    {
+        "id": 58,
+        "name": "Solid Bamboo"
+    },
+    {
+        "id": 59,
+        "name": "Smart Paper/Electronic"
+    },
+    {
+        "id": 60,
+        "name": "Anti-Fatigue Rubber"
+    },
+    {
+        "id": 61,
+        "name": "Aluminum/LED Components"
+    },
+    {
+        "id": 62,
+        "name": "Plant-Based Plastic"
+    },
+    {
+        "id": 63,
+        "name": "Acoustic Fabric/Electronics"
+    },
+    {
+        "id": 64,
+        "name": "Aluminum/Wood Composite"
+    }
+]

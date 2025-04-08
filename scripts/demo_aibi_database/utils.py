@@ -121,6 +121,11 @@ def insert_data(conn, table_name, data, columns):
 
 def compute_id_column(table_name):
     """Compute the ID column for a table"""
+    # Special cases for tables where the ID column is simply 'id'
+    if table_name in ["colors", "materials"]:
+        return "id"
+
+    # Standard case: tablename_id
     stem = table_name.rstrip("s")
     if stem.endswith("ie"):
         stem = stem.rstrip("ie") + "y"

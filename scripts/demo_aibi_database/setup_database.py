@@ -45,6 +45,8 @@ def drop_tables(conn):
         "DROP TABLE IF EXISTS customers CASCADE;",
         "DROP TABLE IF EXISTS regions CASCADE;",
         "DROP TABLE IF EXISTS sectors CASCADE;",
+        "DROP TABLE IF EXISTS colors CASCADE;",
+        "DROP TABLE IF EXISTS materials CASCADE;",
         "DROP TABLE IF EXISTS payment_methods CASCADE;",
     ]
 
@@ -57,6 +59,8 @@ def drop_tables(conn):
         "DROP SEQUENCE IF EXISTS sale_items_sale_item_id_seq CASCADE;",
         "DROP SEQUENCE IF EXISTS regions_region_id_seq CASCADE;",
         "DROP SEQUENCE IF EXISTS sectors_sector_id_seq CASCADE;",
+        "DROP SEQUENCE IF EXISTS colors_id_seq CASCADE;",
+        "DROP SEQUENCE IF EXISTS materials_id_seq CASCADE;",
         "DROP SEQUENCE IF EXISTS payment_methods_payment_method_id_seq CASCADE;",
     ]
 
@@ -98,6 +102,18 @@ def create_tables(conn):
         )
         """,
         """
+        CREATE TABLE colors (
+            id SERIAL PRIMARY KEY,
+            name VARCHAR(100) NOT NULL
+        )
+        """,
+        """
+        CREATE TABLE materials (
+            id SERIAL PRIMARY KEY,
+            name VARCHAR(100) NOT NULL
+        )
+        """,
+        """
         CREATE TABLE payment_methods (
             payment_method_id SERIAL PRIMARY KEY,
             name VARCHAR(100) NOT NULL
@@ -125,10 +141,10 @@ def create_tables(conn):
             description TEXT,
             category_id INTEGER REFERENCES categories(category_id),
             brand VARCHAR(50),
-            color VARCHAR(50),
+            color_id INTEGER REFERENCES colors(id),
             format VARCHAR(50),
             size VARCHAR(50),
-            material VARCHAR(50),
+            material_id INTEGER REFERENCES materials(id),
             price DECIMAL(10, 2) NOT NULL
         )
         """,
@@ -165,6 +181,8 @@ def create_tables(conn):
             "SELECT setval('sale_items_sale_item_id_seq', 1, false);",
             "SELECT setval('regions_region_id_seq', 1, false);",
             "SELECT setval('sectors_sector_id_seq', 1, false);",
+            "SELECT setval('colors_id_seq', 1, false);",
+            "SELECT setval('materials_id_seq', 1, false);",
             "SELECT setval('payment_methods_payment_method_id_seq', 1, false);",
         ]
 
@@ -242,6 +260,8 @@ def populate_tables(conn):
         # Load data
         regions = load_all_data_by_type(data_dir, "regions*.json")
         sectors = load_all_data_by_type(data_dir, "sectors*.json")
+        colors = load_all_data_by_type(data_dir, "colors*.json")
+        materials = load_all_data_by_type(data_dir, "materials*.json")
         payment_methods = load_all_data_by_type(data_dir, "payment_methods*.json")
         categories = load_all_data_by_type(data_dir, "categories*.json")
         customers = load_all_data_by_type(data_dir, "customers*.json")
@@ -264,6 +284,14 @@ def populate_tables(conn):
         sector_columns = ["name"]
         insert_data(conn, "sectors", sectors, sector_columns)
 
+        # Insert colors
+        color_columns = ["id", "name"]
+        insert_data(conn, "colors", colors, color_columns)
+
+        # Insert materials
+        material_columns = ["id", "name"]
+        insert_data(conn, "materials", materials, material_columns)
+
         # Insert payment methods
         payment_method_columns = ["name"]
         insert_data(conn, "payment_methods", payment_methods, payment_method_columns)
@@ -279,7 +307,13 @@ def populate_tables(conn):
         # Insert products
         product_columns = [
             "name",
+            "description",
             "category_id",
+            "brand",
+            "color_id",
+            "format",
+            "size",
+            "material_id",
             "price",
         ]
         insert_data(conn, "products", products, product_columns)

@@ -1,0 +1,262 @@
+[
+    {
+        "id": 1,
+        "name": "Blue"
+    },
+    {
+        "id": 2,
+        "name": "Red"
+    },
+    {
+        "id": 3,
+        "name": "Black"
+    },
+    {
+        "id": 4,
+        "name": "Silver"
+    },
+    {
+        "id": 5,
+        "name": "Yellow"
+    },
+    {
+        "id": 6,
+        "name": "Assorted"
+    },
+    {
+        "id": 7,
+        "name": "White"
+    },
+    {
+        "id": 8,
+        "name": "Beige"
+    },
+    {
+        "id": 9,
+        "name": "Green"
+    },
+    {
+        "id": 10,
+        "name": "Multicolor"
+    },
+    {
+        "id": 11,
+        "name": "Brown"
+    },
+    {
+        "id": 12,
+        "name": "Transparent"
+    },
+    {
+        "id": 13,
+        "name": "Natural Kraft"
+    },
+    {
+        "id": 14,
+        "name": "Silver/Black"
+    },
+    {
+        "id": 15,
+        "name": "Yellow/Black"
+    },
+    {
+        "id": 16,
+        "name": "Black, Blue, Red, Green"
+    },
+    {
+        "id": 17,
+        "name": "Cork/Silver"
+    },
+    {
+        "id": 18,
+        "name": "White/Silver"
+    },
+    {
+        "id": 19,
+        "name": "Gold"
+    },
+    {
+        "id": 20,
+        "name": "Red/Clear"
+    },
+    {
+        "id": 21,
+        "name": "Mixed"
+    },
+    {
+        "id": 22,
+        "name": "Gold/Silver/Rose/Blue/Green"
+    },
+    {
+        "id": 23,
+        "name": "Sage Green"
+    },
+    {
+        "id": 24,
+        "name": "Gray"
+    },
+    {
+        "id": 25,
+        "name": "Black/Red/Blue"
+    },
+    {
+        "id": 26,
+        "name": "Rainbow"
+    },
+    {
+        "id": 27,
+        "name": "Natural White"
+    },
+    {
+        "id": 28,
+        "name": "Natural"
+    },
+    {
+        "id": 29,
+        "name": "Black/Silver"
+    },
+    {
+        "id": 30,
+        "name": "Earth tones"
+    },
+    {
+        "id": 31,
+        "name": "Dark Blue"
+    },
+    {
+        "id": 32,
+        "name": "Light Gray"
+    },
+    {
+        "id": 33,
+        "name": "Charcoal"
+    },
+    {
+        "id": 34,
+        "name": "Ivory"
+    },
+    {
+        "id": 35,
+        "name": "Teal"
+    },
+    {
+        "id": 36,
+        "name": "Pink"
+    },
+    {
+        "id": 37,
+        "name": "Navy"
+    },
+    {
+        "id": 38,
+        "name": "Burgundy"
+    },
+    {
+        "id": 39,
+        "name": "Forest Green"
+    },
+    {
+        "id": 40,
+        "name": "Orange"
+    },
+    {
+        "id": 41,
+        "name": "Purple"
+    },
+    {
+        "id": 42,
+        "name": "Mint Green"
+    },
+    {
+        "id": 43,
+        "name": "Coral"
+    },
+    {
+        "id": 44,
+        "name": "Turquoise"
+    },
+    {
+        "id": 45,
+        "name": "Slate"
+    },
+    {
+        "id": 46,
+        "name": "Lavender"
+    },
+    {
+        "id": 47,
+        "name": "Khaki"
+    },
+    {
+        "id": 48,
+        "name": "Olive"
+    },
+    {
+        "id": 49,
+        "name": "Cream"
+    },
+    {
+        "id": 50,
+        "name": "Indigo"
+    },
+    {
+        "id": 51,
+        "name": "Magenta"
+    },
+    {
+        "id": 52,
+        "name": "Copper"
+    },
+    {
+        "id": 53,
+        "name": "Bronze"
+    },
+    {
+        "id": 54,
+        "name": "Emerald"
+    },
+    {
+        "id": 55,
+        "name": "Sapphire"
+    },
+    {
+        "id": 56,
+        "name": "Ruby"
+    },
+    {
+        "id": 57,
+        "name": "Pearl"
+    },
+    {
+        "id": 58,
+        "name": "Amber"
+    },
+    {
+        "id": 59,
+        "name": "Aqua"
+    },
+    {
+        "id": 60,
+        "name": "Cobalt"
+    },
+    {
+        "id": 61,
+        "name": "Crimson"
+    },
+    {
+        "id": 62,
+        "name": "Jade"
+    },
+    {
+        "id": 63,
+        "name": "Mauve"
+    },
+    {
+        "id": 64,
+        "name": "Onyx"
+    },
+    {
+        "id": 65,
+        "name": "Taupe"
+    }
+]

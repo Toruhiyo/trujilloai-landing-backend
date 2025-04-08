@@ -1,35 +1,35 @@
 [
     {
         "name": "Fine Point Blue Ballpoint Pen",
-        "description": "Smooth writing ballpoint pen with fine 0.5mm tip for precise writing",
+        "description": "Precision blue ink ballpoint pen with fine 0.5mm tip for detailed writing. Features comfortable grip and smooth ink flow for professional document preparation.",
         "category_id": 1,
         "brand": "PenElite",
-        "color": "Blue",
+        "color_id": 1,
         "format": "Ballpoint",
         "size": "0.5mm",
-        "material": "Plastic/Metal",
+        "material_id": 1,
         "price": 2.49
     },
     {
         "name": "Medium Point Red Ballpoint Pen",
-        "description": "Comfortable medium point pen for everyday writing tasks",
+        "description": "Reliable red ink medium point pen designed for everyday writing. Offers consistent ink flow and ergonomic design for reduced writing fatigue during extended use.",
         "category_id": 1,
         "brand": "PenElite",
-        "color": "Red",
+        "color_id": 2,
         "format": "Ballpoint",
         "size": "0.7mm",
-        "material": "Plastic/Metal",
+        "material_id": 1,
         "price": 2.49
     },
     {
         "name": "Black Permanent Marker - Broad Tip",
-        "description": "Fast-drying permanent marker that writes on most surfaces",
+        "description": "Quick-drying black permanent marker with broad tip that writes on most surfaces including plastic, glass, metal, and paper. Perfect for labeling, highlighting, and creating bold markings.",
         "category_id": 1,
         "brand": "MarkMaster",
-        "color": "Black",
+        "color_id": 3,
         "format": "Permanent",
         "size": "Broad Tip",
-        "material": "Plastic",
+        "material_id": 2,
         "price": 3.29
     },
     {
@@ -37,10 +37,10 @@
         "description": "Precision mechanical pencil with cushioned lead advancement",
         "category_id": 1,
         "brand": "DraftPro",
-        "color": "Silver",
+        "color_id": 4,
         "format": "Mechanical",
         "size": "0.5mm",
-        "material": "Metal/Plastic",
+        "material_id": 3,
         "price": 4.99
     },
     {
@@ -48,10 +48,10 @@
         "description": "Premium quality wooden pencil with attached eraser",
         "category_id": 1,
         "brand": "EcoPencil",
-        "color": "Yellow",
+        "color_id": 5,
         "format": "Wooden",
         "size": "HB",
-        "material": "Wood/Rubber",
+        "material_id": 4,
         "price": 0.89
     },
     {
@@ -59,10 +59,10 @@
         "description": "Soft cover notebook with 5mm grid pattern, perfect for notes and planning",
         "category_id": 2,
         "brand": "NoteKeeper",
-        "color": "Blue",
+        "color_id": 6,
         "format": "A5",
         "size": "5mm Grid",
-        "material": "Paper/Cardboard",
+        "material_id": 5,
         "price": 5.99
     },
     {
@@ -70,10 +70,10 @@
         "description": "Premium hardcover notebook with ruled pages for professional use",
         "category_id": 2,
         "brand": "ExecuWrite",
-        "color": "Black",
+        "color_id": 7,
         "format": "A4",
         "size": "Ruled",
-        "material": "Premium Paper/Hardboard",
+        "material_id": 6,
         "price": 9.99
     },
     {
@@ -81,10 +81,10 @@
         "description": "Wire-bound spiral notebook with perforated pages for easy removal",
         "category_id": 2,
         "brand": "NoteKeeper",
-        "color": "Assorted",
+        "color_id": 8,
         "format": "Spiral",
         "size": "80 sheets",
-        "material": "Paper/Metal",
+        "material_id": 7,
         "price": 4.49
     },
     {
@@ -92,10 +92,10 @@
         "description": "Self-adhesive notes for quick reminders and annotations",
         "category_id": 2,
         "brand": "StickIt",
-        "color": "Yellow",
+        "color_id": 9,
         "format": "Square",
         "size": "3x3 inch",
-        "material": "Paper/Adhesive",
+        "material_id": 8,
         "price": 3.29
     },
     {
@@ -103,10 +103,10 @@
         "description": "Multipurpose 80gsm white copy paper for printing and photocopying",
         "category_id": 2,
         "brand": "PaperPro",
-        "color": "White",
+        "color_id": 10,
         "format": "A4",
         "size": "80gsm",
-        "material": "Paper",
+        "material_id": 9,
         "price": 5.99
     },
     {
@@ -114,10 +114,10 @@
         "description": "Environmentally friendly 90gsm recycled paper with natural beige tone",
         "category_id": 2,
         "brand": "EcoPaper",
-        "color": "Beige",
+        "color_id": 11,
         "format": "A4",
         "size": "90gsm",
-        "material": "Recycled Paper",
+        "material_id": 10,
         "price": 6.99
     },
     {
@@ -125,10 +125,10 @@
         "description": "Durable lever arch file with 75mm spine for high-capacity document storage",
         "category_id": 3,
         "brand": "OrganiFile",
-        "color": "Blue",
+        "color_id": 12,
         "format": "Lever Arch",
         "size": "75mm Spine",
-        "material": "Cardboard/Metal",
+        "material_id": 11,
         "price": 7.49
     },
     {
@@ -136,10 +136,10 @@
         "description": "Transparent plastic folder with clip for securing documents",
         "category_id": 3,
         "brand": "ClearView",
-        "color": "Green",
+        "color_id": 13,
         "format": "Clip Folder",
         "size": "A4",
-        "material": "Plastic",
+        "material_id": 12,
         "price": 2.99
     },
     {
@@ -147,10 +147,10 @@
         "description": "26-part alphabetical dividers for efficient document organization",
         "category_id": 3,
         "brand": "OrganiFile",
-        "color": "Multicolor",
+        "color_id": 14,
         "format": "Alphabetical",
         "size": "A4",
-        "material": "Cardboard",
+        "material_id": 13,
         "price": 4.29
     },
     {
@@ -158,10 +158,10 @@
         "description": "Stackable metal mesh tray for organizing documents and papers",
         "category_id": 3,
         "brand": "DeskMaster",
-        "color": "Silver",
+        "color_id": 15,
         "format": "Stackable",
         "size": "Standard",
-        "material": "Metal Mesh",
+        "material_id": 14,
         "price": 14.99
     },
     {
@@ -169,10 +169,10 @@
         "description": "Sturdy cardboard box with lid for document archiving and storage",
         "category_id": 4,
         "brand": "StorWell",
-        "color": "Brown",
+        "color_id": 16,
         "format": "Box with Lid",
         "size": "40x30x20cm",
-        "material": "Cardboard",
+        "material_id": 15,
         "price": 4.99
     },
     {
@@ -180,10 +180,10 @@
         "description": "Transparent adhesive tape for general packaging and office use",
         "category_id": 4,
         "brand": "SealFast",
-        "color": "Transparent",
+        "color_id": 17,
         "format": "Roll",
         "size": "50m x 19mm",
-        "material": "Plastic",
+        "material_id": 16,
         "price": 2.29
     },
     {
@@ -191,10 +191,10 @@
         "description": "Heavy-duty metal stapler for professional use, holds up to 25 sheets",
         "category_id": 4,
         "brand": "BindPro",
-        "color": "Black",
+        "color_id": 18,
         "format": "Desktop",
         "size": "Full Size",
-        "material": "Metal",
+        "material_id": 17,
         "price": 12.99
     },
     {
@@ -202,10 +202,10 @@
         "description": "Eco-friendly kraft paper box for document archiving with side label",
         "category_id": 4,
         "brand": "EcoStore",
-        "color": "Natural Kraft",
+        "color_id": 19,
         "format": "Archive Box",
         "size": "10cm Width",
-        "material": "Kraft Paper",
+        "material_id": 18,
         "price": 3.49
     },
     {
@@ -213,10 +213,10 @@
         "description": "Dual-powered desktop calculator with large display and business functions",
         "category_id": 5,
         "brand": "CalcTech",
-        "color": "Black",
+        "color_id": 20,
         "format": "Desktop",
         "size": "12-Digit",
-        "material": "Plastic/Solar",
+        "material_id": 19,
         "price": 15.99
     },
     {
@@ -224,10 +224,10 @@
         "description": "Safety scissors with rounded tips suitable for paper cutting",
         "category_id": 5,
         "brand": "CutRight",
-        "color": "Silver/Black",
+        "color_id": 21,
         "format": "Manual",
         "size": "8 inch",
-        "material": "Stainless Steel/Plastic",
+        "material_id": 20,
         "price": 8.49
     },
     {
@@ -235,10 +235,10 @@
         "description": "Washable, non-toxic glue stick for paper and cardboard",
         "category_id": 5,
         "brand": "StickFast",
-        "color": "White",
+        "color_id": 22,
         "format": "Stick",
         "size": "20g",
-        "material": "Adhesive",
+        "material_id": 21,
         "price": 2.49
     },
     {
@@ -246,10 +246,10 @@
         "description": "Ergonomic professional cutter with retractable blade for safe handling",
         "category_id": 5,
         "brand": "CutPro",
-        "color": "Yellow/Black",
+        "color_id": 23,
         "format": "Retractable",
         "size": "Standard",
-        "material": "Plastic/Metal",
+        "material_id": 22,
         "price": 7.99
     },
     {
@@ -257,10 +257,10 @@
         "description": "Ergonomic wireless mouse with adjustable DPI for precise control",
         "category_id": 6,
         "brand": "TechPoint",
-        "color": "Black",
+        "color_id": 24,
         "format": "Wireless",
         "size": "Standard",
-        "material": "Plastic/Electronic",
+        "material_id": 23,
         "price": 24.99
     },
     {
@@ -268,10 +268,10 @@
         "description": "High-speed adapter for connecting laptops to external displays",
         "category_id": 6,
         "brand": "ConnectPro",
-        "color": "Silver",
+        "color_id": 25,
         "format": "Adapter",
         "size": "15cm",
-        "material": "Metal/Plastic",
+        "material_id": 24,
         "price": 19.99
     },
     {
@@ -279,10 +279,10 @@
         "description": "Ergonomic laptop stand with adjustable height and angle settings",
         "category_id": 6,
         "brand": "ErgoPro",
-        "color": "Black",
+        "color_id": 26,
         "format": "Adjustable",
         "size": "Universal",
-        "material": "Aluminum",
+        "material_id": 25,
         "price": 34.99
     },
     {
@@ -290,10 +290,10 @@
         "description": "Set of 4 dry-erase markers for whiteboards and glass surfaces",
         "category_id": 7,
         "brand": "MarkMaster",
-        "color": "Black, Blue, Red, Green",
+        "color_id": 27,
         "format": "Dry-Erase",
         "size": "Medium Tip",
-        "material": "Plastic/Ink",
+        "material_id": 26,
         "price": 8.99
     },
     {
@@ -301,10 +301,10 @@
         "description": "Natural cork board for pinning notes and documents with aluminum frame",
         "category_id": 7,
         "brand": "DisplayPro",
-        "color": "Cork/Silver",
+        "color_id": 28,
         "format": "Wall-Mounted",
         "size": "60x90cm",
-        "material": "Cork/Aluminum",
+        "material_id": 27,
         "price": 29.99
     },
     {
@@ -312,10 +312,10 @@
         "description": "Double-sided magnetic whiteboard with adjustable stand for presentations",
         "category_id": 7,
         "brand": "PresentPro",
-        "color": "White",
+        "color_id": 29,
         "format": "Mobile Stand",
         "size": "90x120cm",
-        "material": "Steel/Aluminum",
+        "material_id": 28,
         "price": 149.99
     },
     {
@@ -323,10 +323,10 @@
         "description": "Fully adjustable ergonomic chair with lumbar support and breathable mesh",
         "category_id": 8,
         "brand": "ComfortPro",
-        "color": "Black",
+        "color_id": 30,
         "format": "Swivel",
         "size": "Standard",
-        "material": "Mesh/Plastic/Metal",
+        "material_id": 29,
         "price": 199.99
     },
     {
@@ -334,10 +334,10 @@
         "description": "Electric height-adjustable desk with memory settings for sitting and standing work",
         "category_id": 8,
         "brand": "FlexDesk",
-        "color": "White/Silver",
+        "color_id": 31,
         "format": "Electric",
         "size": "120x80cm",
-        "material": "Wood/Metal",
+        "material_id": 30,
         "price": 399.99
     },
     {
@@ -345,10 +345,10 @@
         "description": "Metal mesh tray for organizing cables and power strips under desks",
         "category_id": 8,
         "brand": "CablePro",
-        "color": "Black",
+        "color_id": 32,
         "format": "Under-Desk",
         "size": "80cm",
-        "material": "Steel Mesh",
+        "material_id": 31,
         "price": 24.99
     },
     {
@@ -356,10 +356,10 @@
         "description": "Self-seal bubble-lined envelopes for secure document shipping",
         "category_id": 9,
         "brand": "MailSafe",
-        "color": "Gold",
+        "color_id": 33,
         "format": "Bubble-Lined",
         "size": "A4",
-        "material": "Paper/Bubble Wrap",
+        "material_id": 32,
         "price": 10.99
     },
     {
@@ -367,10 +367,10 @@
         "description": "Self-adhesive shipping labels compatible with laser printers",
         "category_id": 9,
         "brand": "LabelPro",
-        "color": "White",
+        "color_id": 34,
         "format": "Self-Adhesive",
         "size": "4 per Sheet",
-        "material": "Paper",
+        "material_id": 33,
         "price": 14.99
     },
     {
@@ -378,10 +378,10 @@
         "description": "Hand-held packing tape dispenser with 50m roll of strong packing tape",
         "category_id": 9,
         "brand": "SealFast",
-        "color": "Red/Clear",
+        "color_id": 35,
         "format": "Handheld",
         "size": "50m x 48mm",
-        "material": "Plastic/Tape",
+        "material_id": 34,
         "price": 12.99
     },
     {
@@ -389,10 +389,10 @@
         "description": "Mixed pack of 50 coffee pods compatible with standard office machines",
         "category_id": 10,
         "brand": "CaféPro",
-        "color": "Mixed",
+        "color_id": 36,
         "format": "Pods",
         "size": "50 Count",
-        "material": "Coffee/Aluminum",
+        "material_id": 35,
         "price": 24.99
     },
     {
@@ -400,10 +400,10 @@
         "description": "Disposable paper cups for hot beverages with heat-resistant design",
         "category_id": 10,
         "brand": "EcoServe",
-        "color": "White",
+        "color_id": 37,
         "format": "Disposable",
         "size": "12oz/100 Count",
-        "material": "Paper",
+        "material_id": 36,
         "price": 8.99
     },
     {
@@ -411,10 +411,10 @@
         "description": "Assortment of 40 individually wrapped tea bags in various flavors",
         "category_id": 10,
         "brand": "TeaTime",
-        "color": "Mixed",
+        "color_id": 38,
         "format": "Tea Bags",
         "size": "40 Count",
-        "material": "Tea/Paper",
+        "material_id": 37,
         "price": 12.99
     },
     {
@@ -422,10 +422,10 @@
         "description": "Smooth-writing gel pen with ultra-fine tip for detailed writing and drawing",
         "category_id": 1,
         "brand": "PenElite",
-        "color": "Black",
+        "color_id": 39,
         "format": "Gel",
         "size": "0.4mm",
-        "material": "Plastic/Metal",
+        "material_id": 38,
         "price": 3.99
     },
     {
@@ -433,10 +433,10 @@
         "description": "Professional fountain pen with 3 interchangeable nibs for calligraphy and artistic writing",
         "category_id": 1,
         "brand": "ArtistryPen",
-        "color": "Silver",
+        "color_id": 40,
         "format": "Fountain",
         "size": "Medium Nib",
-        "material": "Metal/Glass",
+        "material_id": 39,
         "price": 24.99
     },
     {
@@ -444,10 +444,10 @@
         "description": "Set of 5 vibrant metallic markers for special projects and decorative writing",
         "category_id": 1,
         "brand": "MarkMaster",
-        "color": "Gold/Silver/Rose/Blue/Green",
+        "color_id": 41,
         "format": "Metallic",
         "size": "Medium Tip",
-        "material": "Plastic/Metallic Ink",
+        "material_id": 40,
         "price": 12.99
     },
     {
@@ -455,10 +455,10 @@
         "description": "Premium dotted journal with 160gsm paper, perfect for bullet journaling and planning",
         "category_id": 2,
         "brand": "NoteKeeper",
-        "color": "Sage Green",
+        "color_id": 42,
         "format": "A5",
         "size": "Dotted",
-        "material": "Premium Paper/Vegan Leather",
+        "material_id": 41,
         "price": 18.99
     },
     {
@@ -466,10 +466,10 @@
         "description": "B5 size notebook with 5mm graph paper, ideal for technical drawing and engineering notes",
         "category_id": 2,
         "brand": "TechNote",
-        "color": "Gray",
+        "color_id": 43,
         "format": "B5",
         "size": "5mm Graph",
-        "material": "Paper/Cardboard",
+        "material_id": 42,
         "price": 7.99
     },
     {
@@ -477,10 +477,10 @@
         "description": "Set of 3 pocket-sized notebooks with ruled pages for on-the-go note-taking",
         "category_id": 2,
         "brand": "NoteKeeper",
-        "color": "Black/Red/Blue",
+        "color_id": 44,
         "format": "Pocket",
         "size": "3.5 x 5.5 inch",
-        "material": "Paper/Cardboard",
+        "material_id": 43,
         "price": 9.99
     },
     {
@@ -488,10 +488,10 @@
         "description": "Accordion-style expanding file with 13 labeled pockets for comprehensive document organization",
         "category_id": 3,
         "brand": "OrganiFile",
-        "color": "Rainbow",
+        "color_id": 45,
         "format": "Expanding",
         "size": "Letter Size",
-        "material": "Plastic/Card",
+        "material_id": 44,
         "price": 16.99
     },
     {
@@ -499,10 +499,10 @@
         "description": "Set of 5 vertical file holders for organizing magazines, catalogs, and folders",
         "category_id": 3,
         "brand": "DeskMaster",
-        "color": "White",
+        "color_id": 46,
         "format": "Vertical",
         "size": "Standard",
-        "material": "Plastic",
+        "material_id": 45,
         "price": 19.99
     },
     {
@@ -510,10 +510,10 @@
         "description": "Secure USB device for storing and generating passwords with fingerprint protection",
         "category_id": 6,
         "brand": "SecureTech",
-        "color": "Black",
+        "color_id": 47,
         "format": "USB",
         "size": "8GB",
-        "material": "Metal/Electronic",
+        "material_id": 46,
         "price": 49.99
     },
     {
@@ -521,10 +521,10 @@
         "description": "Privacy and anti-glare screen filter for laptops to reduce eye strain and protect data",
         "category_id": 6,
         "brand": "ScreenShield",
-        "color": "Black",
+        "color_id": 48,
         "format": "Filter",
         "size": "15.6 inch",
-        "material": "Plastic Film",
+        "material_id": 47,
         "price": 29.99
     },
     {
@@ -532,10 +532,10 @@
         "description": "Digital whiteboard with app connectivity for saving and sharing notes",
         "category_id": 7,
         "brand": "TechBoard",
-        "color": "White/Silver",
+        "color_id": 49,
         "format": "Smart",
         "size": "40x60cm",
-        "material": "Composite/Electronic",
+        "material_id": 48,
         "price": 199.99
     },
     {
@@ -543,10 +543,10 @@
         "description": "Eco-friendly cardstock made from 100% recycled materials for sustainable printing",
         "category_id": 2,
         "brand": "EcoPaper",
-        "color": "Natural White",
+        "color_id": 50,
         "format": "Letter",
         "size": "110lb",
-        "material": "Recycled Cardstock",
+        "material_id": 49,
         "price": 12.99
     },
     {
@@ -554,10 +554,10 @@
         "description": "Ergonomic lumbar support cushion for office chairs to promote proper posture",
         "category_id": 8,
         "brand": "ComfortPro",
-        "color": "Black",
+        "color_id": 51,
         "format": "Support",
         "size": "Standard",
-        "material": "Memory Foam/Mesh",
+        "material_id": 50,
         "price": 34.99
     },
     {
@@ -565,10 +565,10 @@
         "description": "Compact HEPA air purifier for keeping office air clean and fresh",
         "category_id": 10,
         "brand": "CleanAir",
-        "color": "White",
+        "color_id": 52,
         "format": "HEPA",
         "size": "Desktop",
-        "material": "Plastic/Electronic",
+        "material_id": 51,
         "price": 59.99
     },
     {
@@ -576,10 +576,10 @@
         "description": "Temperature-controlled mug warmer with app control to keep beverages at perfect temperature",
         "category_id": 10,
         "brand": "TechSip",
-        "color": "Black",
+        "color_id": 53,
         "format": "Electronic",
         "size": "4 inch",
-        "material": "Ceramic/Electronic",
+        "material_id": 52,
         "price": 39.99
     },
     {
@@ -587,10 +587,10 @@
         "description": "Made from 100% recycled materials with 80 sheets of lined paper",
         "category_id": 2,
         "brand": "GreenWrite",
-        "color": "Natural",
+        "color_id": 54,
         "format": "A5",
         "size": "80 sheets",
-        "material": "Recycled Paper",
+        "material_id": 53,
         "price": 6.99
     },
     {
@@ -598,10 +598,10 @@
         "description": "Comfortable ergonomic design with smooth optical tracking and low latency connection",
         "category_id": 6,
         "brand": "TechEase",
-        "color": "Black/Silver",
+        "color_id": 55,
         "format": "Wireless",
         "size": "Standard",
-        "material": "Plastic/Rubber",
+        "material_id": 54,
         "price": 32.99
     },
     {
@@ -609,10 +609,10 @@
         "description": "Elegant full-grain leather desk pad that protects surfaces and enhances workspace aesthetics",
         "category_id": 5,
         "brand": "ExecuTrend",
-        "color": "Brown",
+        "color_id": 56,
         "format": "Rectangle",
         "size": "60x40cm",
-        "material": "Leather",
+        "material_id": 55,
         "price": 49.99
     },
     {
@@ -620,10 +620,10 @@
         "description": "Compact document scanner with automatic feeder and WiFi connectivity",
         "category_id": 6,
         "brand": "DigiScan",
-        "color": "White",
+        "color_id": 57,
         "format": "Desktop",
         "size": "Compact",
-        "material": "Plastic/Metal",
+        "material_id": 56,
         "price": 189.99
     },
     {
@@ -631,10 +631,10 @@
         "description": "Set of 10 gel pens with 0.3mm tips for precise writing and drawing",
         "category_id": 1,
         "brand": "ArtWrite",
-        "color": "Assorted",
+        "color_id": 58,
         "format": "Gel",
         "size": "0.3mm",
-        "material": "Plastic/Metal",
+        "material_id": 57,
         "price": 15.99
     },
     {
@@ -642,10 +642,10 @@
         "description": "Sustainable bamboo desktop organizer with multiple compartments",
         "category_id": 3,
         "brand": "EcoOrganize",
-        "color": "Natural",
+        "color_id": 59,
         "format": "Desktop",
         "size": "30x20x15cm",
-        "material": "Bamboo",
+        "material_id": 58,
         "price": 28.99
     },
     {
@@ -653,10 +653,10 @@
         "description": "Digital notebook that can be erased and reused with companion app integration",
         "category_id": 2,
         "brand": "TechNote",
-        "color": "Gray",
+        "color_id": 60,
         "format": "A4",
         "size": "40 pages",
-        "material": "Synthetic Paper/Plastic",
+        "material_id": 59,
         "price": 45.99
     },
     {
@@ -664,10 +664,10 @@
         "description": "Ergonomic mat designed to reduce fatigue during prolonged standing at desk",
         "category_id": 8,
         "brand": "ComfortStand",
-        "color": "Black",
+        "color_id": 61,
         "format": "Rectangle",
         "size": "90x50cm",
-        "material": "Foam/Rubber",
+        "material_id": 60,
         "price": 59.99
     },
     {
@@ -675,10 +675,10 @@
         "description": "LED desk lamp with adjustable brightness, wireless charging pad and USB port",
         "category_id": 5,
         "brand": "LumiCharge",
-        "color": "White",
+        "color_id": 62,
         "format": "LED",
         "size": "40cm height",
-        "material": "Aluminum/Plastic",
+        "material_id": 61,
         "price": 69.99
     },
     {
@@ -686,10 +686,10 @@
         "description": "Set of 3 mechanical pencils made from biodegradable materials",
         "category_id": 1,
         "brand": "EcoDraft",
-        "color": "Earth tones",
+        "color_id": 63,
         "format": "Mechanical",
         "size": "0.5mm",
-        "material": "Bioplastic",
+        "material_id": 62,
         "price": 12.99
     },
     {
@@ -697,10 +697,10 @@
         "description": "Over-ear headphones with active noise cancellation for office environments",
         "category_id": 6,
         "brand": "SoundPro",
-        "color": "Black",
+        "color_id": 64,
         "format": "Over-ear",
         "size": "Standard",
-        "material": "Plastic/Metal/Fabric",
+        "material_id": 63,
         "price": 129.99
     },
     {
@@ -708,10 +708,10 @@
         "description": "Height-adjustable monitor stand with integrated storage compartments",
         "category_id": 6,
         "brand": "ErgoPro",
-        "color": "Black",
+        "color_id": 65,
         "format": "Desktop",
         "size": "Adjustable",
-        "material": "Aluminum/Plastic",
+        "material_id": 64,
         "price": 54.99
     }
 ]

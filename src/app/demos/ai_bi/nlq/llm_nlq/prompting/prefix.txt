@@ -19,41 +19,49 @@ Tables and structure:
 - sector_id: Unique identifier of the industry sector (INT, PRIMARY KEY)
 - name: Name of the industry sector (e.g., Design & Marketing, Legal Services, Technology) (VARCHAR)
 
-3. payment_methods
+3. colors
+- id: Unique identifier of the color (INT, PRIMARY KEY)
+- name: Name of the color (e.g., Blue, Red, Black, Silver) (VARCHAR)
+
+4. materials
+- id: Unique identifier of the material (INT, PRIMARY KEY)
+- name: Name of the material (e.g., Plastic/Metal, Plastic, Metal/Plastic, Wood/Rubber) (VARCHAR)
+
+5. payment_methods
 - payment_method_id: Unique identifier of the payment method (INT, PRIMARY KEY)
 - name: Name of the payment method (e.g., Credit Card, Bank Transfer, PayPal) (VARCHAR)
 
-4. customers
+6. customers
 - customer_id: Unique identifier of the customer (INT, PRIMARY KEY)
 - name: Company name of the customer (VARCHAR)
 - sector_id: Reference to the customer's industry sector (INT, FOREIGN KEY → sectors.sector_id)
 - region_id: Reference to the customer's geographical region (INT, FOREIGN KEY → regions.region_id)
 - signup_date: Date when the customer registered (DATE)
 
-5. categories
+7. categories
 - category_id: Unique identifier of the product category (INT, PRIMARY KEY)
 - name: Name of the category (e.g., Stationery, Writing, Organization) (VARCHAR)
 
-6. products
+8. products
 - product_id: Unique identifier of the product (INT, PRIMARY KEY)
 - name: Full product name, with detailed attributes (e.g., Blue Fine Tip Pen) (VARCHAR)
 - description: Optional detailed description (TEXT)
 - category_id: Product category ID (INT, FOREIGN KEY → categories.category_id)
 - brand: Brand of the product (VARCHAR)
-- color: Main color of the product (VARCHAR)
+- color_id: Reference to the color of the product (INT, FOREIGN KEY → colors.id)
 - format: Format or size standard (e.g., A4, 75x75mm) (VARCHAR)
 - size: Specific size or quantity (e.g., 20g, 80 sheets, 0.5mm) (VARCHAR)
-- material: Main material (e.g., Plastic, Cardboard, Metal) (VARCHAR)
+- material_id: Reference to the material of the product (INT, FOREIGN KEY → materials.id)
 - price: Unit price of the product (DECIMAL)
 
-7. sales
+9. sales
 - sale_id: Unique identifier of the sale (INT, PRIMARY KEY)
 - customer_id: Customer who made the purchase (INT, FOREIGN KEY → customers.customer_id)
 - sale_date: Date of the sale (DATE)
 - total_amount: Total amount of the sale (DECIMAL)
 - payment_method_id: Reference to the payment method used (INT, FOREIGN KEY → payment_methods.payment_method_id)
 
-8. sale_items
+10. sale_items
 - sale_item_id: Unique identifier for the sale line item (INT, PRIMARY KEY)
 - sale_id: Sale to which this item belongs (INT, FOREIGN KEY → sales.sale_id)
 - product_id: Product sold (INT, FOREIGN KEY → products.product_id)
@@ -66,7 +74,9 @@ Key relationships:
 - A customer can have multiple sales.
 - Each sale can have multiple sale items.
 - Each sale item is linked to one product.
-- Each product belongs to a category.
+- Each product belongs to a category, a color, and a material.
+- Each product has a color linked to the colors table.
+- Each product has a material linked to the materials table.
 
 Purpose of this schema:
 This schema supports answering complex business questions via natural language, such as:
