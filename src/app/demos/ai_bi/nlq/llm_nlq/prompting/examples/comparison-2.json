@@ -1,0 +1,13 @@
+{
+    "type": "Comparison - Multiple Queries",
+    "natural_language_query": "Compare quarterly sales for the last 2 years",
+    "timestamp": "2025-04-23 10:30:00",
+    "results": {
+        "sql_queries": [
+            "SELECT TO_CHAR(sale_date, 'YYYY-Q') AS quarter, SUM(total_amount) AS quarterly_sales FROM sales WHERE EXTRACT(YEAR FROM sale_date) = 2023 GROUP BY quarter ORDER BY quarter;",
+            "SELECT TO_CHAR(sale_date, 'YYYY-Q') AS quarter, SUM(total_amount) AS quarterly_sales FROM sales WHERE EXTRACT(YEAR FROM sale_date) = 2024 GROUP BY quarter ORDER BY quarter;",
+            "SELECT TO_CHAR(sale_date, 'YYYY-Q') AS quarter, SUM(total_amount) AS quarterly_sales FROM sales WHERE EXTRACT(YEAR FROM sale_date) = 2025 GROUP BY quarter ORDER BY quarter;",
+        ],
+        "title": "Quarterly Revenue Comparison (2023 vs 2024 vs 2025)"
+    }
+}
