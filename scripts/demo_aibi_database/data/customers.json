@@ -400,5 +400,77 @@
         "sector_id": 9,
         "region_id": 4,
         "signup_date": "2025-06-17"
+    },
+    {
+        "name": "Smart City Technologies",
+        "sector_id": 3,
+        "region_id": 5,
+        "signup_date": "2025-07-08"
+    },
+    {
+        "name": "Global Renewable Energy Corp",
+        "sector_id": 10,
+        "region_id": 6,
+        "signup_date": "2025-07-25"
+    },
+    {
+        "name": "Cutting Edge Research Institute",
+        "sector_id": 3,
+        "region_id": 7,
+        "signup_date": "2025-08-12"
+    },
+    {
+        "name": "Modern Architecture Associates",
+        "sector_id": 8,
+        "region_id": 8,
+        "signup_date": "2025-08-30"
+    },
+    {
+        "name": "Future Education Consultants",
+        "sector_id": 4,
+        "region_id": 9,
+        "signup_date": "2025-09-14"
+    },
+    {
+        "name": "Integrated Healthcare Systems",
+        "sector_id": 7,
+        "region_id": 10,
+        "signup_date": "2025-09-28"
+    },
+    {
+        "name": "Sustainable Urban Development",
+        "sector_id": 8,
+        "region_id": 1,
+        "signup_date": "2025-10-10"
+    },
+    {
+        "name": "Digital Finance Platform",
+        "sector_id": 6,
+        "region_id": 2,
+        "signup_date": "2025-10-25"
+    },
+    {
+        "name": "Precision Manufacturing Innovations",
+        "sector_id": 9,
+        "region_id": 3,
+        "signup_date": "2025-11-08"
+    },
+    {
+        "name": "Creative Media Solutions",
+        "sector_id": 1,
+        "region_id": 4,
+        "signup_date": "2025-11-22"
+    },
+    {
+        "name": "Advanced Materials Laboratory",
+        "sector_id": 9,
+        "region_id": 5,
+        "signup_date": "2025-12-05"
+    },
+    {
+        "name": "Cyber Security Experts",
+        "sector_id": 3,
+        "region_id": 6,
+        "signup_date": "2025-12-18"
     }
 ]
