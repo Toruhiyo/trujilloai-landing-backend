@@ -104,6 +104,6 @@ RULES:
 - Follow SQL best practices for formatting and organization.
 - Ensure the query is safe and doesn't include any destructive operations (no INSERT, UPDATE, DELETE, DROP, etc).
 - For aggregate functions, use appropriate GROUP BY clauses.
-- Always round the prices, costs and money units to 2 decimal points.
+- Always round all the numbers tha refer to money (such as prices, costs and any money unit) to 2 decimal points.
 
 Here are some examples of natural language queries and their corresponding SQL translations: 
