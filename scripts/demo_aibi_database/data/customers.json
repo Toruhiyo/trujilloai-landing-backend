@@ -472,5 +472,269 @@
         "sector_id": 3,
         "region_id": 6,
         "signup_date": "2025-12-18"
+    },
+    {
+        "name": "Westside Educational Institute",
+        "sector_id": 4,
+        "region_id": 1,
+        "signup_date": "2018-02-10"
+    },
+    {
+        "name": "Mountain Regional Hospital",
+        "sector_id": 7,
+        "region_id": 3,
+        "signup_date": "2018-03-15"
+    },
+    {
+        "name": "Emerald Valley Landscaping",
+        "sector_id": 10,
+        "region_id": 5,
+        "signup_date": "2018-04-22"
+    },
+    {
+        "name": "Pioneer Legal Associates",
+        "sector_id": 2,
+        "region_id": 7,
+        "signup_date": "2018-05-18"
+    },
+    {
+        "name": "Riverfront Developers",
+        "sector_id": 8,
+        "region_id": 2,
+        "signup_date": "2018-06-09"
+    },
+    {
+        "name": "Atlantic Financial Services",
+        "sector_id": 6,
+        "region_id": 8,
+        "signup_date": "2018-08-12"
+    },
+    {
+        "name": "Blueridge Manufacturing",
+        "sector_id": 9,
+        "region_id": 4,
+        "signup_date": "2018-09-30"
+    },
+    {
+        "name": "Harbor City Administration",
+        "sector_id": 5,
+        "region_id": 6,
+        "signup_date": "2018-10-15"
+    },
+    {
+        "name": "Redwood Design Collective",
+        "sector_id": 1,
+        "region_id": 9,
+        "signup_date": "2018-11-08"
+    },
+    {
+        "name": "Eastside Technology Partners",
+        "sector_id": 3,
+        "region_id": 10,
+        "signup_date": "2018-12-04"
+    },
+    {
+        "name": "Coastal Community College",
+        "sector_id": 4,
+        "region_id": 2,
+        "signup_date": "2019-02-20"
+    },
+    {
+        "name": "Maple Street Medical Practice",
+        "sector_id": 7,
+        "region_id": 5,
+        "signup_date": "2019-03-15"
+    },
+    {
+        "name": "Granite State Contractors",
+        "sector_id": 9,
+        "region_id": 3,
+        "signup_date": "2019-05-02"
+    },
+    {
+        "name": "Crystal Lake Conservation",
+        "sector_id": 10,
+        "region_id": 7,
+        "signup_date": "2019-07-11"
+    },
+    {
+        "name": "Metropolitan Housing Development",
+        "sector_id": 8,
+        "region_id": 1,
+        "signup_date": "2019-09-03"
+    },
+    {
+        "name": "Capital City Law Group",
+        "sector_id": 2,
+        "region_id": 9,
+        "signup_date": "2019-10-17"
+    },
+    {
+        "name": "Milestone Investments",
+        "sector_id": 6,
+        "region_id": 6,
+        "signup_date": "2019-11-25"
+    },
+    {
+        "name": "Southside Municipal Services",
+        "sector_id": 5,
+        "region_id": 4,
+        "signup_date": "2019-12-10"
+    },
+    {
+        "name": "Virtual Education Academy",
+        "sector_id": 4,
+        "region_id": 8,
+        "signup_date": "2020-01-15"
+    },
+    {
+        "name": "Telehealth Innovations",
+        "sector_id": 7,
+        "region_id": 2,
+        "signup_date": "2020-03-01"
+    },
+    {
+        "name": "Remote Work Solutions",
+        "sector_id": 3,
+        "region_id": 5,
+        "signup_date": "2020-04-12"
+    },
+    {
+        "name": "Pandemic Response Team",
+        "sector_id": 5,
+        "region_id": 9,
+        "signup_date": "2020-05-08"
+    },
+    {
+        "name": "Online Marketing Group",
+        "sector_id": 1,
+        "region_id": 3,
+        "signup_date": "2020-07-22"
+    },
+    {
+        "name": "Digital Transformation Consultants",
+        "sector_id": 3,
+        "region_id": 7,
+        "signup_date": "2020-09-15"
+    },
+    {
+        "name": "Home Office Supplies",
+        "sector_id": 9,
+        "region_id": 1,
+        "signup_date": "2020-11-05"
+    },
+    {
+        "name": "Contactless Payment Systems",
+        "sector_id": 6,
+        "region_id": 10,
+        "signup_date": "2020-12-18"
+    },
+    {
+        "name": "New Horizon Ventures",
+        "sector_id": 8,
+        "region_id": 4,
+        "signup_date": "2021-02-08"
+    },
+    {
+        "name": "Green Building Consultants",
+        "sector_id": 10,
+        "region_id": 6,
+        "signup_date": "2021-04-15"
+    },
+    {
+        "name": "AI Research Institute",
+        "sector_id": 3,
+        "region_id": 8,
+        "signup_date": "2021-06-10"
+    },
+    {
+        "name": "Wellness Healthcare Network",
+        "sector_id": 7,
+        "region_id": 2,
+        "signup_date": "2021-08-05"
+    },
+    {
+        "name": "Downtown Design Studio",
+        "sector_id": 1,
+        "region_id": 5,
+        "signup_date": "2021-10-20"
+    },
+    {
+        "name": "Hybrid Workplace Solutions",
+        "sector_id": 9,
+        "region_id": 3,
+        "signup_date": "2021-12-08"
+    },
+    {
+        "name": "Sustainable Energy Cooperative",
+        "sector_id": 10,
+        "region_id": 7,
+        "signup_date": "2022-01-22"
+    },
+    {
+        "name": "Virtualized Learning Systems",
+        "sector_id": 4,
+        "region_id": 1,
+        "signup_date": "2022-02-15"
+    },
+    {
+        "name": "Blockchain Financial Services",
+        "sector_id": 6,
+        "region_id": 9,
+        "signup_date": "2022-03-28"
+    },
+    {
+        "name": "Autonomous Transport Research",
+        "sector_id": 9,
+        "region_id": 4,
+        "signup_date": "2022-04-15"
+    },
+    {
+        "name": "Next Generation Communications",
+        "sector_id": 3,
+        "region_id": 6,
+        "signup_date": "2022-05-10"
+    },
+    {
+        "name": "United Legal Counselors",
+        "sector_id": 2,
+        "region_id": 3,
+        "signup_date": "2022-06-08"
+    },
+    {
+        "name": "Civic Infrastructure Planning",
+        "sector_id": 5,
+        "region_id": 8,
+        "signup_date": "2022-07-15"
+    },
+    {
+        "name": "Precision Medical Diagnostics",
+        "sector_id": 7,
+        "region_id": 10,
+        "signup_date": "2022-08-22"
+    },
+    {
+        "name": "Digital Content Creators",
+        "sector_id": 1,
+        "region_id": 2,
+        "signup_date": "2022-09-14"
+    },
+    {
+        "name": "Urban Development Authority",
+        "sector_id": 8,
+        "region_id": 5,
+        "signup_date": "2022-10-28"
+    },
+    {
+        "name": "Quantum Technology Ventures",
+        "sector_id": 3,
+        "region_id": 7,
+        "signup_date": "2022-11-15"
+    },
+    {
+        "name": "Sustainable Resource Management",
+        "sector_id": 10,
+        "region_id": 1,
+        "signup_date": "2022-12-10"
     }
 ]
