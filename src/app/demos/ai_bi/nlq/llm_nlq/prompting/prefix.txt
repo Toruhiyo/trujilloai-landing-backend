@@ -13,7 +13,7 @@ Tables and structure:
 
 1. regions
 - region_id: Unique identifier of the region (INT, PRIMARY KEY)
-- name: Name of the geographical region (e.g., West Coast, East Coast, Midwest) (VARCHAR)
+- name: Name of the geographical region (e.g., Europe, North America, Asia Pacific) (VARCHAR)
 
 2. sectors
 - sector_id: Unique identifier of the industry sector (INT, PRIMARY KEY)
@@ -86,7 +86,7 @@ This schema supports answering complex business questions via natural language, 
 - "Compare sales of recycled vs. non-recycled paper"
 - "What are the most purchased blue pens in the legal sector?"
 - "Which regions have the highest sales in the Technology sector?"
-- "What is the most popular product category for customers in the East Coast region?"
+- "What is the most popular product category for customers in the Central Europe region?"
 - "Which payment method is most commonly used for high-value purchases?"
 - "Compare the average sale amount between different payment methods"
 

@@ -1,32 +1,32 @@
 [
     {
-        "name": "West Coast"
+        "name": "Central Europe"
     },
     {
-        "name": "East Coast"
+        "name": "North America"
     },
     {
-        "name": "Midwest"
+        "name": "South America"
     },
     {
-        "name": "North"
+        "name": "Asia Pacific"
     },
     {
-        "name": "South"
+        "name": "Middle East"
     },
     {
-        "name": "Southwest"
+        "name": "Africa"
     },
     {
-        "name": "Northeast"
+        "name": "Oceania"
     },
     {
-        "name": "Southeast"
+        "name": "Southeast Asia"
     },
     {
-        "name": "Central"
+        "name": "Eastern Europe"
     },
     {
-        "name": "Northwest"
+        "name": "Western Europe"
     }
 ]
