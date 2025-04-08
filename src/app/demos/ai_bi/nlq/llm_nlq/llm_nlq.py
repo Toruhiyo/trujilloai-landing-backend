@@ -265,7 +265,9 @@ class AibiLlmTextToSQL(metaclass=DynamicSingleton):
     def __load_prompt_examples(self, prompt_examples: list[dict] | Path):
         if isinstance(prompt_examples, Path):
             try:
-                examples: list[dict] = load_jsons_in_directory(prompt_examples)
+                examples: list[dict] = load_jsons_in_directory(
+                    prompt_examples, encoding="utf-8"
+                )
                 # Format the examples to ensure correct handling of nested dictionaries
                 for i, example in enumerate(examples):
                     example["example_id"] = i + 1

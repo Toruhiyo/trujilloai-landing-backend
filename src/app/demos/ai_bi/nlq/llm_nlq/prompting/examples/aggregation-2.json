@@ -1,0 +1,11 @@
+{
+    "type": "Aggregation",
+    "natural_language_query": "What's the average transaction value by payment method?",
+    "timestamp": "2025-04-23 11:57:00",
+    "results": {
+        "sql_queries": [
+            "SELECT pm.name, AVG(s.total_amount) AS average_transaction_value FROM sales s JOIN payment_methods pm ON s.payment_method_id = pm.payment_method_id GROUP BY pm.name ORDER BY average_transaction_value DESC;"
+        ],
+        "title": "Average Transaction Value by Payment Method"
+    }
+}
