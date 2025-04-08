@@ -2580,25 +2580,25 @@
         "payment_method_id": 1
     },
     {
-        "customer_id": 143,
+        "customer_id": 67,
         "sale_date": "2022-01-18",
         "total_amount": 789.20,
         "payment_method_id": 3
     },
     {
-        "customer_id": 671,
+        "customer_id": 32,
         "sale_date": "2022-01-25",
         "total_amount": 435.60,
         "payment_method_id": 4
     },
     {
-        "customer_id": 185,
+        "customer_id": 91,
         "sale_date": "2022-01-31",
         "total_amount": 652.30,
         "payment_method_id": 5
     },
     {
-        "customer_id": 677,
+        "customer_id": 45,
         "sale_date": "2022-02-06",
         "total_amount": 523.45,
         "payment_method_id": 2
@@ -2610,49 +2610,49 @@
         "payment_method_id": 3
     },
     {
-        "customer_id": 173,
+        "customer_id": 72,
         "sale_date": "2022-02-22",
         "total_amount": 345.80,
         "payment_method_id": 6
     },
     {
-        "customer_id": 683,
+        "customer_id": 58,
         "sale_date": "2022-03-03",
         "total_amount": 754.25,
         "payment_method_id": 1
     },
     {
-        "customer_id": 125,
+        "customer_id": 89,
         "sale_date": "2022-03-10",
         "total_amount": 498.70,
         "payment_method_id": 2
     },
     {
-        "customer_id": 197,
+        "customer_id": 63,
         "sale_date": "2022-03-18",
         "total_amount": 623.40,
         "payment_method_id": 5
     },
     {
-        "customer_id": 689,
+        "customer_id": 43,
         "sale_date": "2022-03-25",
         "total_amount": 375.90,
         "payment_method_id": 3
     },
     {
-        "customer_id": 131,
+        "customer_id": 94,
         "sale_date": "2022-04-02",
         "total_amount": 932.60,
         "payment_method_id": 4
     },
     {
-        "customer_id": 209,
+        "customer_id": 36,
         "sale_date": "2022-04-08",
         "total_amount": 547.35,
         "payment_method_id": 2
     },
     {
-        "customer_id": 695,
+        "customer_id": 52,
         "sale_date": "2022-04-15",
         "total_amount": 678.90,
         "payment_method_id": 1
@@ -2664,19 +2664,19 @@
         "payment_method_id": 5
     },
     {
-        "customer_id": 155,
+        "customer_id": 78,
         "sale_date": "2022-04-29",
         "total_amount": 586.20,
         "payment_method_id": 6
     },
     {
-        "customer_id": 701,
+        "customer_id": 49,
         "sale_date": "2022-05-06",
         "total_amount": 346.80,
         "payment_method_id": 3
     },
     {
-        "customer_id": 125,
+        "customer_id": 89,
         "sale_date": "2022-05-13",
         "total_amount": 754.30,
         "payment_method_id": 4
@@ -2688,43 +2688,43 @@
         "payment_method_id": 2
     },
     {
-        "customer_id": 707,
+        "customer_id": 61,
         "sale_date": "2022-05-27",
         "total_amount": 628.90,
         "payment_method_id": 1
     },
     {
-        "customer_id": 143,
+        "customer_id": 67,
         "sale_date": "2022-06-03",
         "total_amount": 385.45,
         "payment_method_id": 5
     },
     {
-        "customer_id": 713,
+        "customer_id": 34,
         "sale_date": "2022-06-10",
         "total_amount": 865.75,
         "payment_method_id": 3
     },
     {
-        "customer_id": 173,
+        "customer_id": 72,
         "sale_date": "2022-06-17",
         "total_amount": 528.30,
         "payment_method_id": 4
     },
     {
-        "customer_id": 719,
+        "customer_id": 98,
         "sale_date": "2022-06-24",
         "total_amount": 654.90,
         "payment_method_id": 6
     },
     {
-        "customer_id": 197,
+        "customer_id": 63,
         "sale_date": "2022-07-01",
         "total_amount": 384.75,
         "payment_method_id": 2
     },
     {
-        "customer_id": 725,
+        "customer_id": 41,
         "sale_date": "2022-07-08",
         "total_amount": 743.20,
         "payment_method_id": 1
@@ -2736,7 +2736,7 @@
         "payment_method_id": 3
     },
     {
-        "customer_id": 731,
+        "customer_id": 87,
         "sale_date": "2022-07-22",
         "total_amount": 678.95,
         "payment_method_id": 5
@@ -2748,37 +2748,37 @@
         "payment_method_id": 4
     },
     {
-        "customer_id": 737,
+        "customer_id": 55,
         "sale_date": "2022-08-05",
         "total_amount": 587.65,
         "payment_method_id": 2
     },
     {
-        "customer_id": 125,
+        "customer_id": 89,
         "sale_date": "2022-08-12",
         "total_amount": 342.80,
         "payment_method_id": 6
     },
     {
-        "customer_id": 173,
+        "customer_id": 72,
         "sale_date": "2022-08-19",
         "total_amount": 789.30,
         "payment_method_id": 1
     },
     {
-        "customer_id": 143,
+        "customer_id": 67,
         "sale_date": "2022-08-26",
         "total_amount": 486.75,
         "payment_method_id": 3
     },
     {
-        "customer_id": 197,
+        "customer_id": 63,
         "sale_date": "2022-09-02",
         "total_amount": 623.40,
         "payment_method_id": 5
     },
     {
-        "customer_id": 719,
+        "customer_id": 98,
         "sale_date": "2022-09-09",
         "total_amount": 374.90,
         "payment_method_id": 2
@@ -2790,7 +2790,7 @@
         "payment_method_id": 4
     },
     {
-        "customer_id": 725,
+        "customer_id": 41,
         "sale_date": "2022-09-23",
         "total_amount": 543.70,
         "payment_method_id": 1
@@ -2802,49 +2802,49 @@
         "payment_method_id": 3
     },
     {
-        "customer_id": 731,
+        "customer_id": 87,
         "sale_date": "2022-10-07",
         "total_amount": 398.40,
         "payment_method_id": 6
     },
     {
-        "customer_id": 125,
+        "customer_id": 89,
         "sale_date": "2022-10-14",
         "total_amount": 736.95,
         "payment_method_id": 2
     },
     {
-        "customer_id": 737,
+        "customer_id": 55,
         "sale_date": "2022-10-21",
         "total_amount": 432.60,
         "payment_method_id": 5
     },
     {
-        "customer_id": 143,
+        "customer_id": 67,
         "sale_date": "2022-10-28",
         "total_amount": 598.25,
         "payment_method_id": 1
     },
     {
-        "customer_id": 173,
+        "customer_id": 72,
         "sale_date": "2022-11-04",
         "total_amount": 345.80,
         "payment_method_id": 4
     },
     {
-        "customer_id": 731,
+        "customer_id": 87,
         "sale_date": "2022-11-11",
         "total_amount": 765.40,
         "payment_method_id": 3
     },
     {
-        "customer_id": 197,
+        "customer_id": 63,
         "sale_date": "2022-11-18",
         "total_amount": 487.65,
         "payment_method_id": 2
     },
     {
-        "customer_id": 737,
+        "customer_id": 55,
         "sale_date": "2022-11-25",
         "total_amount": 634.90,
         "payment_method_id": 6
@@ -2856,7 +2856,7 @@
         "payment_method_id": 1
     },
     {
-        "customer_id": 125,
+        "customer_id": 89,
         "sale_date": "2022-12-09",
         "total_amount": 856.70,
         "payment_method_id": 5
@@ -2868,15 +2868,57 @@
         "payment_method_id": 3
     },
     {
-        "customer_id": 143,
+        "customer_id": 67,
         "sale_date": "2022-12-23",
         "total_amount": 649.80,
         "payment_method_id": 4
     },
     {
-        "customer_id": 173,
+        "customer_id": 72,
         "sale_date": "2022-12-30",
         "total_amount": 395.35,
         "payment_method_id": 2
+    },
+    {
+        "customer_id": 58,
+        "sale_date": "2022-03-03",
+        "total_amount": 754.25,
+        "payment_method_id": 1
+    },
+    {
+        "customer_id": 89,
+        "sale_date": "2022-03-10",
+        "total_amount": 498.70,
+        "payment_method_id": 2
+    },
+    {
+        "customer_id": 63,
+        "sale_date": "2022-03-18",
+        "total_amount": 623.40,
+        "payment_method_id": 5
+    },
+    {
+        "customer_id": 43,
+        "sale_date": "2022-03-25",
+        "total_amount": 375.90,
+        "payment_method_id": 3
+    },
+    {
+        "customer_id": 94,
+        "sale_date": "2022-04-02",
+        "total_amount": 932.60,
+        "payment_method_id": 4
+    },
+    {
+        "customer_id": 36,
+        "sale_date": "2022-04-08",
+        "total_amount": 547.35,
+        "payment_method_id": 2
+    },
+    {
+        "customer_id": 52,
+        "sale_date": "2022-04-15",
+        "total_amount": 678.90,
+        "payment_method_id": 1
     }
 ]
