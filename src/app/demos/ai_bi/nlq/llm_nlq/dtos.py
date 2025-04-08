@@ -9,5 +9,5 @@ class NlqRequestDTO(BaseDTO):
 
 
 class NlqLlmResultsDTO(BaseDTO):
-    sql_query: str
+    sql_queries: list[str]
     title: Optional[str] = None

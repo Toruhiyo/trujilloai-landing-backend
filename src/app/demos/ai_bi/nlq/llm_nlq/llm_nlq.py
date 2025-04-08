@@ -19,6 +19,7 @@ from src.app.demos.ai_bi.nlq.llm_nlq.errors import (
 from src.config.vars_grabber import VariablesGrabber
 from src.utils.json_toolbox import load_jsons_in_directory, make_serializable
 from src.utils.metaclasses import DynamicSingleton
+from src.utils.sql_toolbox import is_valid_sql_query
 from src.wrappers.langchain.llms.bedrock import BedrockLLM
 
 logger = logging.getLogger(__name__)
@@ -146,18 +147,30 @@ class AibiLlmTextToSQL(metaclass=DynamicSingleton):
 
     def __extract_response(self, response: Any) -> NlqLlmResultsDTO:
         try:
-            if isinstance(response, list) and len(response) == 1:
-                response = response[0]
+            if isinstance(response, list):
+                if len(response) == 0:
+                    raise ValueError(f"Invalid response: {response}")
+                if isinstance(response[0], dict):
+                    response = response[0]
+                if isinstance(response[0], str):
+                    response = {"sql_queries": response, "title": None}
+            if isinstance(response, str):
+                response = {"sql_queries": [response], "title": None}
 
             if isinstance(response, dict):
                 if "query" in response:
-                    response["sql_query"] = response["query"]
+                    response["sql_queries"] = response["query"]
                 if "sql" in response:
-                    response["sql_query"] = response["sql"]
+                    response["sql_queries"] = response["sql"]
+                if "queries" in response:
+                    response["sql_queries"] = response["queries"]
+
+                if not all(
+                    [is_valid_sql_query(query) for query in response["sql_queries"]]
+                ):
+                    raise ValueError(f"Invalid SQL queries in response: {response}")
                 return NlqLlmResultsDTO(**response)
 
-            if isinstance(response, str):
-                return NlqLlmResultsDTO(sql_query=response, title=None)
         except Exception as e:
             raise InvalidLLMResponseFormatError(
                 f"Failed to typify LLM response into NLQ response format: {type(e)}-{e}. Response: {response}"
@@ -170,10 +183,11 @@ class AibiLlmTextToSQL(metaclass=DynamicSingleton):
     def __validate_response(self, response: NlqLlmResultsDTO) -> NlqLlmResultsDTO:
         # Check for unsafe SQL operations
         for pattern in UNSAFE_OPERATIONS:
-            if re.search(pattern, response.sql_query, re.IGNORECASE):
-                raise UnsafeQueryError(
-                    f"Query contains unsafe operation matching pattern: {pattern}"
-                )
+            for sql_query in response.sql_queries:
+                if re.search(pattern, sql_query, re.IGNORECASE):
+                    raise UnsafeQueryError(
+                        f"Query '{sql_query}' contains unsafe operation matching pattern: {pattern}"
+                    )
 
         return response
 
@@ -191,7 +205,7 @@ class AibiLlmTextToSQL(metaclass=DynamicSingleton):
         try:
             json_data = json.loads(answer)
             if isinstance(json_data, dict) and (
-                "sql_query" in json_data or "query" in json_data
+                "sql_queries" in json_data or "query" in json_data
             ):
                 return answer
         except json.JSONDecodeError:
@@ -199,7 +213,7 @@ class AibiLlmTextToSQL(metaclass=DynamicSingleton):
 
         # If the response directly starts with SELECT, assume it's a raw SQL query
         if answer.strip().upper().startswith("SELECT"):
-            return json.dumps({"sql_query": answer.strip(), "title": None})
+            return json.dumps({"sql_queries": answer.strip(), "title": None})
 
         return answer
 

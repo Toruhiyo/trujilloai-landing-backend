@@ -1,10 +1,11 @@
 {
-    "example_id": 2,
     "type": "Aggregation",
     "natural_language_query": "What's the total sales by month in 2023?",
     "timestamp": "2025-04-23 11:57:00",
     "results": {
-        "sql_query": "SELECT TO_CHAR(sale_date, 'YYYY-MM') AS month, SUM(total_amount) AS monthly_total FROM sales WHERE EXTRACT(YEAR FROM sale_date) = 2023 GROUP BY month ORDER BY month;",
+        "sql_queries": [
+            "SELECT TO_CHAR(sale_date, 'YYYY-MM') AS month, SUM(total_amount) AS monthly_total FROM sales WHERE EXTRACT(YEAR FROM sale_date) = 2023 GROUP BY month ORDER BY month;"
+        ],
         "title": "Total Sales by Month in 2023"
     }
 }

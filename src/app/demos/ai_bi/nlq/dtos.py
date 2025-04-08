@@ -11,7 +11,7 @@ class SqlResultDTO(BaseDTO):
 
 class NlqResultDTO(BaseDTO):
     natural_language_query: str
-    sql_query: str
-    result: SqlResultDTO
-    execution_time_ms: float
+    results: list[SqlResultDTO]
+    total_time_ms: float
+    generation_time_ms: float
     title: Optional[str] = None

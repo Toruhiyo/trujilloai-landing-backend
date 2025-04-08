@@ -22,16 +22,20 @@ class AibiNlqAgent(metaclass=DynamicSingleton):
         self.__query_executor = query_executor or AibiQueryExecutor()
 
     def compute(self, natural_language_query: str) -> NlqResultDTO:
+        t0 = perf_counter()
         llm_results, generation_time_ms = self.__compute_sql_query(
             natural_language_query
         )
-        sql_result = self.__execute_sql_query(llm_results.sql_query)
+        sql_results = [
+            self.__execute_sql_query(sql_query) for sql_query in llm_results.sql_queries
+        ]
+        total_time = perf_counter() - t0
         return NlqResultDTO(
             natural_language_query=natural_language_query,
-            sql_query=llm_results.sql_query,
             title=llm_results.title,
-            result=sql_result,
-            execution_time_ms=generation_time_ms + sql_result.execution_time_ms,
+            results=sql_results,
+            total_time_ms=total_time,
+            generation_time_ms=generation_time_ms,
         )
 
     # Private:
