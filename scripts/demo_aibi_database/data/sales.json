@@ -918,6 +918,342 @@
         "payment_method_id": 3
     },
     {
+        "customer_id": 8,
+        "sale_date": "2021-01-05",
+        "total_amount": 423.50,
+        "payment_method_id": 4
+    },
+    {
+        "customer_id": 14,
+        "sale_date": "2021-01-12",
+        "total_amount": 587.95,
+        "payment_method_id": 2
+    },
+    {
+        "customer_id": 3,
+        "sale_date": "2021-01-18",
+        "total_amount": 345.80,
+        "payment_method_id": 5
+    },
+    {
+        "customer_id": 41,
+        "sale_date": "2021-01-25",
+        "total_amount": 654.30,
+        "payment_method_id": 1
+    },
+    {
+        "customer_id": 17,
+        "sale_date": "2021-01-30",
+        "total_amount": 432.65,
+        "payment_method_id": 3
+    },
+    {
+        "customer_id": 9,
+        "sale_date": "2021-02-06",
+        "total_amount": 378.20,
+        "payment_method_id": 6
+    },
+    {
+        "customer_id": 35,
+        "sale_date": "2021-02-12",
+        "total_amount": 543.75,
+        "payment_method_id": 4
+    },
+    {
+        "customer_id": 12,
+        "sale_date": "2021-02-18",
+        "total_amount": 498.40,
+        "payment_method_id": 2
+    },
+    {
+        "customer_id": 28,
+        "sale_date": "2021-02-25",
+        "total_amount": 687.95,
+        "payment_method_id": 5
+    },
+    {
+        "customer_id": 5,
+        "sale_date": "2021-03-02",
+        "total_amount": 324.80,
+        "payment_method_id": 3
+    },
+    {
+        "customer_id": 47,
+        "sale_date": "2021-03-08",
+        "total_amount": 567.30,
+        "payment_method_id": 1
+    },
+    {
+        "customer_id": 16,
+        "sale_date": "2021-03-15",
+        "total_amount": 398.75,
+        "payment_method_id": 7
+    },
+    {
+        "customer_id": 77,
+        "sale_date": "2021-03-22",
+        "total_amount": 432.50,
+        "payment_method_id": 2
+    },
+    {
+        "customer_id": 21,
+        "sale_date": "2021-03-28",
+        "total_amount": 298.45,
+        "payment_method_id": 4
+    },
+    {
+        "customer_id": 10,
+        "sale_date": "2021-04-05",
+        "total_amount": 745.90,
+        "payment_method_id": 5
+    },
+    {
+        "customer_id": 33,
+        "sale_date": "2021-04-12",
+        "total_amount": 487.35,
+        "payment_method_id": 3
+    },
+    {
+        "customer_id": 42,
+        "sale_date": "2021-04-18",
+        "total_amount": 365.80,
+        "payment_method_id": 6
+    },
+    {
+        "customer_id": 15,
+        "sale_date": "2021-04-25",
+        "total_amount": 543.25,
+        "payment_method_id": 8
+    },
+    {
+        "customer_id": 6,
+        "sale_date": "2021-05-02",
+        "total_amount": 432.70,
+        "payment_method_id": 1
+    },
+    {
+        "customer_id": 38,
+        "sale_date": "2021-05-08",
+        "total_amount": 278.95,
+        "payment_method_id": 4
+    },
+    {
+        "customer_id": 11,
+        "sale_date": "2021-05-15",
+        "total_amount": 654.30,
+        "payment_method_id": 2
+    },
+    {
+        "customer_id": 29,
+        "sale_date": "2021-05-22",
+        "total_amount": 478.65,
+        "payment_method_id": 5
+    },
+    {
+        "customer_id": 4,
+        "sale_date": "2021-05-28",
+        "total_amount": 345.90,
+        "payment_method_id": 7
+    },
+    {
+        "customer_id": 19,
+        "sale_date": "2021-06-05",
+        "total_amount": 643.25,
+        "payment_method_id": 3
+    },
+    {
+        "customer_id": 26,
+        "sale_date": "2021-06-12",
+        "total_amount": 389.75,
+        "payment_method_id": 6
+    },
+    {
+        "customer_id": 44,
+        "sale_date": "2021-06-18",
+        "total_amount": 287.40,
+        "payment_method_id": 1
+    },
+    {
+        "customer_id": 13,
+        "sale_date": "2021-06-25",
+        "total_amount": 576.95,
+        "payment_method_id": 4
+    },
+    {
+        "customer_id": 2,
+        "sale_date": "2021-07-02",
+        "total_amount": 432.80,
+        "payment_method_id": 2
+    },
+    {
+        "customer_id": 36,
+        "sale_date": "2021-07-08",
+        "total_amount": 324.55,
+        "payment_method_id": 5
+    },
+    {
+        "customer_id": 23,
+        "sale_date": "2021-07-15",
+        "total_amount": 687.30,
+        "payment_method_id": 8
+    },
+    {
+        "customer_id": 7,
+        "sale_date": "2021-07-22",
+        "total_amount": 492.65,
+        "payment_method_id": 3
+    },
+    {
+        "customer_id": 31,
+        "sale_date": "2021-07-28",
+        "total_amount": 364.90,
+        "payment_method_id": 6
+    },
+    {
+        "customer_id": 18,
+        "sale_date": "2021-08-05",
+        "total_amount": 543.75,
+        "payment_method_id": 7
+    },
+    {
+        "customer_id": 25,
+        "sale_date": "2021-08-12",
+        "total_amount": 398.40,
+        "payment_method_id": 1
+    },
+    {
+        "customer_id": 40,
+        "sale_date": "2021-08-18",
+        "total_amount": 276.95,
+        "payment_method_id": 4
+    },
+    {
+        "customer_id": 14,
+        "sale_date": "2021-08-25",
+        "total_amount": 732.60,
+        "payment_method_id": 2
+    },
+    {
+        "customer_id": 32,
+        "sale_date": "2021-08-30",
+        "total_amount": 487.25,
+        "payment_method_id": 5
+    },
+    {
+        "customer_id": 8,
+        "sale_date": "2021-09-06",
+        "total_amount": 365.80,
+        "payment_method_id": 3
+    },
+    {
+        "customer_id": 24,
+        "sale_date": "2021-09-12",
+        "total_amount": 543.95,
+        "payment_method_id": 6
+    },
+    {
+        "customer_id": 37,
+        "sale_date": "2021-09-18",
+        "total_amount": 398.40,
+        "payment_method_id": 8
+    },
+    {
+        "customer_id": 5,
+        "sale_date": "2021-09-25",
+        "total_amount": 287.65,
+        "payment_method_id": 1
+    },
+    {
+        "customer_id": 20,
+        "sale_date": "2021-10-02",
+        "total_amount": 654.30,
+        "payment_method_id": 4
+    },
+    {
+        "customer_id": 45,
+        "sale_date": "2021-10-08",
+        "total_amount": 475.85,
+        "payment_method_id": 2
+    },
+    {
+        "customer_id": 11,
+        "sale_date": "2021-10-15",
+        "total_amount": 354.70,
+        "payment_method_id": 5
+    },
+    {
+        "customer_id": 27,
+        "sale_date": "2021-10-22",
+        "total_amount": 632.95,
+        "payment_method_id": 7
+    },
+    {
+        "customer_id": 15,
+        "sale_date": "2021-10-28",
+        "total_amount": 426.40,
+        "payment_method_id": 3
+    },
+    {
+        "customer_id": 34,
+        "sale_date": "2021-11-05",
+        "total_amount": 287.65,
+        "payment_method_id": 6
+    },
+    {
+        "customer_id": 9,
+        "sale_date": "2021-11-12",
+        "total_amount": 576.90,
+        "payment_method_id": 1
+    },
+    {
+        "customer_id": 43,
+        "sale_date": "2021-11-18",
+        "total_amount": 398.45,
+        "payment_method_id": 4
+    },
+    {
+        "customer_id": 22,
+        "sale_date": "2021-11-25",
+        "total_amount": 324.80,
+        "payment_method_id": 2
+    },
+    {
+        "customer_id": 6,
+        "sale_date": "2021-12-02",
+        "total_amount": 742.35,
+        "payment_method_id": 5
+    },
+    {
+        "customer_id": 30,
+        "sale_date": "2021-12-08",
+        "total_amount": 487.90,
+        "payment_method_id": 8
+    },
+    {
+        "customer_id": 16,
+        "sale_date": "2021-12-15",
+        "total_amount": 345.65,
+        "payment_method_id": 3
+    },
+    {
+        "customer_id": 39,
+        "sale_date": "2021-12-20",
+        "total_amount": 589.30,
+        "payment_method_id": 6
+    },
+    {
+        "customer_id": 13,
+        "sale_date": "2021-12-24",
+        "total_amount": 432.75,
+        "payment_method_id": 7
+    },
+    {
+        "customer_id": 28,
+        "sale_date": "2021-12-30",
+        "total_amount": 354.90,
+        "payment_method_id": 1
+    },
+    {
         "customer_id": 4,
         "sale_date": "2023-01-05",
         "total_amount": 624.50,
@@ -2230,5 +2566,317 @@
         "sale_date": "2026-01-30",
         "total_amount": 543.25,
         "payment_method_id": 5
+    },
+    {
+        "customer_id": 53,
+        "sale_date": "2022-01-05",
+        "total_amount": 678.50,
+        "payment_method_id": 2
+    },
+    {
+        "customer_id": 83,
+        "sale_date": "2022-01-12",
+        "total_amount": 543.75,
+        "payment_method_id": 1
+    },
+    {
+        "customer_id": 143,
+        "sale_date": "2022-01-18",
+        "total_amount": 789.20,
+        "payment_method_id": 3
+    },
+    {
+        "customer_id": 671,
+        "sale_date": "2022-01-25",
+        "total_amount": 435.60,
+        "payment_method_id": 4
+    },
+    {
+        "customer_id": 185,
+        "sale_date": "2022-01-31",
+        "total_amount": 652.30,
+        "payment_method_id": 5
+    },
+    {
+        "customer_id": 677,
+        "sale_date": "2022-02-06",
+        "total_amount": 523.45,
+        "payment_method_id": 2
+    },
+    {
+        "customer_id": 53,
+        "sale_date": "2022-02-15",
+        "total_amount": 867.90,
+        "payment_method_id": 3
+    },
+    {
+        "customer_id": 173,
+        "sale_date": "2022-02-22",
+        "total_amount": 345.80,
+        "payment_method_id": 6
+    },
+    {
+        "customer_id": 683,
+        "sale_date": "2022-03-03",
+        "total_amount": 754.25,
+        "payment_method_id": 1
+    },
+    {
+        "customer_id": 125,
+        "sale_date": "2022-03-10",
+        "total_amount": 498.70,
+        "payment_method_id": 2
+    },
+    {
+        "customer_id": 197,
+        "sale_date": "2022-03-18",
+        "total_amount": 623.40,
+        "payment_method_id": 5
+    },
+    {
+        "customer_id": 689,
+        "sale_date": "2022-03-25",
+        "total_amount": 375.90,
+        "payment_method_id": 3
+    },
+    {
+        "customer_id": 131,
+        "sale_date": "2022-04-02",
+        "total_amount": 932.60,
+        "payment_method_id": 4
+    },
+    {
+        "customer_id": 209,
+        "sale_date": "2022-04-08",
+        "total_amount": 547.35,
+        "payment_method_id": 2
+    },
+    {
+        "customer_id": 695,
+        "sale_date": "2022-04-15",
+        "total_amount": 678.90,
+        "payment_method_id": 1
+    },
+    {
+        "customer_id": 53,
+        "sale_date": "2022-04-22",
+        "total_amount": 423.75,
+        "payment_method_id": 5
+    },
+    {
+        "customer_id": 155,
+        "sale_date": "2022-04-29",
+        "total_amount": 586.20,
+        "payment_method_id": 6
+    },
+    {
+        "customer_id": 701,
+        "sale_date": "2022-05-06",
+        "total_amount": 346.80,
+        "payment_method_id": 3
+    },
+    {
+        "customer_id": 125,
+        "sale_date": "2022-05-13",
+        "total_amount": 754.30,
+        "payment_method_id": 4
+    },
+    {
+        "customer_id": 83,
+        "sale_date": "2022-05-20",
+        "total_amount": 497.65,
+        "payment_method_id": 2
+    },
+    {
+        "customer_id": 707,
+        "sale_date": "2022-05-27",
+        "total_amount": 628.90,
+        "payment_method_id": 1
+    },
+    {
+        "customer_id": 143,
+        "sale_date": "2022-06-03",
+        "total_amount": 385.45,
+        "payment_method_id": 5
+    },
+    {
+        "customer_id": 713,
+        "sale_date": "2022-06-10",
+        "total_amount": 865.75,
+        "payment_method_id": 3
+    },
+    {
+        "customer_id": 173,
+        "sale_date": "2022-06-17",
+        "total_amount": 528.30,
+        "payment_method_id": 4
+    },
+    {
+        "customer_id": 719,
+        "sale_date": "2022-06-24",
+        "total_amount": 654.90,
+        "payment_method_id": 6
+    },
+    {
+        "customer_id": 197,
+        "sale_date": "2022-07-01",
+        "total_amount": 384.75,
+        "payment_method_id": 2
+    },
+    {
+        "customer_id": 725,
+        "sale_date": "2022-07-08",
+        "total_amount": 743.20,
+        "payment_method_id": 1
+    },
+    {
+        "customer_id": 53,
+        "sale_date": "2022-07-15",
+        "total_amount": 532.60,
+        "payment_method_id": 3
+    },
+    {
+        "customer_id": 731,
+        "sale_date": "2022-07-22",
+        "total_amount": 678.95,
+        "payment_method_id": 5
+    },
+    {
+        "customer_id": 83,
+        "sale_date": "2022-07-29",
+        "total_amount": 425.40,
+        "payment_method_id": 4
+    },
+    {
+        "customer_id": 737,
+        "sale_date": "2022-08-05",
+        "total_amount": 587.65,
+        "payment_method_id": 2
+    },
+    {
+        "customer_id": 125,
+        "sale_date": "2022-08-12",
+        "total_amount": 342.80,
+        "payment_method_id": 6
+    },
+    {
+        "customer_id": 173,
+        "sale_date": "2022-08-19",
+        "total_amount": 789.30,
+        "payment_method_id": 1
+    },
+    {
+        "customer_id": 143,
+        "sale_date": "2022-08-26",
+        "total_amount": 486.75,
+        "payment_method_id": 3
+    },
+    {
+        "customer_id": 197,
+        "sale_date": "2022-09-02",
+        "total_amount": 623.40,
+        "payment_method_id": 5
+    },
+    {
+        "customer_id": 719,
+        "sale_date": "2022-09-09",
+        "total_amount": 374.90,
+        "payment_method_id": 2
+    },
+    {
+        "customer_id": 53,
+        "sale_date": "2022-09-16",
+        "total_amount": 865.25,
+        "payment_method_id": 4
+    },
+    {
+        "customer_id": 725,
+        "sale_date": "2022-09-23",
+        "total_amount": 543.70,
+        "payment_method_id": 1
+    },
+    {
+        "customer_id": 83,
+        "sale_date": "2022-09-30",
+        "total_amount": 657.85,
+        "payment_method_id": 3
+    },
+    {
+        "customer_id": 731,
+        "sale_date": "2022-10-07",
+        "total_amount": 398.40,
+        "payment_method_id": 6
+    },
+    {
+        "customer_id": 125,
+        "sale_date": "2022-10-14",
+        "total_amount": 736.95,
+        "payment_method_id": 2
+    },
+    {
+        "customer_id": 737,
+        "sale_date": "2022-10-21",
+        "total_amount": 432.60,
+        "payment_method_id": 5
+    },
+    {
+        "customer_id": 143,
+        "sale_date": "2022-10-28",
+        "total_amount": 598.25,
+        "payment_method_id": 1
+    },
+    {
+        "customer_id": 173,
+        "sale_date": "2022-11-04",
+        "total_amount": 345.80,
+        "payment_method_id": 4
+    },
+    {
+        "customer_id": 731,
+        "sale_date": "2022-11-11",
+        "total_amount": 765.40,
+        "payment_method_id": 3
+    },
+    {
+        "customer_id": 197,
+        "sale_date": "2022-11-18",
+        "total_amount": 487.65,
+        "payment_method_id": 2
+    },
+    {
+        "customer_id": 737,
+        "sale_date": "2022-11-25",
+        "total_amount": 634.90,
+        "payment_method_id": 6
+    },
+    {
+        "customer_id": 53,
+        "sale_date": "2022-12-02",
+        "total_amount": 378.25,
+        "payment_method_id": 1
+    },
+    {
+        "customer_id": 125,
+        "sale_date": "2022-12-09",
+        "total_amount": 856.70,
+        "payment_method_id": 5
+    },
+    {
+        "customer_id": 83,
+        "sale_date": "2022-12-16",
+        "total_amount": 523.45,
+        "payment_method_id": 3
+    },
+    {
+        "customer_id": 143,
+        "sale_date": "2022-12-23",
+        "total_amount": 649.80,
+        "payment_method_id": 4
+    },
+    {
+        "customer_id": 173,
+        "sale_date": "2022-12-30",
+        "total_amount": 395.35,
+        "payment_method_id": 2
     }
 ]
