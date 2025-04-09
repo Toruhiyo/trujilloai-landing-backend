@@ -7,4 +7,3 @@ class Unit(BaseEnum):
     MM = "MM"
     KG = "KG"
     PCS = "PCS"
-    NULL = None
