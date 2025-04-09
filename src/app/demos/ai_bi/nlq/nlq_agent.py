@@ -6,6 +6,9 @@ from src.app.demos.ai_bi.nlq.dtos import NlqResultDTO, SqlResultDTO
 from src.app.demos.ai_bi.nlq.llm_nlq.dtos import NlqLlmResultsDTO, NlqRequestDTO
 from src.app.demos.ai_bi.nlq.llm_nlq.llm_nlq import AibiLlmTextToSQL
 from src.app.demos.ai_bi.nlq.query_executor import AibiQueryExecutor
+from src.app.demos.ai_bi.nlq.units_assignation.column_units_assigner import (
+    ColumnUnitsAssigner,
+)
 from src.utils.decorators import retry
 from src.utils.metaclasses import DynamicSingleton
 
@@ -22,7 +25,7 @@ class AibiNlqAgent(metaclass=DynamicSingleton):
         self.__llm_text_to_sql = llm_text_to_sql or AibiLlmTextToSQL()
         self.__query_executor = query_executor or AibiQueryExecutor()
 
-    @retry(max_retries=3, delay=0)
+    @retry(max_retries=5, delay=0)
     def compute(self, natural_language_query: str) -> NlqResultDTO:
         t0 = perf_counter()
         llm_results, generation_time_ms = self.__compute_sql_query(
@@ -30,6 +33,9 @@ class AibiNlqAgent(metaclass=DynamicSingleton):
         )
         sql_results = [
             self.__execute_sql_query(sql_query) for sql_query in llm_results.sql_queries
+        ]
+        sql_results = [
+            self.__assign_column_units(sql_result) for sql_result in sql_results
         ]
         total_time = perf_counter() - t0
         return NlqResultDTO(
@@ -52,3 +58,8 @@ class AibiNlqAgent(metaclass=DynamicSingleton):
 
     def __execute_sql_query(self, query: str) -> SqlResultDTO:
         return self.__query_executor.execute(query)
+
+    def __assign_column_units(self, sql_result: SqlResultDTO) -> SqlResultDTO:
+        columns_units = ColumnUnitsAssigner().compute(sql_result.columns)
+        sql_result.columns_units = columns_units
+        return sql_result

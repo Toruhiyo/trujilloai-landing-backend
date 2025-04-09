@@ -1,5 +1,6 @@
 from typing import Any, Optional
 from src.utils.typification.base_dto import BaseDTO
+from src.app.demos.ai_bi.nlq.enums import Unit
 
 
 class SqlResultDTO(BaseDTO):
@@ -7,6 +8,7 @@ class SqlResultDTO(BaseDTO):
     rows: list[list[Any]]
     query: str
     execution_time_ms: float
+    columns_units: Optional[list[Unit | None]] = None
 
 
 class NlqResultDTO(BaseDTO):

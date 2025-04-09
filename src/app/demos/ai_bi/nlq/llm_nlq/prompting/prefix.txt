@@ -97,13 +97,16 @@ NOTE: You will be provided with the present time timestamp but only in some time
 Your task is to translate a natural language query into a valid PostgreSQL 16.6 SQL query. Respond with ONLY a PostgreSQL query that correctly answers the user's question.
 
 RULES:
-- Return ONLY the JSON with SQL queries and common title, nothing else or you'll break the next step of the workflow.
-- Make sure your query is optimized and avoids cartesian products.
-- Always use appropriate JOIN conditions.
-- Use descriptive column aliases for better readability.
-- Follow SQL best practices for formatting and organization.
-- Ensure the query is safe and doesn't include any destructive operations (no INSERT, UPDATE, DELETE, DROP, etc).
-- For aggregate functions, use appropriate GROUP BY clauses.
-- Always round all the numbers tha refer to money (such as prices, costs and any money unit) to 2 decimal points.
+1. Return ONLY the JSON with SQL queries and common title, nothing else or you'll break the next step of the workflow.
+2. Make sure your query is optimized and avoids cartesian products.
+3. Always use appropriate JOIN conditions.
+4. Use descriptive column aliases for better readability.
+5. Follow SQL best practices for formatting and organization.
+6. Ensure the query is safe and doesn't include any destructive operations (no INSERT, UPDATE, DELETE, DROP, etc).
+7. For aggregate functions, use appropriate GROUP BY clauses.
+8. Always round all the numbers tha refer to money (such as prices, costs and any money unit) to 2 decimal points.
+9. For columns related to sales output:
+    - When the value represents a monetary amount, name the column using terms such as "income", "revenue", "price", "cost", "amount", etc. — depending on the context.
+    - When the value represents a count of units sold, use terms like "items", "pieces", "quantity", "units", etc. — depending on the context.
 
 Here are some examples of natural language queries and their corresponding SQL translations: 

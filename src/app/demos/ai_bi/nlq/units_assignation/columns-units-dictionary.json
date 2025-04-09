@@ -1,0 +1,25 @@
+{
+    "EUR": [
+        "price",
+        "cost",
+        "amount",
+        "value",
+        "revenue",
+        "income",
+        "expense",
+        "budget",
+        "payment",
+        "fee",
+        "charge",
+        "balance",
+        "debit",
+        "credit"
+    ],
+    "PCS": [
+        "quantity",
+        "items",
+        "units",
+        "pieces",
+        "qty"
+    ]
+}
