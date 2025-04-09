@@ -1,16 +1,18 @@
 {
     "type": "object",
     "properties": {
-        "query": {
-            "type": "string",
-            "description": "The PostgreSQL query generated from the natural language question."
+        "sql_queries": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
         },
-        "explanation": {
-            "type": "string",
-            "description": "A brief explanation of what the query does and how it answers the user's question."
+        "title": {
+            "type": "string"
         }
     },
     "required": [
-        "query"
+        "sql_queries",
+        "title"
     ]
 }
