@@ -25,18 +25,11 @@ class AibiNlqAgent(metaclass=DynamicSingleton):
         self.__llm_text_to_sql = llm_text_to_sql or AibiLlmTextToSQL()
         self.__query_executor = query_executor or AibiQueryExecutor()
 
-    @retry(max_retries=5, delay=0)
     def compute(self, natural_language_query: str) -> NlqResultDTO:
         t0 = perf_counter()
-        llm_results, generation_time_ms = self.__compute_sql_query(
+        llm_results, sql_results, generation_time_ms = self.__compute_results(
             natural_language_query
         )
-        sql_results = [
-            self.__execute_sql_query(sql_query) for sql_query in llm_results.sql_queries
-        ]
-        sql_results = [
-            self.__assign_column_units(sql_result) for sql_result in sql_results
-        ]
         total_time = perf_counter() - t0
         return NlqResultDTO(
             natural_language_query=natural_language_query,
@@ -47,6 +40,21 @@ class AibiNlqAgent(metaclass=DynamicSingleton):
         )
 
     # Private:
+    @retry(max_retries=5, delay=0)
+    def __compute_results(
+        self, natural_language_query: str
+    ) -> tuple[NlqLlmResultsDTO, list[SqlResultDTO], float]:
+        llm_results, generation_time_ms = self.__compute_sql_query(
+            natural_language_query
+        )
+        sql_results = [
+            self.__execute_sql_query(sql_query) for sql_query in llm_results.sql_queries
+        ]
+        sql_results = [
+            self.__assign_column_units(sql_result) for sql_result in sql_results
+        ]
+        return llm_results, sql_results, generation_time_ms
+
     def __compute_sql_query(
         self, natural_language_query: str
     ) -> tuple[NlqLlmResultsDTO, float]:
