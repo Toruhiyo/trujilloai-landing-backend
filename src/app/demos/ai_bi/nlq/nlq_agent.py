@@ -30,7 +30,7 @@ class AibiNlqAgent(metaclass=DynamicSingleton):
         llm_results, sql_results, generation_time_ms = self.__compute_results(
             natural_language_query
         )
-        total_time = perf_counter() - t0
+        total_time = (perf_counter() - t0) * 1000
         return NlqResultDTO(
             natural_language_query=natural_language_query,
             title=llm_results.title,
