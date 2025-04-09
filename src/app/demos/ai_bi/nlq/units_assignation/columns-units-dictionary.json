@@ -3,6 +3,7 @@
         "price",
         "cost",
         "amount",
+        "spend",
         "value",
         "revenue",
         "income",
