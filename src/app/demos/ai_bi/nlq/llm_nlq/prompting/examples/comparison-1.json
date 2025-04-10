@@ -7,6 +7,7 @@
             "SELECT TO_CHAR(sale_date, 'YYYY-Q') AS quarter, SUM(total_amount) AS quarterly_revenue FROM sales WHERE EXTRACT(YEAR FROM sale_date) = 2023 GROUP BY quarter ORDER BY quarter;",
             "SELECT TO_CHAR(sale_date, 'YYYY-Q') AS quarter, SUM(total_amount) AS quarterly_revenue FROM sales WHERE EXTRACT(YEAR FROM sale_date) = 2024 GROUP BY quarter ORDER BY quarter;"
         ],
-        "title": "Quarterly Revenue Comparison (2023 vs 2024)"
+        "title": "Quarterly Revenue Comparison (2023 vs 2024)",
+        "chart_type": "BAR"
     }
 }

@@ -1,0 +1,12 @@
+{
+    "type": "Time Trend (Single Series)",
+    "natural_language_query": "How have sales evolved month by month this year?",
+    "timestamp": "2025-07-29 18:33:00",
+    "results": {
+        "sql_queries": [
+            "SELECT DATE_TRUNC('month', s.sale_date) AS month, SUM(s.total_amount) AS revenue FROM sales s WHERE DATE_PART('year', s.sale_date) = 2025 GROUP BY month ORDER BY month;"
+        ],
+        "title": "Monthly Revenue Evolution in 2025",
+        "chart_type": "LINE"
+    }
+}

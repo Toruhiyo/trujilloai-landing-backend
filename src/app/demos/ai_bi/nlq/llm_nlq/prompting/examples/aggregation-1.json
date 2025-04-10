@@ -6,6 +6,7 @@
         "sql_queries": [
             "SELECT TO_CHAR(sale_date, 'YYYY-MM') AS month, SUM(total_amount) AS monthly_total FROM sales WHERE EXTRACT(YEAR FROM sale_date) = 2023 GROUP BY month ORDER BY month;"
         ],
-        "title": "Total Sales by Month in 2023"
+        "title": "Total Sales by Month in 2023",
+        "chart_type": "BAR"
     }
 }

@@ -35,6 +35,7 @@ class AibiNlqAgent(metaclass=DynamicSingleton):
             natural_language_query=natural_language_query,
             title=llm_results.title,
             results=sql_results,
+            chart_type=llm_results.chart_type,
             total_time_ms=total_time,
             generation_time_ms=generation_time_ms,
         )

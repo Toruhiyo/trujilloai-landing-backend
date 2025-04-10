@@ -1,0 +1,12 @@
+{
+    "type": "BAR Chart Query",
+    "natural_language_query": "Compare sales for top 5 products by region",
+    "timestamp": "2025-08-01 14:20:00",
+    "results": {
+        "sql_queries": [
+            "SELECT p.name, r.region_name, SUM(s.quantity * p.price) as total_sales FROM sales s JOIN products p ON s.product_id = p.product_id JOIN regions r ON s.region_id = r.region_id GROUP BY p.name, r.region_name ORDER BY total_sales DESC LIMIT 5;"
+        ],
+        "title": "Top 5 Products by Sales Across Regions",
+        "chart_type": "BAR"
+    }
+}

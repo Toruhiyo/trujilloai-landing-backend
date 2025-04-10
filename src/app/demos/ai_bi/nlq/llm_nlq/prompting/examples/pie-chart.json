@@ -1,0 +1,12 @@
+{
+    "type": "PIE Chart Query",
+    "natural_language_query": "What percentage of total revenue comes from each product category?",
+    "timestamp": "2025-08-04 16:45:00",
+    "results": {
+        "sql_queries": [
+            "SELECT c.name as category, SUM(s.quantity * p.price) as category_revenue, (SUM(s.quantity * p.price) / (SELECT SUM(s2.quantity * p2.price) FROM sales s2 JOIN products p2 ON s2.product_id = p2.product_id)) * 100 as percentage FROM sales s JOIN products p ON s.product_id = p.product_id JOIN categories c ON p.category_id = c.category_id GROUP BY c.name ORDER BY category_revenue DESC;"
+        ],
+        "title": "Revenue Distribution by Product Category",
+        "chart_type": "PIE"
+    }
+}

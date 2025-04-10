@@ -1,0 +1,12 @@
+{
+    "type": "LINE Chart Query",
+    "natural_language_query": "Show monthly revenue trend for the last year",
+    "timestamp": "2025-08-02 09:15:00",
+    "results": {
+        "sql_queries": [
+            "SELECT DATE_TRUNC('month', s.sale_date) as month, SUM(s.quantity * p.price) as monthly_revenue FROM sales s JOIN products p ON s.product_id = p.product_id WHERE s.sale_date >= CURRENT_DATE - INTERVAL '1 year' GROUP BY month ORDER BY month;"
+        ],
+        "title": "Monthly Revenue Trend (Last 12 Months)",
+        "chart_type": "LINE"
+    }
+}

@@ -1,0 +1,12 @@
+{
+    "type": "Single Value Query",
+    "natural_language_query": "What was the total revenue last quarter?",
+    "timestamp": "2025-07-29 18:36:00",
+    "results": {
+        "sql_queries": [
+            "SELECT SUM(s.total_amount) AS revenue FROM sales s WHERE s.sale_date >= DATE_TRUNC('quarter', CURRENT_DATE) - INTERVAL '3 months' AND s.sale_date < DATE_TRUNC('quarter', CURRENT_DATE);"
+        ],
+        "title": "Total Revenue (Last Quarter)",
+        "chart_type": "KPI"
+    }
+}

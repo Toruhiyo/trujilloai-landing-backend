@@ -1,0 +1,12 @@
+{
+    "type": "PIE Chart Query",
+    "natural_language_query": "Show the proportion of sales from each region this quarter",
+    "timestamp": "2025-08-06 13:20:00",
+    "results": {
+        "sql_queries": [
+            "SELECT r.region_name, SUM(s.quantity * p.price) as region_sales, (SUM(s.quantity * p.price) / (SELECT SUM(s2.quantity * p2.price) FROM sales s2 JOIN products p2 ON s2.product_id = p2.product_id WHERE s2.sale_date >= DATE_TRUNC('quarter', CURRENT_DATE))) * 100 as percentage FROM sales s JOIN products p ON s.product_id = p.product_id JOIN regions r ON s.region_id = r.region_id WHERE s.sale_date >= DATE_TRUNC('quarter', CURRENT_DATE) GROUP BY r.region_name ORDER BY region_sales DESC;"
+        ],
+        "title": "Current Quarter Sales Distribution by Region",
+        "chart_type": "PIE"
+    }
+}

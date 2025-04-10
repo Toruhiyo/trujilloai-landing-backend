@@ -1,0 +1,12 @@
+{
+    "type": "Comparison - Pie Chart",
+    "natural_language_query": "Compare sales of products by material type",
+    "timestamp": "2026-01-29 09:40:13",
+    "results": {
+        "sql_queries": [
+            "SELECT m.name AS material, SUM(si.quantity * si.unit_price) AS sales FROM sale_items si JOIN products p ON si.product_id = p.product_id JOIN materials m ON p.material_id = m.id GROUP BY m.name ORDER BY sales DESC;"
+        ],
+        "title": "Sales by Material Type",
+        "chart_type": "PIE"
+    }
+}

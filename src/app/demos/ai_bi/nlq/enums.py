@@ -7,3 +7,11 @@ class Unit(BaseEnum):
     MM = "MM"
     KG = "KG"
     PCS = "PCS"
+
+
+class ChartType(BaseEnum):
+    BAR = "BAR"
+    LINE = "LINE"
+    AREA = "AREA"
+    PIE = "PIE"
+    KPI = "KPI"

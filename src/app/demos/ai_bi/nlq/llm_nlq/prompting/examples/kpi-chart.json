@@ -1,0 +1,12 @@
+{
+    "type": "KPI Query",
+    "natural_language_query": "What was the total revenue last month?",
+    "timestamp": "2025-08-05 10:00:00",
+    "results": {
+        "sql_queries": [
+            "SELECT SUM(s.quantity * p.price) as total_revenue FROM sales s JOIN products p ON s.product_id = p.product_id WHERE s.sale_date >= DATE_TRUNC('month', CURRENT_DATE - INTERVAL '1 month') AND s.sale_date < DATE_TRUNC('month', CURRENT_DATE);"
+        ],
+        "title": "Total Revenue Last Month",
+        "chart_type": "KPI"
+    }
+}

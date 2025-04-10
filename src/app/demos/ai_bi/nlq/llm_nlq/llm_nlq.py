@@ -16,6 +16,7 @@ from src.app.demos.ai_bi.nlq.llm_nlq.errors import (
     InvalidLLMResponseFormatError,
     UnsafeQueryError,
 )
+from src.app.demos.ai_bi.toolbox import typify_chart_type
 from src.config.vars_grabber import VariablesGrabber
 from src.utils.json_toolbox import load_jsons_in_directory, make_serializable
 from src.utils.metaclasses import DynamicSingleton
@@ -169,6 +170,8 @@ class AibiLlmTextToSQL(metaclass=DynamicSingleton):
                     [is_valid_sql_query(query) for query in response["sql_queries"]]
                 ):
                     raise ValueError(f"Invalid SQL queries in response: {response}")
+                if response.get("chart_type"):
+                    response["chart_type"] = typify_chart_type(response["chart_type"])
                 return NlqLlmResultsDTO(**response)
 
         except Exception as e:

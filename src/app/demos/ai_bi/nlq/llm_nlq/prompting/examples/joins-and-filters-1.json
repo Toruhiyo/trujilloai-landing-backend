@@ -6,6 +6,7 @@
         "sql_queries": [
             "SELECT DISTINCT c.customer_id, c.name FROM customers c JOIN sales s ON c.customer_id = s.customer_id JOIN sale_items si ON s.sale_id = si.sale_id JOIN products p ON si.product_id = p.product_id WHERE p.color = 'Blue' ORDER BY c.name;"
         ],
-        "title": "Customers who purchased blue products"
+        "title": "Customers who purchased blue products",
+        "chart_type": null
     }
 }

@@ -1,0 +1,12 @@
+{
+    "type": "AREA Chart Query",
+    "natural_language_query": "Show quarterly sales by category over the past 2 years",
+    "timestamp": "2025-08-03 11:30:00",
+    "results": {
+        "sql_queries": [
+            "SELECT DATE_TRUNC('quarter', s.sale_date) as quarter, c.name as category, SUM(s.quantity * p.price) as quarterly_sales FROM sales s JOIN products p ON s.product_id = p.product_id JOIN categories c ON p.category_id = c.category_id WHERE s.sale_date >= CURRENT_DATE - INTERVAL '2 years' GROUP BY quarter, category ORDER BY quarter, category;"
+        ],
+        "title": "Quarterly Sales by Product Category (Last 2 Years)",
+        "chart_type": "AREA"
+    }
+}
