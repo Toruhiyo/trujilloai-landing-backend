@@ -22,5 +22,11 @@
         "units",
         "pieces",
         "qty"
+    ],
+    "PERCENT": [
+        "percentage",
+        "percent",
+        "pct",
+        "%"
     ]
 }

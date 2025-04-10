@@ -7,6 +7,7 @@ class Unit(BaseEnum):
     MM = "MM"
     KG = "KG"
     PCS = "PCS"
+    PERCENT = "PERCENT"
 
 
 class ChartType(BaseEnum):
