@@ -1,7 +1,7 @@
-from enum import Enum
+from src.utils.typification.base_enum import BaseEnum
 
 
-class WebSocketEventType(str, Enum):
+class WebSocketEventType(str, BaseEnum):
     """Event types for the websocket connection with ElevenLabs"""
 
     # Client to server events
@@ -30,9 +30,16 @@ class WebSocketEventType(str, Enum):
     ERROR = "error"
 
 
-class MessageRole(str, Enum):
+class MessageRole(str, BaseEnum):
     """Message roles for ElevenLabs conversation"""
 
     USER = "user"
     ASSISTANT = "assistant"
     SYSTEM = "system"
+
+
+class FeedbackKey(str, BaseEnum):
+    """Feedback keys for conversation feedback"""
+
+    LIKE = "like"
+    DISLIKE = "dislike"

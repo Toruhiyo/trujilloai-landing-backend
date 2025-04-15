@@ -4,14 +4,18 @@ from fastapi import (
     WebSocket,
     Depends,
     Query,
+    Path,
+    Body,
+    HTTPException,
 )
 
 from src.app.landing_voicechat.landing_voicechat_websocket_middleware import (
     LandingVoicechatWebsocketMiddleware,
 )
 from src.config.vars_grabber import VariablesGrabber
-from src.wrappers.elevenlabs.enums import WebSocketEventType
+from src.wrappers.elevenlabs.enums import WebSocketEventType, FeedbackKey
 from src.app.errors import EnvironmentVariablesValueError
+from src.app.landing_voicechat.responses import FeedbackResponse
 
 router = APIRouter(prefix="/landing-voicechat", tags=["Landing Voicechat"])
 logger = logging.getLogger(__name__)
@@ -86,3 +90,17 @@ async def voicechat_websocket(
         # Clean up
         if client_id and client_id in active_middlewares:
             del active_middlewares[client_id]
+
+
+@router.post(
+    "/conversations/{conversation_id}/feedback", response_model=FeedbackResponse
+)
+async def send_conversation_feedback_endpoint(
+    conversation_id: str = Path(..., description="Conversation ID"),
+    key: FeedbackKey = Body(..., embed=True, description="Feedback key"),
+) -> FeedbackResponse:
+    # send_conversation_feedback(conversation_id, key)
+    return FeedbackResponse(
+        message=f"Successfully sent feedback ({key}) for conversation {conversation_id}",
+        data={"key": key},
+    )

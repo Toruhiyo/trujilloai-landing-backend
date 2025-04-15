@@ -1,6 +1,6 @@
 from typing import Dict, Any, Optional
 from pydantic import BaseModel
-from .enums import WebSocketEventType
+from src.wrappers.elevenlabs.enums import WebSocketEventType
 
 
 class ConversationInitiationMetadataResponse(BaseModel):
@@ -51,3 +51,10 @@ class ErrorResponse(BaseModel):
     type: str = WebSocketEventType.ERROR
     error: str
     details: Optional[Dict[str, Any]] = None
+
+
+class FeedbackResponse(BaseModel):
+    """Feedback response for conversation"""
+
+    message: str
+    data: dict[str, str]
