@@ -6,18 +6,18 @@ from fastapi import (
     Query,
 )
 
-from src.app.voicechat.voicechat_websocket_middleware import (
-    VoicechatWebsocketMiddleware,
+from src.app.landing_voicechat.landing_voicechat_websocket_middleware import (
+    LandingVoicechatWebsocketMiddleware,
 )
 from src.config.vars_grabber import VariablesGrabber
 from src.wrappers.elevenlabs.enums import WebSocketEventType
 from src.app.errors import EnvironmentVariablesValueError
 
-router = APIRouter(prefix="/voicechat", tags=["voicechat"])
+router = APIRouter(prefix="/landing-voicechat", tags=["Landing Voicechat"])
 logger = logging.getLogger(__name__)
 
 # Cache for active connections
-active_middlewares: dict[str, VoicechatWebsocketMiddleware] = {}
+active_middlewares: dict[str, LandingVoicechatWebsocketMiddleware] = {}
 
 ELEVENLABS_API_KEY = VariablesGrabber().get("ELEVENLABS_API_KEY")
 VOICECHAT_ELEVENLABS_AGENT_ID = VariablesGrabber().get("VOICECHAT_ELEVENLABS_AGENT_ID")
@@ -25,7 +25,7 @@ VOICECHAT_ELEVENLABS_AGENT_ID = VariablesGrabber().get("VOICECHAT_ELEVENLABS_AGE
 
 def get_voicechat_elevenlabs_middleware(
     voice_id: str = Query(None, description="ElevenLabs voice ID")
-) -> VoicechatWebsocketMiddleware:
+) -> LandingVoicechatWebsocketMiddleware:
     if not ELEVENLABS_API_KEY:
         logger.error("ELEVENLABS_API_KEY not configured")
         raise EnvironmentVariablesValueError("ELEVENLABS_API_KEY not configured")
@@ -35,7 +35,7 @@ def get_voicechat_elevenlabs_middleware(
             "VOICECHAT_ELEVENLABS_AGENT_ID not configured"
         )
 
-    return VoicechatWebsocketMiddleware(
+    return LandingVoicechatWebsocketMiddleware(
         agent_id=VOICECHAT_ELEVENLABS_AGENT_ID,
         api_key=ELEVENLABS_API_KEY,
         voice_id=voice_id,
@@ -46,7 +46,7 @@ def get_voicechat_elevenlabs_middleware(
 async def voicechat_websocket(
     websocket: WebSocket,
     debug: bool = Query(False, description="Enable debug mode"),
-    voicechat_elevenlabs_middleware: VoicechatWebsocketMiddleware = Depends(
+    voicechat_elevenlabs_middleware: LandingVoicechatWebsocketMiddleware = Depends(
         get_voicechat_elevenlabs_middleware
     ),
 ):

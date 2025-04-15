@@ -4,8 +4,8 @@ from uuid import uuid5, NAMESPACE_URL
 
 from src.app.landing.enums import LanguageCode, SectionName
 from src.app.landing.toolbox import typify_language, typify_section_name
-from src.app.voicechat.highlighting.dtos import HighlightedTextDTO
-from src.app.voicechat.highlighting.text_highlighter import TextHighlighter
+from src.app.landing_voicechat.highlighting.dtos import HighlightedTextDTO
+from src.app.landing_voicechat.highlighting.text_highlighter import TextHighlighter
 from src.wrappers.elevenlabs.elevenlabs_websocket_middleware import (
     ElevenLabsWebsocketMiddleware,
     client_tool_call,
@@ -14,7 +14,7 @@ from src.wrappers.elevenlabs.elevenlabs_websocket_middleware import (
 logger = logging.getLogger(__name__)
 
 
-class VoicechatWebsocketMiddleware(ElevenLabsWebsocketMiddleware):
+class LandingVoicechatWebsocketMiddleware(ElevenLabsWebsocketMiddleware):
 
     # Public:
 

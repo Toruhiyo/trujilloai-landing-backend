@@ -1,8 +1,8 @@
 from pathlib import Path
 
 from src.app.landing.enums import LanguageCode, SectionName
-from src.app.voicechat.highlighting.dtos import HighlightedTextDTO
-from src.app.voicechat.highlighting.llm_text_highlighting.llm_text_highlighter import (
+from src.app.landing_voicechat.highlighting.dtos import HighlightedTextDTO
+from src.app.landing_voicechat.highlighting.llm_text_highlighting.llm_text_highlighter import (
     LlmTextHighlighter,
 )
 from src.config.vars_grabber import VariablesGrabber

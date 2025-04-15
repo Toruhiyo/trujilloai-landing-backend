@@ -7,7 +7,7 @@ import re
 from typing import Any, Callable, Optional
 
 from src.app.landing.enums import SectionName
-from src.app.voicechat.highlighting.dtos import HighlightedTextDTO
+from src.app.landing_voicechat.highlighting.dtos import HighlightedTextDTO
 from src.config.vars_grabber import VariablesGrabber
 from src.utils.dict_toolbox import (
     remove_other_keys_from_dict_list,
