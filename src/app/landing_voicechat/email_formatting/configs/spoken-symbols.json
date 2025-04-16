@@ -3,6 +3,12 @@
     "arroba": "@",
     "dot": ".",
     "punto": ".",
+    "point": ".",
     "underscore": "_",
-    "dash": "-"
+    "dash": "-",
+    "hyphen": "-",
+    "guion": "-",
+    "period": ".",
+    "underline": "_",
+    "subrayado": "_"
 }

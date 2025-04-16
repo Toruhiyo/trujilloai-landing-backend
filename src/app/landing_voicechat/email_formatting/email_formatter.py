@@ -1,7 +1,10 @@
+import logging
 from src.utils.metaclasses import DynamicSingleton
 import re
 import json
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 
 class EmailFormatter(metaclass=DynamicSingleton):
@@ -25,6 +28,12 @@ class EmailFormatter(metaclass=DynamicSingleton):
         self.__common_domains = common_domains
         self.__popular_email_providers = popular_email_providers
         self.__spoken_symbols = spoken_symbols
+        # Create a mapping for domain to TLD (e.g., "comcast" -> "net")
+        self.__domain_tld_mapping = {}
+        for provider in self.__popular_email_providers:
+            parts = provider.split(".")
+            if len(parts) >= 2:
+                self.__domain_tld_mapping[parts[0]] = ".".join(parts[1:])
 
     @property
     def __popular_domain_hosts(self) -> list[str]:
@@ -37,6 +46,9 @@ class EmailFormatter(metaclass=DynamicSingleton):
         formatted_email = self.__compute_formatted_email(
             email,
         )
+        if not self.__is_valid_email(formatted_email):
+            logger.warning(f"Invalid email: {formatted_email}")
+
         return formatted_email
 
     # Private:
@@ -63,7 +75,9 @@ class EmailFormatter(metaclass=DynamicSingleton):
             # Check if domain is a known email provider
             for provider in self.__popular_domain_hosts:
                 if domain == provider:
-                    return f"{username}@{provider}.com"
+                    # Use the correct TLD from the mapping
+                    tld = self.__domain_tld_mapping.get(provider, "com")
+                    return f"{username}@{provider}.{tld}"
 
             # Check if the second part is a known TLD (com, org, etc.)
             if domain in [
@@ -104,8 +118,8 @@ class EmailFormatter(metaclass=DynamicSingleton):
         return email
 
     def __is_valid_email(self, email: str) -> bool:
-        # Simple regex to check if email has basic valid format
-        email_pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+        # More strict regex to check if email has valid format
+        email_pattern = r"^[a-zA-Z0-9][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
         return bool(re.match(email_pattern, email))
 
     def __fix_incomplete_domain(self, email: str) -> str:
@@ -116,9 +130,11 @@ class EmailFormatter(metaclass=DynamicSingleton):
         username, domain = email.split("@", 1)
 
         # Check if domain is incomplete
-        for incomplete in self.__popular_domain_hosts:
-            if domain == incomplete:
-                return f"{username}@{domain}.com"
+        for provider in self.__popular_domain_hosts:
+            if domain == provider:
+                # Use the correct TLD from the mapping
+                tld = self.__domain_tld_mapping.get(provider, "com")
+                return f"{username}@{provider}.{tld}"
 
         # Check if domain has no TLD
         if "." not in domain:
@@ -127,6 +143,11 @@ class EmailFormatter(metaclass=DynamicSingleton):
         return email
 
     def __fix_missing_at_symbol(self, email: str) -> str:
+        # Special case for domains with special TLDs
+        for provider, tld in self.__domain_tld_mapping.items():
+            if email.startswith(f"{provider} ") or email == provider:
+                return f"user@{provider}.{tld}"
+
         # First special case: domain-only with dot
         if "." in email and email.count(".") == 1:
             # Handle specific domains
@@ -134,7 +155,9 @@ class EmailFormatter(metaclass=DynamicSingleton):
                 if email.startswith(f"{provider}."):
                     return f"user@{email}"
                 elif email == f"{provider}":
-                    return f"user@{provider}.com"
+                    # Use the correct TLD
+                    tld = self.__domain_tld_mapping.get(provider, "com")
+                    return f"user@{provider}.{tld}"
 
             # Default domain logic (from above is handled first so we don't duplicate)
             return email
@@ -158,7 +181,9 @@ class EmailFormatter(metaclass=DynamicSingleton):
             # Handle specific providers in domain part
             for provider in self.__popular_domain_hosts:
                 if parts[1].startswith(provider):
-                    return f"{parts[0]}@{parts[1]}.com"
+                    # Use the correct TLD
+                    tld = self.__domain_tld_mapping.get(provider, "com")
+                    return f"{parts[0]}@{provider}.{tld}"
 
             return f"{parts[0]}@gmail.com"
 
@@ -198,84 +223,127 @@ class EmailFormatter(metaclass=DynamicSingleton):
         return email
 
     def __has_known_domain(self, email: str) -> bool:
-        # Check if the email contains any of the known domains
-        for domain in self.__common_domains:
-            if domain in email:
+        """Check if the email contains any of the known domains."""
+        email_lower = email.lower()
+
+        # Special case for exact matches of unknown domains
+        if "." not in email_lower or "@" in email_lower:
+            return False
+
+        # Check if it's a domain pattern like user.gmail.com
+        for provider in self.__popular_email_providers:
+            # For exact matches like "gmail.com"
+            if provider == email_lower:
                 return True
 
-        # Check for popular email providers
-        for provider in self.__popular_email_providers:
-            if provider in email:
+            # For patterns like "user.gmail.com"
+            if f".{provider}" in email_lower:
+                return True
+
+            # For incomplete domains like "user.gmail"
+            provider_base = provider.split(".")[0]
+            if email_lower.endswith(f".{provider_base}"):
+                parts = email_lower.split(".")
+                if len(parts) >= 2 and parts[-1] == provider_base:
+                    return True
+
+        # Check for common domains (.com, .org, etc.)
+        for domain in self.__common_domains:
+            if email_lower.endswith(domain):
                 return True
 
         return False
 
     def __add_at_with_known_domain(self, email: str) -> str:
-        # Try to find the right place to insert the @ symbol based on known domains
+        """Try to find the right place to insert the @ symbol based on known domains."""
 
-        # First check for known email providers
-        for provider in self.__popular_email_providers:
+        # Handle full email providers (like gmail.com, yahoo.com)
+        for provider in sorted(self.__popular_email_providers, key=len, reverse=True):
             if provider in email:
                 # Split at the provider
-                parts = email.split(provider)
-                if len(parts) == 2:
-                    username = parts[0].rstrip(".")
-                    return f"{username}@{provider}{parts[1]}"
-                else:
-                    # This might be username.gmail.com
-                    username = email[: email.find(provider)].rstrip(".")
-                    domain = provider + email[email.find(provider) + len(provider) :]
+                split_index = email.find(provider)
+                if split_index > 0:
+                    username = email[:split_index].rstrip(".")
+                    domain = provider
                     return f"{username}@{domain}"
 
-        # Check for more specific domains first - handle partial names
-        for provider in self.__popular_domain_hosts:
-            if f".{provider}." in email or email.endswith(f".{provider}"):
+        # Handle domain hosts (like gmail, yahoo)
+        for provider in sorted(self.__popular_domain_hosts, key=len, reverse=True):
+            # Look for patterns like "username.gmail"
+            pattern = f".{provider}$"
+            if re.search(pattern, email):
+                # Extract username part
                 parts = email.split(f".{provider}")
-                if len(parts) >= 1:
-                    return f"{parts[0]}@{provider}.com"
+                if len(parts) == 1:
+                    username = parts[0]
+                    # Use the correct TLD
+                    tld = self.__domain_tld_mapping.get(provider, "com")
+                    return f"{username}@{provider}.{tld}"
 
-        # Try to identify domain pattern with TLDs
+            # Match patterns like "username.gmail.anything"
+            pattern = f"\\.{provider}\\."
+            if re.search(pattern, email):
+                parts = re.split(pattern, email, 1)
+                if len(parts) == 2:
+                    username = parts[0]
+                    tld = parts[1]
+                    return f"{username}@{provider}.{tld}"
+
+        # Look for complex forms like "username.firstname.lastname.gmail.com"
+        for provider in self.__popular_email_providers:
+            if f".{provider}" in email:
+                split_index = email.rfind(f".{provider}")
+                if split_index > 0:
+                    username = email[:split_index]
+                    return f"{username}@{provider}"
+
+        # Fallback - try to find domain boundary based on common TLDs
         for domain in sorted(self.__common_domains, key=len, reverse=True):
-            if domain in email:
-                # Find potential domain boundaries
-                domain_index = email.find(domain)
+            if email.endswith(domain):
+                domain_part = email[-(len(domain)) :]
+                username_part = email[: -(len(domain))]
 
-                # Find the starting point of the domain
-                # We need to go backwards from the TLD to find where the domain starts
-                start_index = email.rfind(".", 0, domain_index)
-                if start_index == -1:  # No dot before the domain
-                    # Try to find the boundary between username and domain
-                    # Common separators might be underscores or dots
-                    for separator in ["_", "."]:
-                        separator_index = email.rfind(separator, 0, domain_index)
-                        if separator_index != -1 and separator_index < domain_index - 1:
-                            start_index = separator_index
-                            break
+                # Look for a provider part to complete the domain
+                for provider in self.__popular_domain_hosts:
+                    if username_part.endswith(f".{provider}"):
+                        # Split at the provider
+                        provider_index = username_part.rfind(f".{provider}")
+                        if provider_index > 0:
+                            real_username = username_part[:provider_index]
+                            return f"{real_username}@{provider}{domain}"
 
-                if start_index == -1:
-                    # Couldn't find a natural boundary, use heuristics
-                    # Try to detect patterns like "username.domain.com"
-                    parts = email.split(".")
-                    if len(parts) >= 3:
-                        return f"{parts[0]}@{'.'.join(parts[1:])}"
-                    elif len(parts) == 2:
-                        domain_part = parts[1]
-                        # Check if domain starts with common domain name
-                        for common_domain in self.__popular_domain_hosts:
-                            if domain_part.startswith(common_domain):
-                                return f"{parts[0]}@{domain_part}"
+                # If no provider is found, use the default pattern
+                if "." in username_part:
+                    # Take everything before the last dot as username
+                    last_dot = username_part.rfind(".")
+                    if last_dot > 0:
+                        real_username = username_part[:last_dot]
+                        domain_name = username_part[last_dot + 1 :] + domain
+                        return f"{real_username}@{domain_name}"
 
-                # If we found a separator
-                if start_index != -1:
-                    username = email[:start_index]
-                    domain = email[start_index + 1 :]
-                    return f"{username}@{domain}"
+        # Last resort - handle complex domain forms
+        if "." in email:
+            parts = email.split(".")
+            if len(parts) >= 3:
+                # Try to identify domain patterns in multi-part emails
+                # Check if any part matches a known provider
+                for i in range(len(parts) - 1):
+                    for provider in self.__popular_domain_hosts:
+                        if parts[i] == provider:
+                            username = ".".join(parts[:i])
+                            tld = self.__domain_tld_mapping.get(provider, "com")
+                            if i < len(parts) - 1:
+                                remaining = ".".join(parts[i + 1 :])
+                                if remaining == tld:
+                                    return f"{username}@{provider}.{tld}"
+                                else:
+                                    return f"{username}@{provider}.{tld}"
+                            else:
+                                return f"{username}@{provider}.{tld}"
 
-        # Fallback to the best guess
-        # Try to split at the second-to-last dot
-        parts = email.split(".")
-        if len(parts) >= 3:
-            # Assume format username.domain.tld
-            return f"{parts[0]}@{'.'.join(parts[1:])}"
+            # Default case - put @ before the last component
+            username = email.rsplit(".", 1)[0]
+            domain = email.rsplit(".", 1)[1]
+            return f"{username}@{domain}.com"
 
         return email
