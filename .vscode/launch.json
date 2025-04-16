@@ -48,6 +48,22 @@
             "envFile": "${workspaceRoot}/.env"
         },
         {
+            "name": "Pytest: Email Formatter",
+            "type": "debugpy",
+            "request": "launch",
+            "stopOnEntry": false,
+            "env": {
+                "PYTHONPATH": "${workspaceRoot}"
+            },
+            "module": "pytest",
+            "args": [
+                "-sv",
+                "tests/app/landing_voicechat/email_formatting/test_email_formatter.py"
+            ],
+            "cwd": "${workspaceRoot}",
+            "envFile": "${workspaceRoot}/.env"
+        },
+        {
             "name": "Run: Main",
             "type": "debugpy",
             "request": "launch",
