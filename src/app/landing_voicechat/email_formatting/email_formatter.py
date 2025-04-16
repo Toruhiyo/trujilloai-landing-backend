@@ -101,8 +101,8 @@ class EmailFormatter(metaclass=DynamicSingleton):
         return email
 
     def __replace_spoken_symbols(self, email: str) -> str:
-        # Remove spaces around punctuation first
-        email = re.sub(r"\s*([.,;:])\s*", r"\1", email)
+        # Handle common name patterns with spoken symbols (like "name guion surname")
+        email = self.__handle_name_patterns_with_symbols(email)
 
         # Process each replacement
         for word, symbol in self.__spoken_symbols.items():
@@ -114,6 +114,53 @@ class EmailFormatter(metaclass=DynamicSingleton):
         email = re.sub(r"\s*\.\s*", ".", email)
         email = re.sub(r"\s*_\s*", "_", email)
         email = re.sub(r"\s*-\s*", "-", email)
+        email = re.sub(r"\s*,\s*", ",", email)
+        email = re.sub(r"\s*:\s*", ":", email)
+
+        return email
+
+    def __handle_name_patterns_with_symbols(self, email: str) -> str:
+        """Handle patterns like 'First Middle guion Last' where symbols are spoken words."""
+        # Special case for compound symbols like "guion medio"
+        pattern_compound = (
+            r"(\w+)(\s+\w+)?\s+(guion medio|guion bajo|barra baja)\s+(\w+)"
+            r"(\s+arroba|\s+at|\s+en|\s+@)"
+        )
+        match = re.search(pattern_compound, email)
+        if match:
+            firstname = match.group(1)
+            lastname = match.group(4)
+            separator = match.group(5)
+            symbol = "-" if match.group(3) == "guion medio" else "_"
+            email = re.sub(
+                pattern_compound, f"{firstname}{symbol}{lastname}{separator}", email
+            )
+
+        # Handle patterns with dash/hyphen variations between words
+        pattern_dash = (
+            r"(\w+)\s+(\w+)\s+(guion|dash|hyphen|raya|menos)\s+(\w+)"
+            r"(\s+arroba|\s+at|\s+en|\s+@)"
+        )
+        match = re.search(pattern_dash, email)
+        if match:
+            firstname = match.group(1)
+            lastname = match.group(4)
+            separator = match.group(5)
+            email = re.sub(pattern_dash, f"{firstname}-{lastname}{separator}", email)
+
+        # Handle patterns with underscore variations between words
+        pattern_underscore = (
+            r"(\w+)\s+(underscore|subrayado|barra|underline)\s+(\w+)"
+            r"(\s+arroba|\s+at|\s+en|\s+@)"
+        )
+        match = re.search(pattern_underscore, email)
+        if match:
+            firstname = match.group(1)
+            lastname = match.group(3)
+            separator = match.group(4)
+            email = re.sub(
+                pattern_underscore, f"{firstname}_{lastname}{separator}", email
+            )
 
         return email
 
@@ -159,7 +206,7 @@ class EmailFormatter(metaclass=DynamicSingleton):
                     tld = self.__domain_tld_mapping.get(provider, "com")
                     return f"user@{provider}.{tld}"
 
-            # Default domain logic (from above is handled first so we don't duplicate)
+            # Default domain logic (from above is handled first)
             return email
 
         # Check for known domains first
@@ -173,9 +220,10 @@ class EmailFormatter(metaclass=DynamicSingleton):
         # If there's only one dot and no @, use gmail.com as default domain
         if dot_count == 1 and len(parts) == 2:
             # Check if the second part is a TLD (com, org, etc.)
-            if parts[1] in [
+            tlds = [
                 d.strip(".") for d in self.__common_domains if len(d.strip(".")) <= 3
-            ]:
+            ]
+            if parts[1] in tlds:
                 return f"{parts[0]}@gmail.{parts[1]}"
 
             # Handle specific providers in domain part
@@ -188,7 +236,7 @@ class EmailFormatter(metaclass=DynamicSingleton):
             return f"{parts[0]}@gmail.com"
 
         if len(parts) >= 2:
-            # Find a domain part (typically after the last dot or second-to-last dot)
+            # Find a domain part
             potential_formats = []
 
             # Try placing @ before the last part
@@ -255,10 +303,11 @@ class EmailFormatter(metaclass=DynamicSingleton):
         return False
 
     def __add_at_with_known_domain(self, email: str) -> str:
-        """Try to find the right place to insert the @ symbol based on known domains."""
+        """Try to find the right place to insert the @ symbol."""
 
         # Handle full email providers (like gmail.com, yahoo.com)
-        for provider in sorted(self.__popular_email_providers, key=len, reverse=True):
+        providers = sorted(self.__popular_email_providers, key=len, reverse=True)
+        for provider in providers:
             if provider in email:
                 # Split at the provider
                 split_index = email.find(provider)
@@ -268,7 +317,8 @@ class EmailFormatter(metaclass=DynamicSingleton):
                     return f"{username}@{domain}"
 
         # Handle domain hosts (like gmail, yahoo)
-        for provider in sorted(self.__popular_domain_hosts, key=len, reverse=True):
+        hosts = sorted(self.__popular_domain_hosts, key=len, reverse=True)
+        for provider in hosts:
             # Look for patterns like "username.gmail"
             pattern = f".{provider}$"
             if re.search(pattern, email):
@@ -300,8 +350,7 @@ class EmailFormatter(metaclass=DynamicSingleton):
         # Fallback - try to find domain boundary based on common TLDs
         for domain in sorted(self.__common_domains, key=len, reverse=True):
             if email.endswith(domain):
-                domain_part = email[-(len(domain)) :]
-                username_part = email[: -(len(domain))]
+                username_part = email[: -len(domain)]
 
                 # Look for a provider part to complete the domain
                 for provider in self.__popular_domain_hosts:
@@ -326,14 +375,13 @@ class EmailFormatter(metaclass=DynamicSingleton):
             parts = email.split(".")
             if len(parts) >= 3:
                 # Try to identify domain patterns in multi-part emails
-                # Check if any part matches a known provider
                 for i in range(len(parts) - 1):
                     for provider in self.__popular_domain_hosts:
                         if parts[i] == provider:
                             username = ".".join(parts[:i])
                             tld = self.__domain_tld_mapping.get(provider, "com")
+                            remaining = ".".join(parts[i + 1 :])
                             if i < len(parts) - 1:
-                                remaining = ".".join(parts[i + 1 :])
                                 if remaining == tld:
                                     return f"{username}@{provider}.{tld}"
                                 else:

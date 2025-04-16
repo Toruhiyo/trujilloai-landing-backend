@@ -27,6 +27,35 @@ class TestEmailFormatter:
             ("contact hyphen us at company dot co", "contact-us@company.co"),
             ("support guion tecnico at empresa punto es", "support-tecnico@empresa.es"),
             ("john subrayado doe arroba outlook punto com", "john_doe@outlook.com"),
+            # Spanish spoken pattern and providers
+            ("jose punto gomez arroba correo punto es", "jose.gomez@correo.es"),
+            (
+                "maria guion sanchez arroba telefonica punto es",
+                "maria-sanchez@telefonica.es",
+            ),
+            (
+                "juan subrayado perez arroba movistar punto com",
+                "juan_perez@movistar.com",
+            ),
+            ("soporte tecnico arroba vodafone punto es", "soportetecnico@vodafone.es"),
+            ("info arroba jazztel punto com", "info@jazztel.com"),
+            (
+                "contacto punto ventas arroba orange punto es",
+                "contacto.ventas@orange.es",
+            ),
+            # New Spanish spoken symbols
+            ("paco guion medio lopez en gmail punto com", "paco-lopez@gmail.com"),
+            (
+                "miguel menos apellido arroba correo punto es",
+                "miguel-apellido@correo.es",
+            ),
+            ("ana guion bajo garcia en outlook punto com", "ana_garcia@outlook.com"),
+            (
+                "carmen barra baja perez arroba hotmail punto com",
+                "carmen_perez@hotmail.com",
+            ),
+            # Spanish @ alternative
+            ("alberto perez en gmail punto com", "albertoperez@gmail.com"),
             # Missing @ with only one dot (default to gmail.com)
             ("johndoe.com", "johndoe@gmail.com"),
             ("enelpunto.com", "enelpunto@gmail.com"),
@@ -42,15 +71,30 @@ class TestEmailFormatter:
             ("jane.hey.com", "jane@hey.com"),
             ("user.msn.com", "user@msn.com"),
             ("john.live.com", "john@live.com"),
+            # Spanish providers
+            ("customer.movistar.com", "customer@movistar.com"),
+            ("usuario.telefonica.es", "usuario@telefonica.es"),
+            ("cliente.jazztel.com", "cliente@jazztel.com"),
+            ("maria.orange.es", "maria@orange.es"),
+            ("support.vodafone.es", "support@vodafone.es"),
             # Complex cases with multiple dots
             ("juad.david.gomez.gmail.com", "juad.david.gomez@gmail.com"),
             ("jane.doe.outlook.com", "jane.doe@outlook.com"),
             ("james.smith.mycompany.com", "james.smith@mycompany.com"),
             ("thomas.white.fastmail.com", "thomas.white@fastmail.com"),
+            # Spanish complex cases
+            ("jose.luis.garcia.telefonica.es", "jose.luis.garcia@telefonica.es"),
+            ("ana.maria.lopez.movistar.com", "ana.maria.lopez@movistar.com"),
             # Misspelled or speech-to-text errors
             ("Juan David gomez at gmail dot com", "juandavidgomez@gmail.com"),
             ("Juan David gomez arroba gmail punto com", "juandavidgomez@gmail.com"),
             ("info at my dash company dot co dot uk", "info@my-company.co.uk"),
+            # Spanish speech-to-text errors
+            ("Carlos Rodriguez arroba correo punto es", "carlosrodriguez@correo.es"),
+            (
+                "Laura Martinez guion lopez arroba movistar punto com",
+                "laura-lopez@movistar.com",
+            ),
             # New TLDs
             ("contact at our dash startup dot dev", "contact@our-startup.dev"),
             ("hello at myapp dot app", "hello@myapp.app"),
@@ -74,6 +118,10 @@ class TestEmailFormatter:
                 "contact at comcast",
                 "contact@comcast.net",
             ),  # New provider with incomplete domain
+            (
+                "soporte at movistar",
+                "soporte@movistar.com",
+            ),  # Spanish provider with incomplete domain
         ],
     )
     def test_compute(self, formatter, input_email, expected_output):
@@ -90,6 +138,23 @@ class TestEmailFormatter:
             ("support hyphen desk at business period com", "support-desk@business.com"),
             ("john underline doe point domain", "john_doe.domain"),
             ("contact guion us at our subrayado company", "contact-us@our_company"),
+            # Spanish spoken symbols
+            ("maria arroba empresa punto es", "maria@empresa.es"),
+            ("carlos guion jimenez arroba correo", "carlos-jimenez@correo"),
+            ("juan subrayado perez punto es", "juan_perez.es"),
+            # New Spanish spoken symbols
+            ("laura menos sanchez en correo", "laura-sanchez@correo"),
+            ("pedro guion medio castillo arroba jazztel", "pedro-castillo@jazztel"),
+            ("carmen guion bajo martinez punto es", "carmen_martinez.es"),
+            ("pablo barra baja lopez en gmail", "pablo_lopez@gmail"),
+            # Spanish @ symbol "en"
+            ("soporte en empresa punto com", "soporte@empresa.com"),
+            # More punctuation
+            ("nombre coma apellido punto es", "nombre,apellido.es"),
+            (
+                "contacto dos puntos soporte arroba sitio punto com",
+                "contacto:soporte@sitio.com",
+            ),
         ]
 
         for input_text, expected in test_cases:
@@ -107,6 +172,10 @@ class TestEmailFormatter:
             "firstname.lastname@company.com.sg",
             "user_name@domain.dev",
             "info-support@business.app",
+            # Spanish style emails
+            "maria.garcia@telefonica.es",
+            "jose_perez@movistar.com",
+            "usuario-soporte@jazztel.es",
         ]
 
         invalid_emails = [
@@ -137,6 +206,11 @@ class TestEmailFormatter:
             "info.zoho.com",
             "user.domain.dev",
             "company.com.sg",
+            # Spanish domains
+            "cliente.telefonica.es",
+            "soporte.movistar.com",
+            "usuario.orange.es",
+            "info.jazztel.com",
         ]
 
         domains_absent = [

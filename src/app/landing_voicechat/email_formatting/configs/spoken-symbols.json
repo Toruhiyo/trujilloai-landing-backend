@@ -1,14 +1,25 @@
 {
     "at": "@",
     "arroba": "@",
+    "en": "@",
     "dot": ".",
     "punto": ".",
     "point": ".",
+    "period": ".",
     "underscore": "_",
+    "underline": "_",
+    "subrayado": "_",
+    "guion bajo": "_",
+    "barra": "_",
+    "barra baja": "_",
     "dash": "-",
     "hyphen": "-",
     "guion": "-",
-    "period": ".",
-    "underline": "_",
-    "subrayado": "_"
+    "raya": "-",
+    "menos": "-",
+    "guion medio": "-",
+    "coma": ",",
+    "comma": ",",
+    "colon": ":",
+    "dos puntos": ":"
 }
