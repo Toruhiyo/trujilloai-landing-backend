@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 elevenlabs_client = ElevenlabsClient()
 
 
-def sendConversationFeedback(conversation_id: str, key: FeedbackKey):
+def send_conversation_feedback(conversation_id: str, key: FeedbackKey):
     try:
         elevenlabs_client.conversational_ai.post_conversation_feedback(
             conversation_id=conversation_id,

@@ -12,6 +12,7 @@ from fastapi import (
 from src.app.landing_voicechat.landing_voicechat_websocket_middleware import (
     LandingVoicechatWebsocketMiddleware,
 )
+from src.app.landing_voicechat.resources import send_conversation_feedback
 from src.config.vars_grabber import VariablesGrabber
 from src.wrappers.elevenlabs.enums import WebSocketEventType, FeedbackKey
 from src.app.errors import EnvironmentVariablesValueError
@@ -99,7 +100,7 @@ async def send_conversation_feedback_endpoint(
     conversation_id: str = Path(..., description="Conversation ID"),
     key: FeedbackKey = Body(..., embed=True, description="Feedback key"),
 ) -> FeedbackResponse:
-    # send_conversation_feedback(conversation_id, key)
+    send_conversation_feedback(conversation_id, key)
     return FeedbackResponse(
         message=f"Successfully sent feedback ({key}) for conversation {conversation_id}",
         data={"key": key},
