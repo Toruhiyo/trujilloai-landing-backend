@@ -7,22 +7,26 @@ from fastapi import (
     Path,
     Body,
     HTTPException,
+    Request,
 )
 
+from src.app.acces_tokens_management.responses import AccessTokenResponse
 from src.app.landing_voicechat.landing_voicechat_websocket_middleware import (
     LandingVoicechatWebsocketMiddleware,
 )
 from src.app.landing_voicechat.resources import send_conversation_feedback
 from src.config.vars_grabber import VariablesGrabber
 from src.wrappers.elevenlabs.enums import WebSocketEventType, FeedbackKey
-from src.app.errors import EnvironmentVariablesValueError
+from src.app.errors import EnvironmentVariablesValueError, UnauthorizedRequestError
 from src.app.landing_voicechat.responses import FeedbackResponse
+from src.app.acces_tokens_management.access_tokens_manager import AccessTokensManager
 
 router = APIRouter(prefix="/landing-voicechat", tags=["Landing Voicechat"])
 logger = logging.getLogger(__name__)
 
 # Cache for active connections
 active_middlewares: dict[str, LandingVoicechatWebsocketMiddleware] = {}
+access_tokens_manager = AccessTokensManager(scope="landing-voicechat")
 
 ELEVENLABS_API_KEY = VariablesGrabber().get("ELEVENLABS_API_KEY")
 VOICECHAT_ELEVENLABS_AGENT_ID = VariablesGrabber().get("VOICECHAT_ELEVENLABS_AGENT_ID")
@@ -47,10 +51,20 @@ def get_voicechat_elevenlabs_middleware(
     )
 
 
+@router.get("/ws/access-token")
+async def get_landing_voicechat_access_token(request: Request) -> AccessTokenResponse:
+    client_ip = request.client.host
+    token = access_tokens_manager.generate_token(client_ip)
+    return AccessTokenResponse(
+        message="Landing Voicechat is available", data={"access_token": token}
+    )
+
+
 @router.websocket("/ws")
 async def voicechat_websocket(
     websocket: WebSocket,
     debug: bool = Query(False, description="Enable debug mode"),
+    access_token: str = Query(..., description="Access token for voicechat"),
     voicechat_elevenlabs_middleware: LandingVoicechatWebsocketMiddleware = Depends(
         get_voicechat_elevenlabs_middleware
     ),
@@ -62,6 +76,13 @@ async def voicechat_websocket(
     It forwards messages bidirectionally between the client and ElevenLabs.
     """
     client_id = None
+    client_ip = websocket.client.host
+
+    if not access_token:
+        raise UnauthorizedRequestError("Access token is required")
+
+    if not access_tokens_manager.validate_token(client_ip, access_token):
+        raise UnauthorizedRequestError("Invalid or expired access token")
 
     try:
         # Setup connections (both client and ElevenLabs)

@@ -7,3 +7,9 @@ class SingleBasicResponse(BaseDTO):
     message: str
     data: Optional[dict] = None
     status_code: int = status.HTTP_200_OK
+
+
+class BooleanResponse(BaseDTO):
+    message: str
+    data: bool
+    status_code: int = status.HTTP_200_OK
