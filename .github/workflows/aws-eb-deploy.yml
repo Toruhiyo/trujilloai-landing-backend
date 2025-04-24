@@ -74,8 +74,8 @@ jobs:
             PROJECT_KEY=${{ vars.PROJECT_KEY }}
             ENV=${{ vars.ENV }}
             AWS_REGION=${{ vars.AWS_REGION }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=registry,ref=${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY }}:buildcache
+          cache-to: type=registry,ref=${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY }}:buildcache,mode=max
           provenance: false
           sbom: false
 
