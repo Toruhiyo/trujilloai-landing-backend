@@ -6,7 +6,6 @@ import websockets
 from fastapi import WebSocket
 from websockets.exceptions import ConnectionClosed
 from src.utils.json_toolbox import make_serializable
-from src.utils.metaclasses import DynamicSingleton
 from .enums import WebSocketEventType
 from .errors import ToolCallMissingParametersError
 from .toolbox import format_message_for_logging, get_signed_url
@@ -77,7 +76,7 @@ def client_tool_call(
     return server_event(event_matcher)
 
 
-class ElevenLabsWebsocketMiddleware(metaclass=DynamicSingleton):
+class ElevenLabsWebsocketMiddleware:
 
     # Public:
     @property
