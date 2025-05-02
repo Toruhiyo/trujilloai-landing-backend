@@ -1,5 +1,3 @@
-What I Deliver
-I excel at building
 Comprehensive AI solutions designed to streamline your business operations and drive growth. Here's some use cases:
 
 Chatbots and Voice Assistants
@@ -10,8 +8,8 @@ E-commerce sales closer
 Customer support chatbot
 Hyperrealistic AI voice assistant
 
-Field Reporting Automation
-Streamline your data entry process with AI-powered automation
+Natural Language Data Intake
+Streamline your data entry process from natural language inputs
 
 Voice-to-CRM
 Aided form filling

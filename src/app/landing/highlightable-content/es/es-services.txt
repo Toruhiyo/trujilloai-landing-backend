@@ -1,5 +1,3 @@
-Lo que ofrezco
-Me especializo en crear
 Soluciones integrales de IA diseñadas para optimizar las operaciones de tu negocio e impulsar el crecimiento. Estos son algunos casos de uso:
 
 Chatbots y Asistentes de voz
@@ -10,7 +8,7 @@ Especialista en cierre de ventas
 Chatbot de atención al cliente
 Asistente de voz IA hiperrealista
 
-Reporting de campo con IA
+Extracción de datos de lenguaje natural
 Optimiza tus procesos de entrada de datos con automatización potenciada por IA
 
 De voz a CRM

@@ -1,8 +1,10 @@
-Proyectos destacados
-Proyectos seleccionados
-Un vistazo a los proyectos significativos que he dirigido. Debido a acuerdos de confidencialidad, se omiten los nombres de los clientes.
-
-Chatbot como hub de ia
+Despachos de Abogados
+Empresas Farmacéuticas
+Agencias de Marketing
+Comunicación y Eventos
+Consultorías de Software
+Sector Público
+Chatbot como hub de IA
 Farmacéutica Española Líder
 
 Construí un agente de IA conversacional de nivel empresarial que sirve como centro de conocimiento central. Integrado con Azure, Microsoft Entra ID y arquitectura de microservicios personalizada para acceso seguro a información 24/7.
@@ -18,7 +20,7 @@ Pionero en arquitectura RAG
 I+D - Subvención Neotec para Innovación
 
 Pionero en arquitectura RAG (Retrieval-Augmented Generation) para Topic Modelling en español en 2022, desarrollando soluciones innovadoras para análisis semántico de texto que influyeron en arquitecturas modernas de IA como ChatGPT, Google Gemini, Claude, etc.
-Chatbot como hub de ia
+Chatbot como hub de IA
 Farmacéutica Española Líder
 
 Construí un agente de IA conversacional de nivel empresarial que sirve como centro de conocimiento central. Integrado con Azure, Microsoft Entra ID y arquitectura de microservicios personalizada para acceso seguro a información 24/7.
@@ -34,3 +36,4 @@ Pionero en arquitectura RAG
 I+D - Subvención Neotec para Innovación
 
 Pionero en arquitectura RAG (Retrieval-Augmented Generation) para Topic Modelling en español en 2022, desarrollando soluciones innovadoras para análisis semántico de texto que influyeron en arquitecturas modernas de IA como ChatGPT, Google Gemini, Claude, etc.
+Nombres de clientes omitidos por razones de confidencialidad

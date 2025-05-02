@@ -1,7 +1,9 @@
-Portfolio Highlights
-Selected Projects
-A glimpse of significant projects I've led. Due to confidentiality agreements, client names are withheld.
-
+Law Firms
+Pharmaceutical Companies
+Marketing Agencies
+Communication & Events
+Software Consultancies
+Public Sector
 Chatbot as AI Hub
 Leading Spanish Pharma
 
@@ -34,3 +36,4 @@ RAG Architecture Pioneer
 R&D - Neotec Grant for Innovation
 
 Pioneered RAG architecture for Spanish topic modeling in 2022, developing innovative solutions for semantic text analysis that influenced modern AI architectures like ChatGPT and Google Gemini.
+Client names withheld due to confidentiality agreements
