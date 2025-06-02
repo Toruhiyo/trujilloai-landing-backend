@@ -82,18 +82,13 @@ class LandingVoicechatWebsocketMiddleware(ElevenLabsWebsocketMiddleware):
             tool_call_uuid = tool_call.get("client_tool_call", {}).get(
                 "tool_call_id", ""
             ).split("_")[-1] or uuid5(NAMESPACE_URL, "highlight_text")
-            await self.send_message_to_client(
-                {
-                    "type": "client_tool_call",
-                    "client_tool_call": {
-                        "tool_name": "highlight_text",
-                        "tool_call_id": f"highlight_text_{tool_call_uuid}",
-                        "parameters": {
-                            "section": section_name.value,
-                            "texts": highlighted_text_results.texts,
-                        },
-                    },
-                }
+            await self.send_client_tool_call(
+                tool_name="highlight_text",
+                tool_call_id=f"highlight_text_{tool_call_uuid}",
+                parameters={
+                    "section": section_name.value,
+                    "texts": highlighted_text_results.texts,
+                },
             )
         except Exception as e:
             logger.error(f"Error handling go to section tool: {e}")

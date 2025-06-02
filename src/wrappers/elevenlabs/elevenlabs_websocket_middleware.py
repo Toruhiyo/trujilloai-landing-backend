@@ -222,6 +222,20 @@ class ElevenLabsWebsocketMiddleware:
         else:
             logger.warning("Cannot forward to ElevenLabs: connection is closed")
 
+    async def send_client_tool_call(
+        self, tool_name: str, tool_call_id: str, parameters: dict[str, Any]
+    ):
+        await self.send_message_to_client(
+            {
+                "type": "client_tool_call",
+                "client_tool_call": {
+                    "tool_name": tool_name,
+                    "tool_call_id": tool_call_id,
+                    "parameters": parameters,
+                },
+            }
+        )
+
     def add_client_to_elevenlabs_filter(
         self, filter_func: Callable[[dict[str, Any]], bool]
     ):
