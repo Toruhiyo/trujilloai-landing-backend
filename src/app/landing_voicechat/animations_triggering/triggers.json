@@ -3,7 +3,7 @@
         "name": "agreement",
         "animation": "salute",
         "lifecycle": {
-            "type": "once",
+            "times": 1,
             "when": "agent_speaking"
         },
         "patterns": {

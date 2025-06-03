@@ -10,7 +10,6 @@ from src.app.landing.toolbox import typify_language, typify_section_name
 from src.app.landing_voicechat.email_formatting.email_formatter import EmailFormatter
 from src.app.landing_voicechat.animations_triggering.enums import (
     AnimationName,
-    AnimationLifecycleType,
     AnimationLifecycleWhen,
 )
 from src.app.landing_voicechat.highlighting.dtos import HighlightedTextDTO
@@ -33,22 +32,22 @@ class AnimationLifecycle:
 
     def __init__(
         self,
-        type: Optional[AnimationLifecycleType] = None,
+        times: Optional[int] = None,
         when: Optional[AnimationLifecycleWhen] = None,
     ):
-        self.type = type
+        self.times = times
         self.when = when
 
     @classmethod
     def from_dict(cls, data: dict) -> "AnimationLifecycle":
         return cls(
-            type=AnimationLifecycleType(data["type"]) if data.get("type") else None,
+            times=data.get("times"),
             when=AnimationLifecycleWhen(data["when"]) if data.get("when") else None,
         )
 
-    def to_dict(self) -> dict[str, Optional[str]]:
+    def to_dict(self) -> dict[str, Optional[int | str]]:
         return {
-            "type": self.type.value if self.type else None,
+            "times": self.times,
             "when": self.when.value if self.when else None,
         }
 
@@ -161,7 +160,7 @@ class LandingVoicechatWebsocketMiddleware(ElevenLabsWebsocketMiddleware):
 
                 # Convert lifecycle to dict for parameters
                 lifecycle_params = (
-                    lifecycle.to_dict() if lifecycle else {"type": "once", "when": None}
+                    lifecycle.to_dict() if lifecycle else {"times": None, "when": None}
                 )
 
                 await self.send_client_tool_call(
@@ -173,9 +172,7 @@ class LandingVoicechatWebsocketMiddleware(ElevenLabsWebsocketMiddleware):
                     },
                 )
 
-                lifecycle_type = (
-                    lifecycle.type.value if lifecycle and lifecycle.type else "once"
-                )
+                lifecycle_times = lifecycle.times if lifecycle else None
                 lifecycle_when = (
                     lifecycle.when.value
                     if lifecycle and lifecycle.when
@@ -183,7 +180,7 @@ class LandingVoicechatWebsocketMiddleware(ElevenLabsWebsocketMiddleware):
                 )
                 logger.info(
                     f"Triggered {animation_name.value} animation with lifecycle: "
-                    f"type={lifecycle_type}, when={lifecycle_when}"
+                    f"times={lifecycle_times}, when={lifecycle_when}"
                 )
         except Exception as e:
             logger.error(f"Error handling agent response animation: {e}")
@@ -222,13 +219,11 @@ class LandingVoicechatWebsocketMiddleware(ElevenLabsWebsocketMiddleware):
 
                 lifecycle = None
                 if lifecycle_data:
-                    if isinstance(lifecycle_data, dict):
-                        lifecycle = AnimationLifecycle.from_dict(lifecycle_data)
-                    else:
-                        # Handle legacy string format
-                        lifecycle = AnimationLifecycle(
-                            type=AnimationLifecycleType(lifecycle_data)
-                        )
+                    lifecycle = AnimationLifecycle.from_dict(lifecycle_data)
+
+                logger.info(
+                    f"Detected animation trigger: {animation_name}. Lifecycle: {lifecycle}"
+                )
 
                 return (
                     AnimationName(animation_name) if animation_name else None,
