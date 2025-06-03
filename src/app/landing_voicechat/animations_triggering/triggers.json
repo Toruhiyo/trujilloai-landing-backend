@@ -1,0 +1,48 @@
+[
+    {
+        "name": "agreement",
+        "animation": "salute",
+        "lifecycle": "once",
+        "patterns": {
+            "en": [
+                "okay",
+                "ok",
+                "alright",
+                "sure",
+                "yes",
+                "yep",
+                "yeah",
+                "right",
+                "got\\s+it",
+                "understood",
+                "perfect",
+                "gotcha",
+                "yup",
+                "uh-huh",
+                "absolutely",
+                "totally",
+                "sounds\\s+good",
+                "you\\s+bet",
+                "for\\s+sure",
+                "okey-dokey"
+            ],
+            "es": [
+                "vale",
+                "está\\s+bien",
+                "de\\s+acuerdo",
+                "bueno",
+                "sí",
+                "claro",
+                "perfecto",
+                "entendido",
+                "muy\\s+bien",
+                "aja",
+                "ajá",
+                "órale",
+                "dale",
+                "por\\s+supuesto",
+                "qué\\s+sí"
+            ]
+        }
+    }
+]

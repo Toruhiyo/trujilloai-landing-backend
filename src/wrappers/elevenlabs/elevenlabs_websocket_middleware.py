@@ -76,6 +76,18 @@ def client_tool_call(
     return server_event(event_matcher)
 
 
+def agent_response_event(await_handler: bool = True):
+
+    def event_matcher(message: dict[str, Any]) -> bool:
+        return message.get("type") == "agent_response"
+
+    # Store the await_handler setting on the matcher function
+    event_matcher.await_handler = await_handler
+    event_matcher.send_results_to_elevenlabs = False
+    event_matcher.send_results_to_client = False
+    return server_event(event_matcher)
+
+
 class ElevenLabsWebsocketMiddleware:
 
     # Public:
