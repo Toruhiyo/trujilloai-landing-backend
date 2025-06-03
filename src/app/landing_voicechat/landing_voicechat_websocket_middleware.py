@@ -214,6 +214,8 @@ class LandingVoicechatWebsocketMiddleware(ElevenLabsWebsocketMiddleware):
     def __detect_animation_trigger(
         self, agent_response: str
     ) -> tuple[AnimationName | None, AnimationLifecycle | None]:
+        matching_triggers = []
+
         for trigger_config in self._animation_triggers:
             patterns_by_language = trigger_config["patterns"]
             all_patterns = []
@@ -222,25 +224,68 @@ class LandingVoicechatWebsocketMiddleware(ElevenLabsWebsocketMiddleware):
             for language_patterns in patterns_by_language.values():
                 all_patterns.extend(language_patterns)
 
-            pattern_string = r"\b(?:" + "|".join(all_patterns) + r")\b"
-            compiled_pattern = re.compile(pattern_string, re.IGNORECASE)
+            # Separate length-based patterns from word-based patterns
+            length_patterns = []
+            word_patterns = []
 
-            if compiled_pattern.search(agent_response):
-                logger.info(f"Detected animation trigger: {trigger_config.get('name')}")
-                animation_name = trigger_config.get("animation")
-                lifecycle_data = trigger_config.get("lifecycle")
+            for pattern in all_patterns:
+                if pattern.startswith("^") and pattern.endswith("$"):
+                    length_patterns.append(pattern)
+                else:
+                    word_patterns.append(pattern)
 
-                lifecycle = None
-                if lifecycle_data:
-                    lifecycle = AnimationLifecycle.from_dict(lifecycle_data)
+            # Check if any pattern matches
+            pattern_matched = False
 
-                logger.info(
-                    f"Detected animation trigger: {animation_name}. Lifecycle: {lifecycle}"
+            # Test length-based patterns (like ^.{10,}$) without word boundaries
+            if length_patterns:
+                length_pattern_string = "|".join(length_patterns)
+                length_compiled_pattern = re.compile(
+                    length_pattern_string, re.IGNORECASE
                 )
+                if length_compiled_pattern.search(agent_response):
+                    pattern_matched = True
 
-                return (
-                    AnimationName(animation_name) if animation_name else None,
-                    lifecycle,
-                )
+            # Test word-based patterns with word boundaries
+            if not pattern_matched and word_patterns:
+                word_pattern_string = r"\b(?:" + "|".join(word_patterns) + r")\b"
+                word_compiled_pattern = re.compile(word_pattern_string, re.IGNORECASE)
+                if word_compiled_pattern.search(agent_response):
+                    pattern_matched = True
 
-        return None, None
+            if pattern_matched:
+                priority = trigger_config.get("priority", 999)  # Default low priority
+                matching_triggers.append((priority, trigger_config))
+
+        if not matching_triggers:
+            return None, None
+
+        # Sort by priority (lower number = higher priority) and get the highest priority trigger
+        matching_triggers.sort(key=lambda x: x[0])
+        highest_priority_trigger = matching_triggers[0][1]
+
+        logger.info(
+            f"Detected animation trigger: {highest_priority_trigger.get('name')} "
+            f"(priority: {highest_priority_trigger.get('priority')})"
+        )
+
+        animation_name = highest_priority_trigger.get("animation")
+        lifecycle_data = highest_priority_trigger.get("lifecycle")
+
+        lifecycle = None
+        if lifecycle_data:
+            if isinstance(lifecycle_data, dict):
+                lifecycle = AnimationLifecycle.from_dict(lifecycle_data)
+            else:
+                # Handle legacy string format - convert "once"/"loop" to times
+                if lifecycle_data == "once":
+                    lifecycle = AnimationLifecycle(times=1)
+                elif lifecycle_data == "loop":
+                    lifecycle = AnimationLifecycle(
+                        times=None
+                    )  # None means infinite/default
+
+        return (
+            AnimationName(animation_name) if animation_name else None,
+            lifecycle,
+        )

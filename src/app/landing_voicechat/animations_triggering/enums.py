@@ -6,6 +6,7 @@ class AnimationName(str, BaseEnum):
 
     SALUTE = "salute"
     THUMBSUP = "thumbsup"
+    EXAGGERATED_TALKING = "exaggerated_talking"
 
 
 class AnimationLifecycleWhen(str, BaseEnum):

@@ -1,6 +1,7 @@
 [
     {
         "name": "agreement",
+        "priority": 2,
         "animation": "salute",
         "lifecycle": {
             "times": 1,
@@ -46,6 +47,42 @@
                 "dale",
                 "por\\s+supuesto",
                 "qué\\s+sí"
+            ]
+        }
+    },
+    {
+        "name": "long_explanation",
+        "priority": 1,
+        "animation": "exaggerated_talking",
+        "lifecycle": {
+            "times": null,
+            "when": "agent_speaking",
+            "duration_in_ms": 10000
+        },
+        "patterns": {
+            "en": [
+                "^.{100,}$",
+                "\\b(?:\\w+\\s+){50,}\\w+\\b",
+                "let me explain in detail",
+                "here's a comprehensive overview",
+                "I'll walk you through",
+                "to give you the full picture",
+                "there are several important points",
+                "allow me to elaborate",
+                "in order to understand this properly",
+                "you a detailed explanation",
+                "you a comprehensive overview"
+            ],
+            "es": [
+                "^.{150,}$",
+                "\\b(?:\\w+\\s+){50,}\\w+\\b",
+                "déjame explicarte en detalle",
+                "te voy a dar una visión completa",
+                "para que entiendas bien",
+                "hay varios puntos importantes",
+                "permíteme elaborar",
+                "para tener el panorama completo",
+                "voy a explicarte paso a paso"
             ]
         }
     }
