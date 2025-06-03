@@ -1,6 +1,7 @@
 import json
 import logging
 import re
+from datetime import datetime
 from pathlib import Path
 from typing import Any, Optional
 from uuid import uuid5, NAMESPACE_URL
@@ -129,7 +130,9 @@ class LandingVoicechatWebsocketMiddleware(ElevenLabsWebsocketMiddleware):
             )
             tool_call_uuid = tool_call.get("client_tool_call", {}).get(
                 "tool_call_id", ""
-            ).split("_")[-1] or uuid5(NAMESPACE_URL, "highlight_text")
+            ).split("_")[-1] or uuid5(
+                NAMESPACE_URL, f"highlight_text_{datetime.now().isoformat()}"
+            )
             await self.send_client_tool_call(
                 tool_name="highlight_text",
                 tool_call_id=f"highlight_text_{tool_call_uuid}",
@@ -155,7 +158,10 @@ class LandingVoicechatWebsocketMiddleware(ElevenLabsWebsocketMiddleware):
             animation_name, lifecycle = self.__detect_animation_trigger(agent_response)
             if animation_name:
                 tool_call_uuid = str(
-                    uuid5(NAMESPACE_URL, f"animation_{animation_name.value}")
+                    uuid5(
+                        NAMESPACE_URL,
+                        f"animation_{animation_name.value}_{datetime.now().isoformat()}",
+                    )
                 )
 
                 # Convert lifecycle to dict for parameters
