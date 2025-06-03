@@ -4,7 +4,8 @@
         "animation": "salute",
         "lifecycle": {
             "times": 1,
-            "when": "agent_speaking"
+            "when": "agent_speaking",
+            "duration_in_ms": null
         },
         "patterns": {
             "en": [

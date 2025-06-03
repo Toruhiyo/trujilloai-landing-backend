@@ -35,21 +35,25 @@ class AnimationLifecycle:
         self,
         times: Optional[int] = None,
         when: Optional[AnimationLifecycleWhen] = None,
+        duration_in_ms: Optional[int] = None,
     ):
         self.times = times
         self.when = when
+        self.duration_in_ms = duration_in_ms
 
     @classmethod
     def from_dict(cls, data: dict) -> "AnimationLifecycle":
         return cls(
             times=data.get("times"),
             when=AnimationLifecycleWhen(data["when"]) if data.get("when") else None,
+            duration_in_ms=data.get("duration_in_ms"),
         )
 
     def to_dict(self) -> dict[str, Optional[int | str]]:
         return {
             "times": self.times,
             "when": self.when.value if self.when else None,
+            "duration_in_ms": self.duration_in_ms,
         }
 
 
@@ -166,7 +170,9 @@ class LandingVoicechatWebsocketMiddleware(ElevenLabsWebsocketMiddleware):
 
                 # Convert lifecycle to dict for parameters
                 lifecycle_params = (
-                    lifecycle.to_dict() if lifecycle else {"times": None, "when": None}
+                    lifecycle.to_dict()
+                    if lifecycle
+                    else {"times": None, "when": None, "duration_in_ms": None}
                 )
 
                 await self.send_client_tool_call(
@@ -184,9 +190,10 @@ class LandingVoicechatWebsocketMiddleware(ElevenLabsWebsocketMiddleware):
                     if lifecycle and lifecycle.when
                     else "unspecified"
                 )
+                lifecycle_duration = lifecycle.duration_in_ms if lifecycle else None
                 logger.info(
                     f"Triggered {animation_name.value} animation with lifecycle: "
-                    f"times={lifecycle_times}, when={lifecycle_when}"
+                    f"times={lifecycle_times}, when={lifecycle_when}, duration_ms={lifecycle_duration}"
                 )
         except Exception as e:
             logger.error(f"Error handling agent response animation: {e}")
