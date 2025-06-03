@@ -2,7 +2,10 @@
     {
         "name": "agreement",
         "animation": "salute",
-        "lifecycle": "once",
+        "lifecycle": {
+            "type": "once",
+            "when": "agent_speaking"
+        },
         "patterns": {
             "en": [
                 "okay",

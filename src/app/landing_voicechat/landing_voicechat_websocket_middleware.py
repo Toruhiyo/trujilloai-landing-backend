@@ -2,7 +2,7 @@ import json
 import logging
 import re
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 from uuid import uuid5, NAMESPACE_URL
 
 from src.app.landing.enums import LanguageCode, SectionName
@@ -10,7 +10,8 @@ from src.app.landing.toolbox import typify_language, typify_section_name
 from src.app.landing_voicechat.email_formatting.email_formatter import EmailFormatter
 from src.app.landing_voicechat.animations_triggering.enums import (
     AnimationName,
-    AnimationLifecycle,
+    AnimationLifecycleType,
+    AnimationLifecycleWhen,
 )
 from src.app.landing_voicechat.highlighting.dtos import HighlightedTextDTO
 from src.app.landing_voicechat.highlighting.text_highlighter import TextHighlighter
@@ -25,6 +26,31 @@ logger = logging.getLogger(__name__)
 DEFAULT_ANIMATION_TRIGGERS_FILE_PATH = (
     Path(__file__).parent / "animations_triggering" / "triggers.json"
 )
+
+
+class AnimationLifecycle:
+    """Represents animation lifecycle configuration"""
+
+    def __init__(
+        self,
+        type: Optional[AnimationLifecycleType] = None,
+        when: Optional[AnimationLifecycleWhen] = None,
+    ):
+        self.type = type
+        self.when = when
+
+    @classmethod
+    def from_dict(cls, data: dict) -> "AnimationLifecycle":
+        return cls(
+            type=AnimationLifecycleType(data["type"]) if data.get("type") else None,
+            when=AnimationLifecycleWhen(data["when"]) if data.get("when") else None,
+        )
+
+    def to_dict(self) -> dict[str, Optional[str]]:
+        return {
+            "type": self.type.value if self.type else None,
+            "when": self.when.value if self.when else None,
+        }
 
 
 class LandingVoicechatWebsocketMiddleware(ElevenLabsWebsocketMiddleware):
@@ -132,17 +158,32 @@ class LandingVoicechatWebsocketMiddleware(ElevenLabsWebsocketMiddleware):
                 tool_call_uuid = str(
                     uuid5(NAMESPACE_URL, f"animation_{animation_name.value}")
                 )
+
+                # Convert lifecycle to dict for parameters
+                lifecycle_params = (
+                    lifecycle.to_dict() if lifecycle else {"type": "once", "when": None}
+                )
+
                 await self.send_client_tool_call(
                     tool_name="trigger_animation",
                     tool_call_id=f"trigger_animation_{tool_call_uuid}",
                     parameters={
                         "name": animation_name.value,
-                        "lifecycle": lifecycle.value if lifecycle else "once",
+                        "lifecycle": lifecycle_params,
                     },
+                )
+
+                lifecycle_type = (
+                    lifecycle.type.value if lifecycle and lifecycle.type else "once"
+                )
+                lifecycle_when = (
+                    lifecycle.when.value
+                    if lifecycle and lifecycle.when
+                    else "unspecified"
                 )
                 logger.info(
                     f"Triggered {animation_name.value} animation with lifecycle: "
-                    f"{lifecycle.value if lifecycle else 'once'}"
+                    f"type={lifecycle_type}, when={lifecycle_when}"
                 )
         except Exception as e:
             logger.error(f"Error handling agent response animation: {e}")
@@ -177,11 +218,21 @@ class LandingVoicechatWebsocketMiddleware(ElevenLabsWebsocketMiddleware):
             if compiled_pattern.search(agent_response):
                 logger.info(f"Detected animation trigger: {trigger_config.get('name')}")
                 animation_name = trigger_config.get("animation")
-                lifecycle = trigger_config.get("lifecycle") or "once"
+                lifecycle_data = trigger_config.get("lifecycle")
+
+                lifecycle = None
+                if lifecycle_data:
+                    if isinstance(lifecycle_data, dict):
+                        lifecycle = AnimationLifecycle.from_dict(lifecycle_data)
+                    else:
+                        # Handle legacy string format
+                        lifecycle = AnimationLifecycle(
+                            type=AnimationLifecycleType(lifecycle_data)
+                        )
 
                 return (
                     AnimationName(animation_name) if animation_name else None,
-                    AnimationLifecycle(lifecycle),
+                    lifecycle,
                 )
 
         return None, None
