@@ -192,7 +192,7 @@ class LandingVoicechatWebsocketMiddleware(ElevenLabsWebsocketMiddleware):
                 )
                 lifecycle_duration = lifecycle.duration_in_ms if lifecycle else None
                 logger.info(
-                    f"Triggered {animation_name.value} animation with lifecycle: "
+                    f'Triggered "{animation_name.value}" animation with lifecycle: '
                     f"times={lifecycle_times}, when={lifecycle_when}, duration_ms={lifecycle_duration}"
                 )
         except Exception as e:
