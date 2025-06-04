@@ -224,6 +224,10 @@ class LandingVoicechatWebsocketMiddleware(ElevenLabsWebsocketMiddleware):
             for language_patterns in patterns_by_language.values():
                 all_patterns.extend(language_patterns)
 
+            logger.debug(
+                f"Testing trigger '{trigger_config.get('name')}' with patterns: {all_patterns}"
+            )
+
             # Separate length-based patterns from word-based patterns
             length_patterns = []
             word_patterns = []
@@ -254,10 +258,16 @@ class LandingVoicechatWebsocketMiddleware(ElevenLabsWebsocketMiddleware):
             if not pattern_matched and word_patterns:
                 word_pattern_string = r"\b(?:" + "|".join(word_patterns) + r")\b"
                 word_compiled_pattern = re.compile(word_pattern_string, re.IGNORECASE)
-                if word_compiled_pattern.search(agent_response):
+
+                # Debug: Check what actually matched
+                match = word_compiled_pattern.search(agent_response)
+                if match:
+                    matched_text = match.group(0)
                     logger.info(
-                        f"Word pattern matched for trigger '{trigger_config.get('name')}'"
+                        f"Word pattern matched for trigger '{trigger_config.get('name')}': "
+                        f"matched_text='{matched_text}' at position {match.start()}-{match.end()}"
                     )
+                    logger.debug(f"Full pattern tested: {word_pattern_string}")
                     pattern_matched = True
 
             if pattern_matched:
