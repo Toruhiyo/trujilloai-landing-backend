@@ -237,13 +237,17 @@ class LandingVoicechatWebsocketMiddleware(ElevenLabsWebsocketMiddleware):
             # Check if any pattern matches
             pattern_matched = False
 
-            # Test length-based patterns (like ^.{10,}$) without word boundaries
+            # Test length-based patterns (like ^.{200,}$) without word boundaries
             if length_patterns:
                 length_pattern_string = "|".join(length_patterns)
                 length_compiled_pattern = re.compile(
-                    length_pattern_string, re.IGNORECASE
+                    length_pattern_string, re.IGNORECASE | re.DOTALL
                 )
                 if length_compiled_pattern.search(agent_response):
+                    logger.info(
+                        f"Length pattern matched for trigger '{trigger_config.get('name')}': "
+                        f"text length={len(agent_response)}"
+                    )
                     pattern_matched = True
 
             # Test word-based patterns with word boundaries
@@ -251,6 +255,9 @@ class LandingVoicechatWebsocketMiddleware(ElevenLabsWebsocketMiddleware):
                 word_pattern_string = r"\b(?:" + "|".join(word_patterns) + r")\b"
                 word_compiled_pattern = re.compile(word_pattern_string, re.IGNORECASE)
                 if word_compiled_pattern.search(agent_response):
+                    logger.info(
+                        f"Word pattern matched for trigger '{trigger_config.get('name')}'"
+                    )
                     pattern_matched = True
 
             if pattern_matched:

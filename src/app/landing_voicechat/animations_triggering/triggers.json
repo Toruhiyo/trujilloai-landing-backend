@@ -61,7 +61,7 @@
         },
         "patterns": {
             "en": [
-                "^.{100,}$",
+                "^.{800,}$",
                 "\\b(?:\\w+\\s+){50,}\\w+\\b",
                 "let me explain in detail",
                 "here's a comprehensive overview",
@@ -74,7 +74,7 @@
                 "you a comprehensive overview"
             ],
             "es": [
-                "^.{150,}$",
+                "^.{1000,}$",
                 "\\b(?:\\w+\\s+){50,}\\w+\\b",
                 "déjame explicarte en detalle",
                 "te voy a dar una visión completa",
