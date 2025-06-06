@@ -4,6 +4,7 @@ from src.utils.typification.base_enum import BaseEnum
 class AnimationName(str, BaseEnum):
     """Animation names for trigger animations"""
 
+    NOD = "nod"
     SALUTE = "salute"
     THUMBSUP = "thumbsup"
     EXAGGERATED_TALKING = "exaggerated_talking"
