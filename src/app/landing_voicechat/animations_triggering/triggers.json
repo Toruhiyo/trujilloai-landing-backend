@@ -121,7 +121,7 @@
         },
         "patterns": {
             "en": [
-                "^.{800,}$",
+                "^.{1000,}$",
                 "\\b(?:\\w+\\s+){50,}\\w+\\b",
                 "let me explain in detail",
                 "here's a comprehensive overview",
